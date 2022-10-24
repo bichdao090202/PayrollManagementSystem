@@ -1,4 +1,4 @@
-package model;
+package ui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
-public class PhanCong extends JFrame implements ActionListener {
+public class AssignmentGUI extends JFrame implements ActionListener {
 	private JTable tblNhanVien, tblSanPham, tblQuyTrinh, tblPhanCong;
 	private DefaultTableModel modelNhanVien, modelSanPham, modelQuyTrinh, modelPhanCong; 
 	private JTable tblPhongBan;
@@ -30,7 +30,7 @@ public class PhanCong extends JFrame implements ActionListener {
 	
 	
 	private JButton btnPhanCong, btnPhanCongLai, btnXoaPhanCong;
-	public PhanCong() {
+	public AssignmentGUI() {
 		setSize(1200,690);
 		add(tabPhanCong());
 	}
@@ -122,6 +122,6 @@ public class PhanCong extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		new PhanCong().setVisible(true);;
+		new AssignmentGUI().setVisible(true);;
 	}
 }

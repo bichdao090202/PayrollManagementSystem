@@ -66,11 +66,6 @@ public class MenuGUI extends JFrame {
 		});
 	}
 
-	protected void setIconImages(ImageIcon imageIcon) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	/**
 	 * Create the frame.
 	 */
@@ -91,7 +86,7 @@ public class MenuGUI extends JFrame {
 		pnContent.setBackground(new Color(128, 128, 0));
 		
 		JPanel pnSideMenu = new JPanel();
-		pnSideMenu.setBounds(0, 0, 65, 691);
+		pnSideMenu.setBounds(0, 0, 194, 691);
 		pnSideMenu.setBorder(new EmptyBorder(0, 10, 0, 0));
 		pnSideMenu.addMouseListener(new MouseAdapter() {
 			@Override
@@ -107,11 +102,11 @@ public class MenuGUI extends JFrame {
 		pnSideMenu.setBackground(new Color(16, 84, 129));
 		
 		ImageAvatar imageAvatar = new ImageAvatar();
-		imageAvatar.setBounds(30, 25, 210, 100);
+		imageAvatar.setBounds(0, 23, 108, 100);
 		imageAvatar.setIcon(new ImageIcon("images\\avatar.jpg"));
 		
 		lblName = new JLabel("Nguyễn Văn A");
-		lblName.setBounds(30, 136, 210, 33);
+		lblName.setBounds(0, 134, 160, 33);
 		lblName.setForeground(new Color(255, 255, 255));
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
