@@ -102,7 +102,7 @@ public class SideMenuPanel {
 			Thread th = new Thread() {
 				@Override
 				public void run() {
-					for (int i = maxWidth; i >= 0; i -= speed) {
+					for (int i = maxWidth - minWidth; i >= 0; i -= speed) {
 						try {
 							if (b == i) {
 								i = 0;
