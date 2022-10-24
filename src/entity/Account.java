@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.Objects;
-
 public class Account {
 	private String username; // =empID
 	private String password;
