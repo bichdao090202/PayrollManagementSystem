@@ -11,6 +11,8 @@ import javax.swing.border.MatteBorder;
 
 import custom_field.JPasswordFieldHint;
 import custom_field.JTextFieldHint;
+import entity.PasswordBasedEncryption;
+import model.AccountDAO;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
@@ -35,6 +38,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 	private JButton btnLogin;
 	private JTextFieldHint txtUser;
 	private JPasswordFieldHint txtPassword;
+	private AccountDAO accountDAO;
 
 	/**
 	 * Launch the application.
@@ -57,6 +61,8 @@ public class LoginGUI extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public LoginGUI() {
+		accountDAO = new AccountDAO();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(ICON_APPLICATION);
 		setTitle("Đăng nhập");
@@ -166,7 +172,12 @@ public class LoginGUI extends JFrame implements ActionListener {
 			} else if (pwd.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống", "Lỗi", JOptionPane.NO_OPTION, null);
 			} else {
-				System.out.println(pwd);
+				HashMap<String, String> account = accountDAO.getPasswordEncryption(username);
+				if (account != null & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"), account.get("salt"))) {
+					System.out.println("Dang nhap thanh cong");
+				}else {
+					System.out.println("Dang nhap khong thanh cong");
+				}
 			}
 		}
 	}
