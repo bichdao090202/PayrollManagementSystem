@@ -22,7 +22,6 @@ import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 
 import entity.Employee;
-import entity.EmployeeOffice;
 import model.EmployeeOfficeDAO;
 
 import java.awt.FlowLayout;
