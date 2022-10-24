@@ -102,4 +102,11 @@ public class Employee {
 	public void setBeneficiany(String beneficiany) {
 		this.beneficiany = beneficiany;
 	}
+
+	@Override
+	public String toString() {
+		return "Employee [employeeID=" + employeeID + ", name=" + name + ", gender=" + gender + ", birthday=" + birthday
+				+ ", address=" + address + ", phone=" + phone + ", bankName=" + bankName + ", accountNumber="
+				+ accountNumber + ", beneficiany=" + beneficiany + "]";
+	}
 }

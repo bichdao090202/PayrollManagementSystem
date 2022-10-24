@@ -21,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 
+import entity.Employee;
 import entity.EmployeeOffice;
 import model.EmployeeOfficeDAO;
 
@@ -180,6 +181,7 @@ public class EmployeeGUI extends JFrame {
 		panel_4.add(pnButtonOperations, BorderLayout.NORTH);
 
 		btnAdd = new JButton("Thêm");
+		btnAdd.setToolTipText("Thêm nhân viên");
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAdd.setFocusable(false);
 		pnButtonOperations.add(btnAdd);
@@ -275,8 +277,8 @@ public class EmployeeGUI extends JFrame {
 	}
 
 	public void loadDataToTable() {
-		List<EmployeeOffice> lstEmp = employeeOfficeDAO.getAllEmployeeOffice();
-		for (EmployeeOffice employeeOffice : lstEmp) {
+		List<Employee> lstEmp = employeeOfficeDAO.getAllEmployeeOffice();
+		for (Employee employeeOffice : lstEmp) {
 			dtmEmployeeOffice.addRow(employeeOffice.toString().split(","));
 		}
 	}
