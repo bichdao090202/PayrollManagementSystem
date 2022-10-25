@@ -24,55 +24,74 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import entity.Account;
+import entity.Department;
+import entity.Employee;
+import entity.EmployeeOffice;
+import model.AccountDAO;
+import model.DepartmentDAO;
+import model.EmployeeOfficeDAO;
 import net.miginfocom.swing.MigLayout;
 
 public class AccountGUI extends JFrame implements ActionListener {
-	private JButton btnCapTaiKhoan;
-	private JButton btnXoaTaiKhoan;
-	private JButton btnDatLaiMatKhau;
-	private JButton btnTimKiem;
-	private JTextField txtTimKiem;
-	private JTable tblTaiKhoan;
+	private JButton btnCreateAccount;
+	private JButton btnDeleteAccount;
+	private JButton btnChangePassword;
+	private JButton btnSearch;
+	private JTextField txtSearch;
+	private JTable tblAccount;
 	private DefaultTableModel tblModel;
 	private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
 	private ArrayList<Account> ds;
 	private int index, num;
 	private List<Account> newList;
-
+	private  EmployeeOfficeDAO empOffDAO;
+	private List<EmployeeOffice> listEmpOff;
+	private  DepartmentDAO depDAO;
+	private List<Department> listDep;
+	private  AccountDAO accDAO;
+	
 	public AccountGUI() {
 		setSize(1200, 690);
-		add(tabTaiKhoan());
+		empOffDAO = new EmployeeOfficeDAO();
+		listEmpOff = new ArrayList<>();
+		listEmpOff = empOffDAO.getAllEmployeeOffice();
+		depDAO = new DepartmentDAO();
+		listDep = new ArrayList<>();
+		listDep = depDAO.getAllDepartments();
+		accDAO = new AccountDAO();
+		add(tabAccount());
+//		System.out.print(listEmpOff);
 	}
 
-	public Component tabTaiKhoan() {
+	public Component tabAccount() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JPanel pnTaiKhoan = new JPanel();
-		pnTaiKhoan.setSize(1200, 690);
-		pnTaiKhoan.setLayout(new BoxLayout(pnTaiKhoan, BoxLayout.Y_AXIS));
+		JPanel pnAccount = new JPanel();
+		pnAccount.setSize(1200, 690);
+		pnAccount.setLayout(new BoxLayout(pnAccount, BoxLayout.Y_AXIS));
 		System.setProperty("Color", "0X000099");
 		
-		JPanel pnTimKiem = new JPanel();
-		pnTimKiem.setLayout(new MigLayout("", "[]10[]10[]50", ""));
-		pnTimKiem.add(new JLabel("Nhập mã/tên nhân viên: "));
-		pnTimKiem.add(txtTimKiem = new JTextField());
-		txtTimKiem.setColumns(30);
-		pnTimKiem.add(btnTimKiem = new JButton());
-		Image imgSearch = new ImageIcon("images\\Operation\\search.png").getImage().getScaledInstance(20, 20,
+		JPanel pnSearch = new JPanel();
+		pnSearch.setLayout(new MigLayout("", "[]10[]10[]50", ""));
+		pnSearch.add(new JLabel("Nhập mã/tên nhân viên: "));
+		pnSearch.add(txtSearch = new JTextField());
+		txtSearch.setColumns(30);
+		pnSearch.add(btnSearch = new JButton());
+		Image imgSearch = new ImageIcon("images\\operations\\search.png").getImage().getScaledInstance(20, 20,
 				Image.SCALE_DEFAULT);
-		btnTimKiem.setIcon(new ImageIcon(imgSearch));
+		btnSearch.setIcon(new ImageIcon(imgSearch));
 		
 		JPanel pnButton = new JPanel();
 		pnButton.setLayout(new MigLayout("", "[]20[]20[]", ""));
-		pnButton.add(btnCapTaiKhoan = new JButton("Cấp tài khoản"));
-		pnButton.add(btnXoaTaiKhoan = new JButton("Xóa tài khoản"));
-		pnButton.add(btnDatLaiMatKhau = new JButton("Đặt lại mật khẩu"));
+		pnButton.add(btnCreateAccount = new JButton("Cấp tài khoản"));
+		pnButton.add(btnDeleteAccount = new JButton("Xóa tài khoản"));
+		pnButton.add(btnChangePassword = new JButton("Đặt lại mật khẩu"));
 		
 		JPanel pnTable = new JPanel();
 		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách nhân viên"));
-		tblTaiKhoan = new JTable();
-		String[] row0 = { "A", "B"};
-		tblTaiKhoan = new JTable(tblModel = new DefaultTableModel(row0, 0));
-		JScrollPane sp = new JScrollPane(tblTaiKhoan);
+		tblAccount = new JTable();
+		String[] row0 = { "Mã nhân viên", "Họ tên", "Loại", "Phòng ban/phân xưởng", "Chức vụ", "Tài khoản"};
+		tblAccount = new JTable(tblModel = new DefaultTableModel(row0, 0));
+		JScrollPane sp = new JScrollPane(tblAccount);
 		sp.setPreferredSize(new Dimension(1150, 480));
 		pnTable.add(sp);
 
@@ -97,16 +116,16 @@ public class AccountGUI extends JFrame implements ActionListener {
 		JPanel pnNorth = new JPanel();
 		pnNorth.setLayout(new BoxLayout(pnNorth, BoxLayout.X_AXIS));
 		pnNorth.add(Box.createVerticalStrut(30));
-		pnNorth.add(pnTimKiem);
+		pnNorth.add(pnSearch);
 		pnNorth.add(pnButton);
-		pnTaiKhoan.add(pnNorth);
-		pnTaiKhoan.add(pnTable);
+		pnAccount.add(pnNorth);
+		pnAccount.add(pnTable);
 		pnTable.add(pnChangePage);
 
-		btnCapTaiKhoan.setFocusable(false);
-		btnDatLaiMatKhau.setFocusable(false);
-		btnXoaTaiKhoan.setFocusable(false);
-		btnTimKiem.setFocusable(false);
+		btnCreateAccount.setFocusable(false);
+		btnChangePassword.setFocusable(false);
+		btnDeleteAccount.setFocusable(false);
+		btnSearch.setFocusable(false);
 		btnGoFirstPage.setFocusable(false);
 		btnGoLastPage.setFocusable(false);
 		btnNextPage.setFocusable(false);
@@ -115,6 +134,9 @@ public class AccountGUI extends JFrame implements ActionListener {
 		btnGoLastPage.addActionListener(this);
 		btnPreviousPage.addActionListener(this);
 		btnNextPage.addActionListener(this);
+		btnCreateAccount.addActionListener(this);
+		btnDeleteAccount.addActionListener(this);
+		btnChangePassword.addActionListener(this);
 		ds = new ArrayList<>();
 		Account acc1 = new Account("1","1");
 		Account acc2 = new Account("2","2");
@@ -137,15 +159,15 @@ public class AccountGUI extends JFrame implements ActionListener {
 		num = 3;
 		newList = ds.subList(0,num);
 		loadTable();
-		return pnTaiKhoan;
+		return pnAccount;
 	}
 	
 	public void loadTable() {
 		while (tblModel.getRowCount() != 0)
 			tblModel.removeRow(0);
-		for (Account x : newList) {
-//			String[] row = { x.getAccountID(), x.getPassword()};
-//				tblModel.addRow(row);
+		for (EmployeeOffice x : listEmpOff) {
+			String[] row = { x.getEmployeeID(), x.getName(), "Nhân viên hành chính", empOffDAO.getDepNameByEmpID(x.getEmployeeID()), x.getPosition(), (empOffDAO.checkAccByEmpID(x.getEmployeeID())==true?"Có tài khoản":null) };
+				tblModel.addRow(row);
 		}
 	}
 
@@ -157,6 +179,12 @@ public class AccountGUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
+		if (o.equals(btnCreateAccount)) {
+			int row = tblAccount.getSelectedRow();
+			String id = (String)tblAccount.getValueAt(row, 0);
+			accDAO.createAccount(id);
+			loadTable();
+		}
 		if (o.equals(btnGoFirstPage)) {
 			index = 0;
 			newList = ds.subList(0,num);

@@ -17,17 +17,18 @@ public class EmployeeOfficeDAO {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 
-	public List<Employee> getAllEmployeeOffice() {
-		List<Employee> listEmp = new ArrayList<Employee>();
+	public List<EmployeeOffice> getAllEmployeeOffice() {
+		List<EmployeeOffice> listEmp = new ArrayList<EmployeeOffice>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENHANHCHINH");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				Employee emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
+				EmployeeOffice emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
 						rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
 						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"),
 						rs.getDouble("LuongTheoChucDanh"), rs.getString("ChucVu"), rs.getString("MaPhongBan"));
 				listEmp.add(emp);
+//				System.out.print(emp.getPosition());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,5 +57,35 @@ public class EmployeeOfficeDAO {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public String getDepNameByEmpID (String empID) {
+		String depName = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select D.TenPhongBan from NhanVienHanhChinh E join PhongBan D on E.MaPhongBan = D.MaPhongBan where E.MaNhanVien = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				depName = rs.getString("TenPhongBan");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return depName;
+	}
+	
+	public Boolean checkAccByEmpID (String empID) {
+		Integer num=0;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select number = count(MaNhanVien) from NhanVienHanhChinh E join TaiKhoan A on E.MaNhanVien = A.tenTaiKhoan where E.MaNhanVien = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				num = rs.getInt("number");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return num==1?true:false;
 	}
 }

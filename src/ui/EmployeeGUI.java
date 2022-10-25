@@ -277,7 +277,7 @@ public class EmployeeGUI extends JFrame {
 	}
 
 	public void loadDataToTable() {
-		List<Employee> lstEmp = employeeOfficeDAO.getAllEmployeeOffice();
+		List<EmployeeOffice> lstEmp = employeeOfficeDAO.getAllEmployeeOffice();
 		for (Employee employeeOffice : lstEmp) {
 			dtmEmployeeOffice.addRow(employeeOffice.toString().split(","));
 		}

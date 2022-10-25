@@ -45,4 +45,20 @@ public class AccountDAO {
 		}
 		return account;
 	}
+	
+	public boolean createAccount(String id) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement(
+					"insert into TaiKhoan values (?,'1111',null,?)");
+			stmt.setString(1, id);
+			stmt.setString(2, id);
+			int insertResult = stmt.executeUpdate();
+			if (insertResult > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
