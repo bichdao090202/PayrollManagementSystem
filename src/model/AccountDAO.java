@@ -74,4 +74,18 @@ public class AccountDAO {
 		}
 		return n>0;
 	}
+	
+	public boolean setDefaultPassword (String id) {
+		int n = 0;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("update TaiKhoan set matKhau = '1111' where tenTaiKhoan = ?");
+			stmt.setString(1, id);
+			n= stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return n>0;
+	}
+	
 }

@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,7 +36,7 @@ import net.miginfocom.swing.MigLayout;
 public class AccountGUI extends JFrame implements ActionListener {
 	private JButton btnCreateAccount;
 	private JButton btnDeleteAccount;
-	private JButton btnChangePassword;
+	private JButton btnSetDefaultPassword;
 	private JButton btnSearch;
 	private JTextField txtSearch;
 	private JTable tblAccount;
@@ -84,7 +85,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		pnButton.setLayout(new MigLayout("", "[]20[]20[]", ""));
 		pnButton.add(btnCreateAccount = new JButton("Cấp tài khoản"));
 		pnButton.add(btnDeleteAccount = new JButton("Xóa tài khoản"));
-		pnButton.add(btnChangePassword = new JButton("Đặt lại mật khẩu"));
+		pnButton.add(btnSetDefaultPassword = new JButton("Đặt lại mật khẩu"));
 		
 		JPanel pnTable = new JPanel();
 		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách nhân viên"));
@@ -123,7 +124,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		pnTable.add(pnChangePage);
 
 		btnCreateAccount.setFocusable(false);
-		btnChangePassword.setFocusable(false);
+		btnSetDefaultPassword.setFocusable(false);
 		btnDeleteAccount.setFocusable(false);
 		btnSearch.setFocusable(false);
 		btnGoFirstPage.setFocusable(false);
@@ -136,7 +137,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		btnNextPage.addActionListener(this);
 		btnCreateAccount.addActionListener(this);
 		btnDeleteAccount.addActionListener(this);
-		btnChangePassword.addActionListener(this);
+		btnSetDefaultPassword.addActionListener(this);
 		ds = new ArrayList<>();
 		Account acc1 = new Account("1","1");
 		Account acc2 = new Account("2","2");
@@ -181,18 +182,37 @@ public class AccountGUI extends JFrame implements ActionListener {
 		Object o = e.getSource();
 		if (o.equals(btnCreateAccount)) {
 			int row = tblAccount.getSelectedRow();
+			if (row==-1) {
+				JOptionPane.showMessageDialog(this,"Chưa chọn nhân viên để cấp tài khoản");
+				return;
+			}	
 			String id = (String)tblAccount.getValueAt(row, 0);
 			accDAO.createAccount(id);
 			loadTable();
 		}
 		if (o.equals(btnDeleteAccount)) {
 			int row = tblAccount.getSelectedRow();
+			if (row==-1) {
+				JOptionPane.showMessageDialog(this,"Chưa chọn nhân viên để xóa tài khoản");
+				return;
+			}	
 			String id = (String)tblAccount.getValueAt(row, 0);
-			accDAO.deleteAccount(id);
+			if (accDAO.deleteAccount(id)==false) {
+				JOptionPane.showMessageDialog(this,"Nhân viên này chưa có tài khoản");
+				return;
+			}
 			loadTable();
 		}
-		if (o.equals(btnChangePassword)) {
-			
+		if (o.equals(btnSetDefaultPassword)) {
+			int row = tblAccount.getSelectedRow();
+			if (row==-1) {
+				JOptionPane.showMessageDialog(this,"Chưa chọn nhân viên để đặt lại mật khẩu");
+				return;
+			}	
+			String id = (String)tblAccount.getValueAt(row, 0);
+			accDAO.setDefaultPassword(id);
+			loadTable();
+			JOptionPane.showMessageDialog(this,"Tài khoản đã đổi về mật khẩu mặc định");
 		}
 		if (o.equals(btnGoFirstPage)) {
 			index = 0;
