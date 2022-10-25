@@ -61,4 +61,17 @@ public class AccountDAO {
 		}
 		return false;
 	}
+	
+	public boolean deleteAccount (String id) {
+		int n = 0;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("delete from TaiKhoan where tenTaiKhoan = ?");
+			stmt.setString(1, id);
+			n= stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return n>0;
+	}
 }

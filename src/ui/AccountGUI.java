@@ -185,6 +185,15 @@ public class AccountGUI extends JFrame implements ActionListener {
 			accDAO.createAccount(id);
 			loadTable();
 		}
+		if (o.equals(btnDeleteAccount)) {
+			int row = tblAccount.getSelectedRow();
+			String id = (String)tblAccount.getValueAt(row, 0);
+			accDAO.deleteAccount(id);
+			loadTable();
+		}
+		if (o.equals(btnChangePassword)) {
+			
+		}
 		if (o.equals(btnGoFirstPage)) {
 			index = 0;
 			newList = ds.subList(0,num);
