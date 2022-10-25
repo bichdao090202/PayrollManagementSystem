@@ -74,18 +74,4 @@ public class EmployeeOfficeDAO {
 		return depName;
 	}
 	
-	public Boolean checkAccByEmpID (String empID) {
-		Integer num=0;
-		try {
-			PreparedStatement stmt = connection.prepareStatement("select number = count(MaNhanVien) from NhanVienHanhChinh E join TaiKhoan A on E.MaNhanVien = A.tenTaiKhoan where E.MaNhanVien = ?");
-			stmt.setString(1, empID);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				num = rs.getInt("number");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return num==1?true:false;
-	}
 }

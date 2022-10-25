@@ -167,7 +167,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		while (tblModel.getRowCount() != 0)
 			tblModel.removeRow(0);
 		for (EmployeeOffice x : listEmpOff) {
-			String[] row = { x.getEmployeeID(), x.getName(), "Nhân viên hành chính", empOffDAO.getDepNameByEmpID(x.getEmployeeID()), x.getPosition(), (empOffDAO.checkAccByEmpID(x.getEmployeeID())==true?"Có tài khoản":null) };
+			String[] row = { x.getEmployeeID(), x.getName(), "Nhân viên hành chính", empOffDAO.getDepNameByEmpID(x.getEmployeeID()), x.getPosition(), (accDAO.checkAccByEmpID(x.getEmployeeID())==true?"Có tài khoản":null) };
 				tblModel.addRow(row);
 		}
 	}
@@ -183,12 +183,20 @@ public class AccountGUI extends JFrame implements ActionListener {
 		if (o.equals(btnCreateAccount)) {
 			int row = tblAccount.getSelectedRow();
 			if (row==-1) {
-				JOptionPane.showMessageDialog(this,"Chưa chọn nhân viên để cấp tài khoản");
+				JOptionPane.showMessageDialog(this,"Hãy chọn nhân viên cần cấp tài khoản");
 				return;
 			}	
 			String id = (String)tblAccount.getValueAt(row, 0);
-			accDAO.createAccount(id);
+			if (accDAO.checkAccByEmpID(id)==true) {
+				JOptionPane.showMessageDialog(this,"Nhân viên này đã có tài khoản");
+				return;
+			}
+			if (accDAO.createAccount(id)==false) {
+				JOptionPane.showMessageDialog(this,"Ghi dữ liệu thất bại, vui lòng thử lại sau");
+				return;
+			}
 			loadTable();
+			JOptionPane.showMessageDialog(this,"Cấp tài khoản thành công");
 		}
 		if (o.equals(btnDeleteAccount)) {
 			int row = tblAccount.getSelectedRow();
@@ -202,6 +210,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 				return;
 			}
 			loadTable();
+			JOptionPane.showMessageDialog(this,"Xóa tài khoản thành công");
 		}
 		if (o.equals(btnSetDefaultPassword)) {
 			int row = tblAccount.getSelectedRow();
@@ -210,6 +219,10 @@ public class AccountGUI extends JFrame implements ActionListener {
 				return;
 			}	
 			String id = (String)tblAccount.getValueAt(row, 0);
+			if (accDAO.checkAccByEmpID(id)==false) {
+				JOptionPane.showMessageDialog(this,"Nhân viên này chưa có tài khoản");
+				return;
+			}
 			accDAO.setDefaultPassword(id);
 			loadTable();
 			JOptionPane.showMessageDialog(this,"Tài khoản đã đổi về mật khẩu mặc định");

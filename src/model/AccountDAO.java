@@ -47,7 +47,7 @@ public class AccountDAO {
 	}
 	
 	public boolean createAccount(String id) {
-		try {
+		try {			
 			PreparedStatement stmt = connection.prepareStatement(
 					"insert into TaiKhoan values (?,'1111',null,?)");
 			stmt.setString(1, id);
@@ -65,7 +65,7 @@ public class AccountDAO {
 	public boolean deleteAccount (String id) {
 		int n = 0;
 		try {
-			PreparedStatement stmt = connection.prepareStatement("delete from TaiKhoan where tenTaiKhoan = ?");
+			PreparedStatement stmt = connection.prepareStatement("delete from TaiKhoan where TenDangNhap = ?");
 			stmt.setString(1, id);
 			n= stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -78,7 +78,7 @@ public class AccountDAO {
 	public boolean setDefaultPassword (String id) {
 		int n = 0;
 		try {
-			PreparedStatement stmt = connection.prepareStatement("update TaiKhoan set matKhau = '1111' where tenTaiKhoan = ?");
+			PreparedStatement stmt = connection.prepareStatement("update TaiKhoan set matKhau = '1111' where TenDangNhap = ?");
 			stmt.setString(1, id);
 			n= stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -86,6 +86,21 @@ public class AccountDAO {
 			e.printStackTrace();
 		}
 		return n>0;
+	}
+	
+	public Boolean checkAccByEmpID (String empID) {
+		Integer num=0;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select number = count(MaNhanVien) from NhanVienHanhChinh E join TaiKhoan A on E.MaNhanVien = A.TenDangNhap where E.MaNhanVien = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				num = rs.getInt("number");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return num>0?true:false;
 	}
 	
 }
