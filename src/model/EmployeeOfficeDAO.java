@@ -20,8 +20,8 @@ public class EmployeeOfficeDAO {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 
-	public List<EmployeeOffice> getAllEmployeeOffice() {
-		List<EmployeeOffice> listEmp = new ArrayList<EmployeeOffice>();
+	public List<Employee> getAllEmployeeOffice() {
+		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENHANHCHINH");
 			ResultSet rs = stmt.executeQuery();
