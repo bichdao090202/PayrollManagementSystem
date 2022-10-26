@@ -12,6 +12,9 @@ import entity.EmployeeOffice;
 
 public class EmployeeOfficeDAO {
 	private Connection connection;
+	/**
+	 * fix
+	 */
 
 	public EmployeeOfficeDAO() {
 		connection = ConnectDB.getInstance().getConnection();
@@ -57,4 +60,20 @@ public class EmployeeOfficeDAO {
 		}
 		return false;
 	}
+	
+	public String getDepNameByEmpID (String empID) {
+		String depName = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select D.TenPhongBan from NhanVienHanhChinh E join PhongBan D on E.MaPhongBan = D.MaPhongBan where E.MaNhanVien = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				depName = rs.getString("TenPhongBan");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return depName;
+	}
+	
 }

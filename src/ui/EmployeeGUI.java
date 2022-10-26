@@ -22,7 +22,6 @@ import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 
 import entity.Employee;
-import entity.EmployeeOffice;
 import model.EmployeeOfficeDAO;
 
 import java.awt.FlowLayout;
@@ -30,6 +29,10 @@ import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.JScrollPane;
+import javax.swing.JRadioButton;
+import javax.swing.JCheckBox;
+import custom_field.JTextFieldHint;
+import java.awt.Dimension;
 
 public class EmployeeGUI extends JFrame {
 	private String[] gender = new String[] { "Nam", "Nữ" };
@@ -45,8 +48,6 @@ public class EmployeeGUI extends JFrame {
 	private JButton btnUpdate;
 	private JButton btnDelete;
 	private JButton btnReset;
-	private JTextField textField_1;
-	private JTextField textField_6;
 	private String[] headerTableEmployeeOffice = new String[] { "Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ",
 			"SDT" };
 	private EmployeeOfficeDAO employeeOfficeDAO;
@@ -91,7 +92,7 @@ public class EmployeeGUI extends JFrame {
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Nhập thông tin nhân sự"));
 		panel.add(panel_3, BorderLayout.NORTH);
-		panel_3.setLayout(new MigLayout("", "[][grow][][grow][][grow]", "[][][][grow][]"));
+		panel_3.setLayout(new MigLayout("", "[][grow][][grow][][grow]", "[][][][grow][][]"));
 
 		JLabel lblNewLabel = new JLabel("Họ tên");
 		panel_3.add(lblNewLabel, "cell 0 0,alignx left");
@@ -165,11 +166,17 @@ public class EmployeeGUI extends JFrame {
 		JComboBox comboBox_3_1 = new JComboBox();
 		panel_3.add(comboBox_3_1, "cell 3 4,growx");
 
-		JLabel lblNewLabel_11 = new JLabel("Tổ chức/Chức vụ");
-		panel_3.add(lblNewLabel_11, "cell 4 4,alignx trailing");
+		JLabel lblNewLabel_11 = new JLabel("Tổ");
+		panel_3.add(lblNewLabel_11, "cell 4 4,alignx left");
 
 		JComboBox comboBox_3_2 = new JComboBox();
 		panel_3.add(comboBox_3_2, "cell 5 4,growx");
+		
+		JLabel lblNewLabel_2 = new JLabel("Chức vụ");
+		panel_3.add(lblNewLabel_2, "cell 0 5,alignx left");
+		
+		JComboBox comboBox = new JComboBox();
+		panel_3.add(comboBox, "cell 1 5,growx");
 
 		JPanel panel_4 = new JPanel();
 		panel.add(panel_4, BorderLayout.CENTER);
@@ -244,10 +251,10 @@ public class EmployeeGUI extends JFrame {
 		FlowLayout flowLayout_1 = (FlowLayout) panel_5.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		panel_1.add(panel_5, BorderLayout.NORTH);
-
-		textField_1 = new JTextField();
-		panel_5.add(textField_1);
-		textField_1.setColumns(25);
+		
+		JTextFieldHint txtfldhntNhpTnHoc = new JTextFieldHint("Nhập tên hoặc mã nhân viên");
+		txtfldhntNhpTnHoc.setPreferredSize(new Dimension(200, 25));
+		panel_5.add(txtfldhntNhpTnHoc);
 
 		JButton btnNewButton = new JButton();
 		btnNewButton.setFocusable(false);
@@ -261,10 +268,10 @@ public class EmployeeGUI extends JFrame {
 		FlowLayout flowLayout_2 = (FlowLayout) panel_7.getLayout();
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		panel_2.add(panel_7, BorderLayout.NORTH);
-
-		textField_6 = new JTextField();
-		panel_7.add(textField_6);
-		textField_6.setColumns(25);
+		
+		JTextFieldHint txtfldhntNhpTnHoc_1 = new JTextFieldHint("Nhập tên hoặc mã nhân viên");
+		txtfldhntNhpTnHoc_1.setPreferredSize(new Dimension(200, 25));
+		panel_7.add(txtfldhntNhpTnHoc_1);
 
 		JButton btnNewButton_1 = new JButton();
 		btnNewButton_1.setFocusable(false);
