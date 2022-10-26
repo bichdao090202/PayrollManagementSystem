@@ -100,7 +100,7 @@ public class AccountDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return num>0?true:false;
+		return num>0;
 	}
 	
 }

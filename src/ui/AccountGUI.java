@@ -223,7 +223,10 @@ public class AccountGUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this,"Nhân viên này chưa có tài khoản");
 				return;
 			}
-			accDAO.setDefaultPassword(id);
+			if (accDAO.setDefaultPassword(id)==false) {
+				JOptionPane.showMessageDialog(this,"Thao tác thật bại, bạn vui lòng thử lại sau");
+				return;
+			}
 			loadTable();
 			JOptionPane.showMessageDialog(this,"Tài khoản đã đổi về mật khẩu mặc định");
 		}
