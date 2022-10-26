@@ -86,7 +86,7 @@ public class MenuGUI extends JFrame {
 		pnContent.setBackground(new Color(128, 128, 0));
 		
 		JPanel pnSideMenu = new JPanel();
-		pnSideMenu.setBounds(0, 0, 194, 691);
+		pnSideMenu.setBounds(0, 0, 60, 691);
 		pnSideMenu.setBorder(new EmptyBorder(0, 10, 0, 0));
 		pnSideMenu.addMouseListener(new MouseAdapter() {
 			@Override
