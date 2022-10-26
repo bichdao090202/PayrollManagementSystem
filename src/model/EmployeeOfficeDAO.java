@@ -12,6 +12,9 @@ import entity.EmployeeOffice;
 
 public class EmployeeOfficeDAO {
 	private Connection connection;
+	/**
+	 * fix
+	 */
 
 	public EmployeeOfficeDAO() {
 		connection = ConnectDB.getInstance().getConnection();
