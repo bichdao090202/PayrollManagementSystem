@@ -46,7 +46,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 	private int index, num;
 	private List<Account> newList;
 	private  EmployeeOfficeDAO empOffDAO;
-	private List<EmployeeOffice> listEmpOff;
+	private List<Employee> listEmpOff;
 	private  DepartmentDAO depDAO;
 	private List<Department> listDep;
 	private  AccountDAO accDAO;
@@ -166,8 +166,8 @@ public class AccountGUI extends JFrame implements ActionListener {
 	public void loadTable() {
 		while (tblModel.getRowCount() != 0)
 			tblModel.removeRow(0);
-		for (EmployeeOffice x : listEmpOff) {
-			String[] row = { x.getEmployeeID(), x.getName(), "Nhân viên hành chính", empOffDAO.getDepNameByEmpID(x.getEmployeeID()), x.getPosition(), (accDAO.checkAccByEmpID(x.getEmployeeID())==true?"Có tài khoản":null) };
+		for (Employee x : listEmpOff) {
+			String[] row = { x.getEmployeeID(), x.getName(), "Nhân viên hành chính", empOffDAO.getDepNameByEmpID(x.getEmployeeID()), ((EmployeeOffice) x).getPosition(), (accDAO.checkAccByEmpID(x.getEmployeeID())==true?"Có tài khoản":null) };
 				tblModel.addRow(row);
 		}
 	}
