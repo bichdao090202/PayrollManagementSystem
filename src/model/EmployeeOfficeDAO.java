@@ -26,12 +26,11 @@ public class EmployeeOfficeDAO {
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENHANHCHINH");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				EmployeeOffice emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
+				Employee emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
 						rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
 						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"),
 						rs.getDouble("LuongTheoChucDanh"), rs.getString("ChucVu"), rs.getString("MaPhongBan"));
 				listEmp.add(emp);
-//				System.out.print(emp.getPosition());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
