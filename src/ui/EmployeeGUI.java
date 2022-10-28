@@ -23,36 +23,55 @@ import com.toedter.calendar.JDateChooser;
 
 import entity.Employee;
 import model.EmployeeOfficeDAO;
+import model.WorkerDAO;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JScrollPane;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
 import custom_field.JTextFieldHint;
 import java.awt.Dimension;
 
-public class EmployeeGUI extends JFrame {
+public class EmployeeGUI extends JFrame implements ActionListener {
+	
+	private static final long serialVersionUID = 1L;
 	private String[] gender = new String[] { "Nam", "Nữ" };
-	private JTextField textField;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTable table;
+	private String[] bankName = new String[] {"BIDV"};
+	private JTextField txtName;
+	private JTextField txtPhone;
+	private JTextField txtAddress;
 	private JPanel contentPane;
-	private JTextField textField_4;
-	private JTextField textField_5;
+	private JTextField txtAccountNumber;
+	private JTextField txtBeneficiany;
 	private JPanel panel;
-	private JButton btnAdd;
-	private JButton btnUpdate;
-	private JButton btnDelete;
-	private JButton btnReset;
 	private String[] headerTableEmployeeOffice = new String[] { "Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ",
 			"SDT" };
+	private String[] headerTableWorker = new String[] {"Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ", "SDT"};
 	private EmployeeOfficeDAO employeeOfficeDAO;
-	
+	private WorkerDAO workerDAO;
+
 	private DefaultTableModel dtmEmployeeOffice;
+	private DefaultTableModel dtmWorker;
+	private JButton btnUpdate;
+	private JButton btnAdd;
+	private JButton btnDelete;
+	private JButton btnReset;
+	private JButton btnSearchWorker;
+	private JButton btnSearchEmpOffice;
+	private JDateChooser txtDob;
+	private JComboBox<String> cboGender;
+	private JComboBox<String> cboTeam;
+	private JComboBox<String> cboBankName;
+	private JComboBox<String> cboSpeciality;
+	private JComboBox<String> cboDept_Factory;
+	private JComboBox<String> cboTypeEmployee;
+	private JComboBox<String> cboPosition;
+	private JTable tblEmpOffice;
+	private JTable tblWorker;
+
 	/**
 	 * Launch the application.
 	 */
@@ -75,7 +94,8 @@ public class EmployeeGUI extends JFrame {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public EmployeeGUI() {
 		employeeOfficeDAO = new EmployeeOfficeDAO();
-		
+		workerDAO = new WorkerDAO();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 690);
 		contentPane = new JPanel();
@@ -83,10 +103,7 @@ public class EmployeeGUI extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		panel = new JPanel();
-//		tabbedPane.addTab("Nhân viên hành chính", null, panel_1, null);
 		panel.setLayout(new BorderLayout(0, 0));
-
-//		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(panel);
 
 		JPanel panel_3 = new JPanel();
@@ -94,89 +111,89 @@ public class EmployeeGUI extends JFrame {
 		panel.add(panel_3, BorderLayout.NORTH);
 		panel_3.setLayout(new MigLayout("", "[][grow][][grow][][grow]", "[][][][grow][][]"));
 
-		JLabel lblNewLabel = new JLabel("Họ tên");
-		panel_3.add(lblNewLabel, "cell 0 0,alignx left");
+		JLabel lblName = new JLabel("Họ tên");
+		panel_3.add(lblName, "cell 0 0,alignx left");
 
-		textField = new JTextField();
-		panel_3.add(textField, "cell 1 0,growx");
-		textField.setColumns(10);
+		txtName = new JTextField();
+		panel_3.add(txtName, "cell 1 0,growx");
+		txtName.setColumns(10);
 
-		JLabel lblNewLabel_1 = new JLabel("Ngày sinh");
-		panel_3.add(lblNewLabel_1, "cell 2 0,alignx left");
+		JLabel lblDob = new JLabel("Ngày sinh");
+		panel_3.add(lblDob, "cell 2 0,alignx left");
 
-		JDateChooser dateChooser = new JDateChooser();
-		panel_3.add(dateChooser, "cell 3 0,growx");
+		txtDob = new JDateChooser();
+		panel_3.add(txtDob, "cell 3 0,growx");
 
 		JLabel lblGender = new JLabel("Giới tính");
 		panel_3.add(lblGender, "cell 4 0,alignx left");
 
-		JComboBox<String> cboGender = new JComboBox(gender);
+		cboGender = new JComboBox(gender);
 		panel_3.add(cboGender, "cell 5 0,growx");
 
-		JLabel lblNewLabel_3 = new JLabel("SDT");
-		panel_3.add(lblNewLabel_3, "cell 0 1");
+		JLabel lblPhone = new JLabel("SDT");
+		panel_3.add(lblPhone, "cell 0 1");
 
-		textField_2 = new JTextField();
-		panel_3.add(textField_2, "cell 1 1,growx");
-		textField_2.setColumns(10);
+		txtPhone = new JTextField();
+		panel_3.add(txtPhone, "cell 1 1,growx");
+		txtPhone.setColumns(10);
 
-		JLabel lblNewLabel_4 = new JLabel("Địa chỉ");
-		lblNewLabel_4.setHorizontalAlignment(SwingConstants.LEFT);
-		panel_3.add(lblNewLabel_4, "cell 2 1,alignx left");
+		JLabel lblAddress = new JLabel("Địa chỉ");
+		lblAddress.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_3.add(lblAddress, "cell 2 1,alignx left");
 
-		textField_3 = new JTextField();
-		panel_3.add(textField_3, "cell 3 1,growx");
-		textField_3.setColumns(10);
+		txtAddress = new JTextField();
+		panel_3.add(txtAddress, "cell 3 1,growx");
+		txtAddress.setColumns(10);
 
-		JLabel lblNewLabel_5 = new JLabel("Chuyên môn");
-		panel_3.add(lblNewLabel_5, "cell 4 1,alignx left");
+		JLabel lblSpeciality = new JLabel("Chuyên môn");
+		panel_3.add(lblSpeciality, "cell 4 1,alignx left");
 
-		JComboBox comboBox_1 = new JComboBox();
-		panel_3.add(comboBox_1, "cell 5 1,growx");
+		cboSpeciality = new JComboBox();
+		panel_3.add(cboSpeciality, "cell 5 1,growx");
 
 		JLabel lblBankName = new JLabel("Ngân hàng");
 		panel_3.add(lblBankName, "cell 0 2,alignx left");
 
-		JComboBox cboBankName = new JComboBox(new String[] { "BIDV" });
+		cboBankName = new JComboBox(bankName);
 		panel_3.add(cboBankName, "cell 1 2,growx");
 
-		JLabel lblNewLabel_7 = new JLabel("STK");
-		panel_3.add(lblNewLabel_7, "cell 2 2,alignx left");
+		JLabel lblAccountNumber = new JLabel("STK");
+		panel_3.add(lblAccountNumber, "cell 2 2,alignx left");
 
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		panel_3.add(textField_4, "cell 3 2,growx");
+		txtAccountNumber = new JTextField();
+		txtAccountNumber.setColumns(10);
+		panel_3.add(txtAccountNumber, "cell 3 2,growx");
 
-		JLabel lblNewLabel_8 = new JLabel("Người thụ hưởng");
-		panel_3.add(lblNewLabel_8, "cell 4 2,alignx trailing");
+		JLabel lblBeneficiany = new JLabel("Người thụ hưởng");
+		panel_3.add(lblBeneficiany, "cell 4 2,alignx trailing");
 
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		panel_3.add(textField_5, "cell 5 2,growx");
+		txtBeneficiany = new JTextField();
+		txtBeneficiany.setColumns(10);
+		panel_3.add(txtBeneficiany, "cell 5 2,growx");
 
-		JLabel lblNewLabel_9 = new JLabel("Loại nhân sự");
-		panel_3.add(lblNewLabel_9, "cell 0 4");
+		JLabel lblTypeEmployee = new JLabel("Loại nhân sự");
+		panel_3.add(lblTypeEmployee, "cell 0 4");
 
-		JComboBox comboBox_4 = new JComboBox(new String[] { "Nhân viên hành chính", "Nhân viên sản xuất" });
-		panel_3.add(comboBox_4, "cell 1 4,growx");
+		cboTypeEmployee = new JComboBox(new String[] { "Nhân viên hành chính", "Nhân viên sản xuất" });
+		panel_3.add(cboTypeEmployee, "cell 1 4,growx");
 
-		JLabel lblNewLabel_10 = new JLabel("Phân xưởng/Phòng ban");
-		panel_3.add(lblNewLabel_10, "cell 2 4,alignx trailing");
+		JLabel lblDept_Factory = new JLabel("Phân xưởng/Phòng ban");
+		panel_3.add(lblDept_Factory, "cell 2 4,alignx trailing");
 
-		JComboBox comboBox_3_1 = new JComboBox();
-		panel_3.add(comboBox_3_1, "cell 3 4,growx");
+		cboDept_Factory = new JComboBox();
+		panel_3.add(cboDept_Factory, "cell 3 4,growx");
 
-		JLabel lblNewLabel_11 = new JLabel("Tổ");
-		panel_3.add(lblNewLabel_11, "cell 4 4,alignx left");
+		JLabel lblTeam = new JLabel("Tổ");
+		panel_3.add(lblTeam, "cell 4 4,alignx left");
 
-		JComboBox comboBox_3_2 = new JComboBox();
-		panel_3.add(comboBox_3_2, "cell 5 4,growx");
-		
-		JLabel lblNewLabel_2 = new JLabel("Chức vụ");
-		panel_3.add(lblNewLabel_2, "cell 0 5,alignx left");
-		
-		JComboBox comboBox = new JComboBox();
-		panel_3.add(comboBox, "cell 1 5,growx");
+		cboTeam = new JComboBox();
+		panel_3.add(cboTeam, "cell 5 4,growx");
+
+		JLabel lblPosition = new JLabel("Chức vụ");
+		panel_3.add(lblPosition, "cell 0 5,alignx left");
+
+		cboPosition = new JComboBox();
+		panel_3.add(cboPosition, "cell 1 5,growx");
 
 		JPanel panel_4 = new JPanel();
 		panel.add(panel_4, BorderLayout.CENTER);
@@ -188,6 +205,7 @@ public class EmployeeGUI extends JFrame {
 		panel_4.add(pnButtonOperations, BorderLayout.NORTH);
 
 		btnAdd = new JButton("Thêm");
+		btnAdd.addActionListener(this);
 		btnAdd.setToolTipText("Thêm nhân viên");
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAdd.setFocusable(false);
@@ -204,25 +222,26 @@ public class EmployeeGUI extends JFrame {
 		pnButtonOperations.add(btnDelete);
 
 		btnReset = new JButton("Làm mới");
+		btnReset.addActionListener(this);
 		btnReset.setIcon(new ImageIcon("images\\operations\\refresh.png"));
 		btnReset.setFocusable(false);
 		pnButtonOperations.add(btnReset);
 
-		JPanel panel_6 = new JPanel();
-		panel_4.add(panel_6, BorderLayout.CENTER);
-		panel_6.setLayout(new GridLayout(2, 1, 10, 10));
+		JPanel pnEmployee = new JPanel();
+		panel_4.add(pnEmployee, BorderLayout.CENTER);
+		pnEmployee.setLayout(new GridLayout(2, 1, 10, 10));
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Danh sách nhân viên hành chính"));
-		panel_6.add(panel_1);
-		panel_1.setLayout(new BorderLayout(0, 0));
+		JPanel pnEmpOffice = new JPanel();
+		pnEmpOffice.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Danh sách nhân viên hành chính"));
+		pnEmployee.add(pnEmpOffice);
+		pnEmpOffice.setLayout(new BorderLayout(0, 0));
 
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Danh sách nhân viên sản xuất"));
-		panel_6.add(panel_2);
-		panel_2.setLayout(new BorderLayout(0, 0));
+		JPanel pnWorker = new JPanel();
+		pnWorker.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Danh sách nhân viên sản xuất"));
+		pnEmployee.add(pnWorker);
+		pnWorker.setLayout(new BorderLayout(0, 0));
 
-		JTable tbl1 = new JTable(dtmEmployeeOffice = new DefaultTableModel(headerTableEmployeeOffice, 0)) {
+		tblEmpOffice = new JTable(dtmEmployeeOffice = new DefaultTableModel(headerTableEmployeeOffice, 0)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -231,11 +250,7 @@ public class EmployeeGUI extends JFrame {
 			}
 		};
 
-		JTable tbl2 = new JTable(new DefaultTableModel(
-				new String[] { "M\u00E3 Nh\u00E2n S\u1EF1", "M\u00E3 Ph\u00F2ng Ban", "H\u1ECD \u0110\u00EAm",
-						"T\u00EAn Nh\u00E2n S\u1EF1", "Ng\u00E0y Sinh", "Tu\u1ED5i", "L\u01B0\u01A1ng Ng\u00E0y",
-						"Gi\u1EDBi T\u00EDnh", "\u0110\u1ECBa Ch\u1EC9", "SDT", "Chuy\u00EAn M\u00F4n" },
-				0)) {
+		tblWorker = new JTable(dtmWorker = new DefaultTableModel(headerTableWorker, 0)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -244,49 +259,87 @@ public class EmployeeGUI extends JFrame {
 			}
 		};
 
-		JScrollPane scrollPane = new JScrollPane(tbl1);
-		panel_1.add(scrollPane);
+		JScrollPane scrollPane = new JScrollPane(tblEmpOffice);
+		pnEmpOffice.add(scrollPane);
 
-		JPanel panel_5 = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panel_5.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		panel_1.add(panel_5, BorderLayout.NORTH);
-		
-		JTextFieldHint txtfldhntNhpTnHoc = new JTextFieldHint("Nhập tên hoặc mã nhân viên");
-		txtfldhntNhpTnHoc.setPreferredSize(new Dimension(200, 25));
-		panel_5.add(txtfldhntNhpTnHoc);
+		JPanel pnSearchEmpOffice = new JPanel();
+		FlowLayout fl_pnSearchEmpOffice = (FlowLayout) pnSearchEmpOffice.getLayout();
+		fl_pnSearchEmpOffice.setAlignment(FlowLayout.LEFT);
+		pnEmpOffice.add(pnSearchEmpOffice, BorderLayout.NORTH);
 
-		JButton btnNewButton = new JButton();
-		btnNewButton.setFocusable(false);
-		btnNewButton.setIcon(new ImageIcon("images\\operations\\search.png"));
-		panel_5.add(btnNewButton);
+		JTextFieldHint txtSearchEmpOffice = new JTextFieldHint("Nhập tên hoặc mã nhân viên");
+		txtSearchEmpOffice.setPreferredSize(new Dimension(200, 25));
+		pnSearchEmpOffice.add(txtSearchEmpOffice);
 
-		JScrollPane scrollPane_1 = new JScrollPane(tbl2);
-		panel_2.add(scrollPane_1);
+		btnSearchEmpOffice = new JButton();
+		btnSearchEmpOffice.setFocusable(false);
+		btnSearchEmpOffice.setIcon(new ImageIcon("images\\operations\\search.png"));
+		pnSearchEmpOffice.add(btnSearchEmpOffice);
 
-		JPanel panel_7 = new JPanel();
-		FlowLayout flowLayout_2 = (FlowLayout) panel_7.getLayout();
-		flowLayout_2.setAlignment(FlowLayout.LEFT);
-		panel_2.add(panel_7, BorderLayout.NORTH);
-		
-		JTextFieldHint txtfldhntNhpTnHoc_1 = new JTextFieldHint("Nhập tên hoặc mã nhân viên");
-		txtfldhntNhpTnHoc_1.setPreferredSize(new Dimension(200, 25));
-		panel_7.add(txtfldhntNhpTnHoc_1);
+		JScrollPane scrollPane_1 = new JScrollPane(tblWorker);
+		pnWorker.add(scrollPane_1);
 
-		JButton btnNewButton_1 = new JButton();
-		btnNewButton_1.setFocusable(false);
-		btnNewButton_1.setIcon(new ImageIcon("images\\operations\\search.png"));
-		panel_7.add(btnNewButton_1);
+		JPanel pnSearchWorker = new JPanel();
+		FlowLayout fl_pnSearchWorker = (FlowLayout) pnSearchWorker.getLayout();
+		fl_pnSearchWorker.setAlignment(FlowLayout.LEFT);
+		pnWorker.add(pnSearchWorker, BorderLayout.NORTH);
+
+		JTextFieldHint txtSearchWorker = new JTextFieldHint("Nhập tên hoặc mã nhân viên");
+		txtSearchWorker.setPreferredSize(new Dimension(200, 25));
+		pnSearchWorker.add(txtSearchWorker);
+
+		btnSearchWorker = new JButton();
+		btnSearchWorker.setFocusable(false);
+		btnSearchWorker.setIcon(new ImageIcon("images\\operations\\search.png"));
+		pnSearchWorker.add(btnSearchWorker);
 
 		setContentPane(contentPane);
-		
+
 		loadDataToTable();
 	}
 
 	public void loadDataToTable() {
-		List<Employee> lstEmp = employeeOfficeDAO.getAllEmployeeOffice();
-		for (Employee employeeOffice : lstEmp) {
-			dtmEmployeeOffice.addRow(employeeOffice.toString().split(","));
+		List<Employee> lstEmpOffice = employeeOfficeDAO.getAllEmployeeOffice();
+		for (Employee emp : lstEmpOffice) {
+			dtmEmployeeOffice.addRow(emp.toString().split(","));
+		}
+		
+		List<Employee> lstWorker = workerDAO.getAllWorker();
+		for (Employee emp : lstWorker) {
+			dtmWorker.addRow(emp.toString().split(","));
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnAdd) {
+
+		} else if (e.getSource() == btnUpdate) {
+
+		} else if (e.getSource() == btnDelete) {
+			
+		} else if (e.getSource() == btnReset) {
+			txtName.setText("");
+			txtDob.setDate(null);
+			cboGender.setSelectedIndex(0);
+			
+			txtPhone.setText("");
+			txtAddress.setText("");
+			cboSpeciality.setSelectedIndex(0);
+			
+			cboBankName.setSelectedIndex(0);
+			txtAccountNumber.setText("");
+			txtBeneficiany.setText("");
+			
+			cboTypeEmployee.setSelectedIndex(0);
+			cboDept_Factory.setSelectedIndex(0);
+			cboTeam.setSelectedIndex(0);
+			
+			cboPosition.setSelectedIndex(0);			
+		} else if (e.getSource() == btnSearchEmpOffice) {
+
+		} else {
+
 		}
 	}
 }

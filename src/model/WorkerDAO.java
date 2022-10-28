@@ -16,10 +16,10 @@ public class WorkerDAO {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 	
-	public List<Employee> getAllEmployeeOffice() {
+	public List<Employee> getAllWorker() {
 		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENHANHCHINH");
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENSANXUAT");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Employee emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
