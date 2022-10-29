@@ -35,10 +35,11 @@ public class Worker extends Employee {
 
 	@Override
 	public String toString() {
-		return "Worker [employeeID=" + getEmployeeID() + ", name=" + getName() + ", gender=" + isGender() + ", birthday=" + getBirthday()
-				+ ", address=" + getAddress() + ", phone=" + getPhone() + ", bankName=" + getBankName() + ", accountNumber="
-				+ getAccountNumber() + ", beneficiany=" + getBeneficiany() + ", speciality=" + speciality + ", teamID=" + teamID
-				+ "]";
+		if (isGender() == true) {
+			return getEmployeeID() + "," + getName() + ",Nam," + getBirthday() + "," + getAddress() + "," + getPhone();
+		} else {
+			return getEmployeeID() + "," + getName() + ",Nữ," + getBirthday() + "," + getAddress() + "," + getPhone();
+		}
 	}
 
 }

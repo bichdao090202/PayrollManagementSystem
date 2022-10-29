@@ -3,24 +3,24 @@ package entity;
 import java.util.Date;
 import java.util.Objects;
 //chấm công sản xuất
-public class Timesheets_Factory {
+public class TimesheetsFactory {
 	private String timesheetID;
 	private Date date;
 	private int quantity; // số lượng
 	private String procedureID; // quy trình
 	private String employeeID;
 
-	public Timesheets_Factory() {
+	public TimesheetsFactory() {
 		super();
 
 	}
 
-	public Timesheets_Factory(String timesheetID) {
+	public TimesheetsFactory(String timesheetID) {
 		super();
 		this.timesheetID = timesheetID;
 	}
 
-	public Timesheets_Factory(String timesheetID, Date date, int quantity, String procedureID, String employeeID) {
+	public TimesheetsFactory(String timesheetID, Date date, int quantity, String procedureID, String employeeID) {
 		super();
 		this.timesheetID = timesheetID;
 		this.date = date;
@@ -82,7 +82,7 @@ public class Timesheets_Factory {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Timesheets_Factory other = (Timesheets_Factory) obj;
+		TimesheetsFactory other = (TimesheetsFactory) obj;
 		return Objects.equals(timesheetID, other.timesheetID);
 	}
 
