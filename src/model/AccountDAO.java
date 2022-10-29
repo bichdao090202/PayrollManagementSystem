@@ -91,7 +91,9 @@ public class AccountDAO {
 	public Boolean checkAccByEmpID (String empID) {
 		Integer num=0;
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select number = count(MaNhanVien) from NhanVienHanhChinh E join TaiKhoan A on E.MaNhanVien = A.TenDangNhap where E.MaNhanVien = ?");
+			PreparedStatement stmt = connection.prepareStatement("select "
+			        + "number = count(MaNhanVien) from NhanVienHanhChinh E join TaiKhoan A "
+			        + "on E.MaNhanVien = A.TenDangNhap where E.MaNhanVien = ?");
 			stmt.setString(1, empID);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -102,5 +104,7 @@ public class AccountDAO {
 		}
 		return num>0?true:false;
 	}
+	
+	
 	
 }
