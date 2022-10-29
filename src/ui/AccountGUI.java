@@ -45,12 +45,12 @@ public class AccountGUI extends JFrame implements ActionListener {
 	private ArrayList<Account> ds;
 	private int index, num;
 	private List<Account> newList;
-	private  EmployeeOfficeDAO empOffDAO;
-	private List<EmployeeOffice> listEmpOff;
-	private  DepartmentDAO depDAO;
+	private EmployeeOfficeDAO empOffDAO;
+	private List<Employee> listEmpOff;
+	private DepartmentDAO depDAO;
 	private List<Department> listDep;
-	private  AccountDAO accDAO;
-	
+	private AccountDAO accDAO;
+
 	public AccountGUI() {
 		setSize(1200, 690);
 		empOffDAO = new EmployeeOfficeDAO();
@@ -60,7 +60,28 @@ public class AccountGUI extends JFrame implements ActionListener {
 		listDep = new ArrayList<>();
 		listDep = depDAO.getAllDepartments();
 		accDAO = new AccountDAO();
+		ds = new ArrayList<>();
+        Account acc1 = new Account("1", "1");
+        Account acc2 = new Account("2", "2");
+        Account acc3 = new Account("3", "3");
+        Account acc4 = new Account("4", "4");
+        Account acc5 = new Account("5", "5");
+        Account acc6 = new Account("6", "6");
+        Account acc7 = new Account("7", "7");
+        Account acc8 = new Account("8", "8");
+        ds.add(acc1);
+        ds.add(acc2);
+        ds.add(acc3);
+        ds.add(acc4);
+        ds.add(acc5);
+        ds.add(acc6);
+        ds.add(acc7);
+        ds.add(acc8);
+        index = 0;
+        num = 3;
+        newList = ds.subList(0, num);
 		add(tabAccount());
+		loadTable();
 //		System.out.print(listEmpOff);
 	}
 
@@ -70,7 +91,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		pnAccount.setSize(1200, 690);
 		pnAccount.setLayout(new BoxLayout(pnAccount, BoxLayout.Y_AXIS));
 		System.setProperty("Color", "0X000099");
-		
+
 		JPanel pnSearch = new JPanel();
 		pnSearch.setLayout(new MigLayout("", "[]10[]10[]50", ""));
 		pnSearch.add(new JLabel("Nhập mã/tên nhân viên: "));
@@ -80,17 +101,17 @@ public class AccountGUI extends JFrame implements ActionListener {
 		Image imgSearch = new ImageIcon("images\\operations\\search.png").getImage().getScaledInstance(20, 20,
 				Image.SCALE_DEFAULT);
 		btnSearch.setIcon(new ImageIcon(imgSearch));
-		
+
 		JPanel pnButton = new JPanel();
 		pnButton.setLayout(new MigLayout("", "[]20[]20[]", ""));
 		pnButton.add(btnCreateAccount = new JButton("Cấp tài khoản"));
 		pnButton.add(btnDeleteAccount = new JButton("Xóa tài khoản"));
 		pnButton.add(btnSetDefaultPassword = new JButton("Đặt lại mật khẩu"));
-		
+
 		JPanel pnTable = new JPanel();
 		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách nhân viên"));
 		tblAccount = new JTable();
-		String[] row0 = { "Mã nhân viên", "Họ tên", "Loại", "Phòng ban/phân xưởng", "Chức vụ", "Tài khoản"};
+		String[] row0 = { "Mã nhân viên", "Họ tên", "Loại", "Phòng ban/phân xưởng", "Chức vụ", "Tài khoản" };
 		tblAccount = new JTable(tblModel = new DefaultTableModel(row0, 0));
 		JScrollPane sp = new JScrollPane(tblAccount);
 		sp.setPreferredSize(new Dimension(1150, 480));
@@ -138,37 +159,17 @@ public class AccountGUI extends JFrame implements ActionListener {
 		btnCreateAccount.addActionListener(this);
 		btnDeleteAccount.addActionListener(this);
 		btnSetDefaultPassword.addActionListener(this);
-		ds = new ArrayList<>();
-		Account acc1 = new Account("1","1");
-		Account acc2 = new Account("2","2");
-		Account acc3 = new Account("3","3");
-		Account acc4 = new Account("4","4");
-		Account acc5 = new Account("5","5");
-		Account acc6 = new Account("6","6");
-		Account acc7 = new Account("7","7");
-		Account acc8 = new Account("8","8");
-		
-		ds.add(acc1);
-		ds.add(acc2);
-		ds.add(acc3);
-		ds.add(acc4);
-		ds.add(acc5);	
-		ds.add(acc6);
-		ds.add(acc7);
-		ds.add(acc8);
-		index = 0;
-		num = 3;
-		newList = ds.subList(0,num);
-		loadTable();
 		return pnAccount;
 	}
-	
+
 	public void loadTable() {
 		while (tblModel.getRowCount() != 0)
 			tblModel.removeRow(0);
-		for (EmployeeOffice x : listEmpOff) {
-			String[] row = { x.getEmployeeID(), x.getName(), "Nhân viên hành chính", empOffDAO.getDepNameByEmpID(x.getEmployeeID()), x.getPosition(), (accDAO.checkAccByEmpID(x.getEmployeeID())==true?"Có tài khoản":null) };
-				tblModel.addRow(row);
+		for (Employee x : listEmpOff) {
+			String[] row = { x.getEmployeeID(), x.getName(), "Nhân viên hành chính",
+					empOffDAO.getDepNameByEmpID(x.getEmployeeID()), ((EmployeeOffice) x).getPosition(),
+					(accDAO.checkAccByEmpID(x.getEmployeeID()) == true ? "Có tài khoản" : null) };
+			tblModel.addRow(row);
 		}
 	}
 
@@ -182,83 +183,84 @@ public class AccountGUI extends JFrame implements ActionListener {
 		Object o = e.getSource();
 		if (o.equals(btnCreateAccount)) {
 			int row = tblAccount.getSelectedRow();
-			if (row==-1) {
-				JOptionPane.showMessageDialog(this,"Hãy chọn nhân viên cần cấp tài khoản");
-				return;
-			}	
-			String id = (String)tblAccount.getValueAt(row, 0);
-			if (accDAO.checkAccByEmpID(id)==true) {
-				JOptionPane.showMessageDialog(this,"Nhân viên này đã có tài khoản");
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên cần cấp tài khoản");
 				return;
 			}
-			if (accDAO.createAccount(id)==false) {
-				JOptionPane.showMessageDialog(this,"Ghi dữ liệu thất bại, vui lòng thử lại sau");
+			String id = (String) tblAccount.getValueAt(row, 0);
+			if (accDAO.checkAccByEmpID(id) == true) {
+				JOptionPane.showMessageDialog(this, "Nhân viên này đã có tài khoản");
+				return;
+			}
+			if (accDAO.createAccount(id) == false) {
+				JOptionPane.showMessageDialog(this, "Ghi dữ liệu thất bại, vui lòng thử lại sau");
 				return;
 			}
 			loadTable();
-			JOptionPane.showMessageDialog(this,"Cấp tài khoản thành công");
+			JOptionPane.showMessageDialog(this, "Cấp tài khoản thành công");
 		}
 		if (o.equals(btnDeleteAccount)) {
 			int row = tblAccount.getSelectedRow();
-			if (row==-1) {
-				JOptionPane.showMessageDialog(this,"Chưa chọn nhân viên để xóa tài khoản");
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this, "Chưa chọn nhân viên để xóa tài khoản");
 				return;
-			}	
-			String id = (String)tblAccount.getValueAt(row, 0);
-			if (accDAO.deleteAccount(id)==false) {
-				JOptionPane.showMessageDialog(this,"Nhân viên này chưa có tài khoản");
+			}
+			String id = (String) tblAccount.getValueAt(row, 0);
+			if (accDAO.checkAccByEmpID(id) == false) {
+                JOptionPane.showMessageDialog(this, "Nhân viên này chưa có tài khoản");
+                return;
+            }
+			if (accDAO.deleteAccount(id) == false) {
+				JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại, vui lòng thử lại sau");
 				return;
 			}
 			loadTable();
-			JOptionPane.showMessageDialog(this,"Xóa tài khoản thành công");
+			JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công");
 		}
 		if (o.equals(btnSetDefaultPassword)) {
 			int row = tblAccount.getSelectedRow();
-			if (row==-1) {
-				JOptionPane.showMessageDialog(this,"Chưa chọn nhân viên để đặt lại mật khẩu");
-				return;
-			}	
-			String id = (String)tblAccount.getValueAt(row, 0);
-			if (accDAO.checkAccByEmpID(id)==false) {
-				JOptionPane.showMessageDialog(this,"Nhân viên này chưa có tài khoản");
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this, "Chưa chọn nhân viên để đặt lại mật khẩu");
 				return;
 			}
-			if (accDAO.setDefaultPassword(id)==false) {
-				JOptionPane.showMessageDialog(this,"Thao tác thật bại, bạn vui lòng thử lại sau");
+			String id = (String) tblAccount.getValueAt(row, 0);
+			if (accDAO.checkAccByEmpID(id) == false) {
+				JOptionPane.showMessageDialog(this, "Nhân viên này chưa có tài khoản");
 				return;
 			}
+			accDAO.setDefaultPassword(id);
 			loadTable();
-			JOptionPane.showMessageDialog(this,"Tài khoản đã đổi về mật khẩu mặc định");
+			JOptionPane.showMessageDialog(this, "Tài khoản đã đổi về mật khẩu mặc định");
 		}
 		if (o.equals(btnGoFirstPage)) {
 			index = 0;
-			newList = ds.subList(0,num);
+			newList = ds.subList(0, num);
 			loadTable();
 		}
 		if (o.equals(btnPreviousPage)) {
-			if (index==0)
+			if (index == 0)
 				return;
 			else {
-				index-=num;
-				newList = ds.subList(index,index+num);
-			}			
+				index -= num;
+				newList = ds.subList(index, index + num);
+			}
 			loadTable();
 		}
 		if (o.equals(btnNextPage)) {
-			if (index+num>=ds.size())
+			if (index + num >= ds.size())
 				return;
 			else {
-				index+=num;
-				if (index+num>ds.size())
-					newList = ds.subList(index,ds.size());
-				else 
-					newList = ds.subList(index,index+num);
-			}	
+				index += num;
+				if (index + num > ds.size())
+					newList = ds.subList(index, ds.size());
+				else
+					newList = ds.subList(index, index + num);
+			}
 			loadTable();
 		}
 		if (o.equals(btnGoLastPage)) {
-			index = (ds.size()-1)/num*num;			
-			newList = ds.subList(index,ds.size());
+			index = (ds.size() - 1) / num * num;
+			newList = ds.subList(index, ds.size());
 			loadTable();
 		}
 	}

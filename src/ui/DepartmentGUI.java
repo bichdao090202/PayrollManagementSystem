@@ -1,17 +1,25 @@
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -20,109 +28,285 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import entity.Account;
+import entity.Department;
+import model.DepartmentDAO;
 import net.miginfocom.swing.MigLayout;
-import java.awt.BorderLayout;
 
-public class DepartmentGUI extends JFrame{
-	
-	private static final long serialVersionUID = 1L;
-	private JButton btnThem;
-	private JButton btnXoa;
-	private JButton btnCapNhat;
-	private JTable tblPhongBan;
-	private DefaultTableModel tblModel;
-	private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
-	
-	public DepartmentGUI() {
-		setSize(1200,690);
-		getContentPane().add(tabPhongBan());
-	}
-	
-	public Component tabPhongBan(){
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JPanel pnPhongBan = new JPanel();
-		pnPhongBan.setSize(1200,690);
-		
-		JPanel pnNhapThongTin = new JPanel();
-		System.setProperty("Color", "0X000099");
-		pnNhapThongTin.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Nhập thông tin phòng ban"));
-		pnNhapThongTin.setLayout(new MigLayout());
-		
-		pnNhapThongTin.add(Box.createHorizontalStrut(20));
-		pnNhapThongTin.add(new JLabel("Mã phòng ban:    "));
-		JTextField txtMaPB = new JTextField();
-		txtMaPB.setEditable(false);
-		pnNhapThongTin.add(txtMaPB);
-		txtMaPB.setColumns(20);
-		pnNhapThongTin.add(Box.createHorizontalStrut(100));
-	
-		pnNhapThongTin.add(new JLabel("Tên phòng ban:   "));
-		JTextField txtTenPB = new JTextField();
-		pnNhapThongTin.add(txtTenPB);
-		txtTenPB.setColumns(50);
-		pnNhapThongTin.add(Box.createHorizontalStrut(20));
-	
-		JPanel pnButton = new JPanel();
-		FlowLayout fl_pnButton = new FlowLayout();
-		fl_pnButton.setHgap(20);
-		pnButton.setLayout(fl_pnButton);
-		btnThem=new JButton("Thêm");
-		btnThem.setFocusable(false);
-		pnButton.add(btnThem);
-		
-		Image imgThem = new ImageIcon("images\\operations\\new.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		btnThem.setIcon(new ImageIcon(imgThem));
-		pnButton.add(btnXoa=new JButton("Xóa"));
-		btnXoa.setFocusable(false);
-		Image imgXoa = new ImageIcon("images\\operations\\delete.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		btnXoa.setIcon(new ImageIcon(imgXoa));
-		pnButton.add(btnCapNhat=new JButton("Cập nhật"));
-		btnCapNhat.setFocusable(false);
-		Image imgCapNhat = new ImageIcon("images\\operations\\update.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		btnCapNhat.setIcon(new ImageIcon(imgCapNhat));
-		
-		JPanel pnTable = new JPanel();
-		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách phòng ban"));
-		tblPhongBan = new JTable();
-		String[] row0 = { "A","B","B","C" };
-		pnTable.setLayout(new BorderLayout(0, 0));
-		tblPhongBan = new JTable(tblModel = new DefaultTableModel(row0, 0));
-		JScrollPane sp = new JScrollPane(tblPhongBan);
-		sp.setPreferredSize(new Dimension(1150, 470));
-		pnTable.add(sp, BorderLayout.CENTER);
-		
-		JPanel pnChangePage = new JPanel();
-		pnChangePage.add(btnGoFirstPage = new JButton());
-		btnGoFirstPage.setFocusable(false);
-		Image imgFirst = new ImageIcon("images\\jump page\\first.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		btnGoFirstPage.setIcon(new ImageIcon(imgFirst));
-		pnChangePage.add(btnPreviousPage = new JButton());
-		btnPreviousPage.setFocusable(false);
-		Image imgPrevious = new ImageIcon("images\\jump page\\previous.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		btnPreviousPage.setIcon(new ImageIcon(imgPrevious));
-		pnChangePage.add(btnNextPage = new JButton());
-		btnNextPage.setFocusable(false);
-		Image imgNext = new ImageIcon("images\\jump page\\next.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		btnNextPage.setIcon(new ImageIcon(imgNext));
-		pnChangePage.add(btnGoLastPage = new JButton(""));
-		btnGoLastPage.setFocusable(false);
-		Image imgLast = new ImageIcon("images\\jump page\\last.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		btnGoLastPage.setIcon(new ImageIcon(imgLast));
-		pnPhongBan.setLayout(new BorderLayout(0, 0));
-		
-		JPanel pnNorth = new JPanel();
-		pnNorth.setLayout(new BorderLayout(0, 0));
-		pnNorth.add(pnNhapThongTin, BorderLayout.NORTH);
-		pnNorth.add(pnButton);
-		pnPhongBan.add(pnNorth, BorderLayout.NORTH);
-		pnPhongBan.add(pnTable);	
-		pnTable.add(pnChangePage, BorderLayout.SOUTH);
-		
-		return pnPhongBan;
-	}
+public class DepartmentGUI extends JFrame implements ActionListener, MouseListener {
 
-	public static void main(String[] args) {
-		new DepartmentGUI().setVisible(true);;
-	}
+    private static final long serialVersionUID = 1L;
+    private JButton btnCreate;
+    private JButton btnDelete;
+    private JButton btnUpdate;
+    private JButton btnRefresh;
+    private JTable tblDepartment;
+    private DefaultTableModel tblModel;
+    private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
+    private DepartmentDAO depDAO;
+    private JTextField txtID, txtName;
+    private  int index, num;
+    private List<Department> newList;
+    private List<Department> listDep;
+
+    public DepartmentGUI() {
+        setSize(1200, 690);
+        depDAO = new DepartmentDAO();
+        listDep = new ArrayList<>();
+        listDep = depDAO.getAllDepartments();
+        num = 29;
+        index = 0;
+        newList = listDep.subList(index, num);
+        getContentPane().add(tabDepartment());
+        loadNewDepartment();
+        loadTable();
+//        System.out.print(depDAO.getNewDeparmentID());
+
+    }
+
+    public Component tabDepartment() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel pnDepartment = new JPanel();
+        pnDepartment.setSize(1200, 690);
+
+        JPanel pnInformation = new JPanel();
+        System.setProperty("Color", "0X000099");
+        pnInformation.setBorder(
+                new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Nhập thông tin phòng ban"));
+        pnInformation.setLayout(new MigLayout());
+
+        pnInformation.add(Box.createHorizontalStrut(20));
+        pnInformation.add(new JLabel("Mã phòng ban:    "));
+        txtID = new JTextField();
+        txtID.setEditable(false);
+        pnInformation.add(txtID);
+        txtID.setColumns(20);
+        pnInformation.add(Box.createHorizontalStrut(100));
+
+        pnInformation.add(new JLabel("Tên phòng ban:   "));
+        txtName = new JTextField();
+        pnInformation.add(txtName);
+        txtName.setColumns(50);
+        pnInformation.add(Box.createHorizontalStrut(20));
+
+        JPanel pnButton = new JPanel();
+        FlowLayout fl_pnButton = new FlowLayout();
+        fl_pnButton.setHgap(20);
+        pnButton.setLayout(fl_pnButton);
+        btnCreate = new JButton("Thêm");
+        btnCreate.setFocusable(false);
+        pnButton.add(btnCreate);
+
+        Image imgAdd = new ImageIcon("images\\operations\\new.png").getImage().getScaledInstance(20, 20,
+                Image.SCALE_DEFAULT);
+        btnCreate.setIcon(new ImageIcon(imgAdd));
+        pnButton.add(btnDelete = new JButton("Xóa"));
+        btnDelete.setFocusable(false);
+        Image imgDelete = new ImageIcon("images\\operations\\delete.png").getImage().getScaledInstance(20, 20,
+                Image.SCALE_DEFAULT);
+        btnDelete.setIcon(new ImageIcon(imgDelete));
+        pnButton.add(btnUpdate = new JButton("Cập nhật"));
+        btnUpdate.setFocusable(false);
+        Image imgUpdate = new ImageIcon("images\\operations\\update.png").getImage().getScaledInstance(20, 20,
+                Image.SCALE_DEFAULT);
+        btnUpdate.setIcon(new ImageIcon(imgUpdate));
+        pnButton.add(btnRefresh = new JButton("Làm mới"));
+        btnDelete.setFocusable(false);
+
+        JPanel pnTable = new JPanel();
+        pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách phòng ban"));
+        tblDepartment = new JTable();
+        String[] row0 = { "Mã phòng ban", "Tên phòng ban" };
+        pnTable.setLayout(new BorderLayout(0, 0));
+        tblDepartment = new JTable(tblModel = new DefaultTableModel(row0, 0));
+        JScrollPane sp = new JScrollPane(tblDepartment);
+        sp.setPreferredSize(new Dimension(1150, 470));
+        pnTable.add(sp, BorderLayout.CENTER);
+
+        JPanel pnChangePage = new JPanel();
+        pnChangePage.add(btnGoFirstPage = new JButton());
+        btnGoFirstPage.setFocusable(false);
+        Image imgFirst = new ImageIcon("images\\jump page\\first.png").getImage().getScaledInstance(20, 20,
+                Image.SCALE_DEFAULT);
+        btnGoFirstPage.setIcon(new ImageIcon(imgFirst));
+        pnChangePage.add(btnPreviousPage = new JButton());
+        btnPreviousPage.setFocusable(false);
+        Image imgPrevious = new ImageIcon("images\\jump page\\previous.png").getImage().getScaledInstance(20, 20,
+                Image.SCALE_DEFAULT);
+        btnPreviousPage.setIcon(new ImageIcon(imgPrevious));
+        pnChangePage.add(btnNextPage = new JButton());
+        btnNextPage.setFocusable(false);
+        Image imgNext = new ImageIcon("images\\jump page\\next.png").getImage().getScaledInstance(20, 20,
+                Image.SCALE_DEFAULT);
+        btnNextPage.setIcon(new ImageIcon(imgNext));
+        pnChangePage.add(btnGoLastPage = new JButton(""));
+        btnGoLastPage.setFocusable(false);
+        Image imgLast = new ImageIcon("images\\jump page\\last.png").getImage().getScaledInstance(20, 20,
+                Image.SCALE_DEFAULT);
+        btnGoLastPage.setIcon(new ImageIcon(imgLast));
+        pnDepartment.setLayout(new BorderLayout(0, 0));
+
+        JPanel pnNorth = new JPanel();
+        pnNorth.setLayout(new BorderLayout(0, 0));
+        pnNorth.add(pnInformation, BorderLayout.NORTH);
+        pnNorth.add(pnButton);
+        pnDepartment.add(pnNorth, BorderLayout.NORTH);
+        pnDepartment.add(pnTable);
+        pnTable.add(pnChangePage, BorderLayout.SOUTH);
+        btnGoFirstPage.setFocusable(false);
+        btnGoLastPage.setFocusable(false);
+        btnNextPage.setFocusable(false);
+        btnPreviousPage.setFocusable(false);
+        btnGoFirstPage.addActionListener(this);
+        btnGoLastPage.addActionListener(this);
+        btnPreviousPage.addActionListener(this);
+        btnNextPage.addActionListener(this);
+        btnCreate.addActionListener(this);
+        btnDelete.addActionListener(this);
+        btnUpdate.addActionListener(this);
+        btnRefresh.addActionListener(this);
+        tblDepartment.addMouseListener(this);
+        return pnDepartment;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object o = e.getSource();
+        if (o.equals(btnCreate)) {
+            if (tblDepartment.getSelectedRow()!=-1) {
+                JOptionPane.showMessageDialog(this, "Hãy nhấn nút 'Làm mới' rồi thêm phòng ban mới");
+                return;
+            }
+            Department newDep = getDepartment();
+            if (newDep == null){
+                JOptionPane.showMessageDialog(this, "Tên phòng ban không thể để trống hoặc chứa kí tự đặc biệt");
+                return;
+            }
+            depDAO.addDepartment(newDep);
+            loadNewDepartment();
+            loadTable();
+        }
+        if (o.equals(btnRefresh))
+            loadNewDepartment();
+        if (o.equals(btnDelete)) {
+            int row = tblDepartment.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Chưa chọn phòng ban để xóa");
+                return;
+            }
+            String id = (String) tblDepartment.getValueAt(row, 0);
+            if (depDAO.deleteDepartment(id) == false) {
+                JOptionPane.showMessageDialog(this, "Xóa phòng ban thất bại, vui lòng thử lại sau");
+                return;
+            }
+            loadTable();
+            JOptionPane.showMessageDialog(this, "Xóa phòng ban thành công");
+        }
+        if (o.equals(btnUpdate)) {
+            int row = tblDepartment.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Chưa chọn phòng ban để cập nhật");
+                return;
+            }
+            Department newDep = getDepartment();
+            if (newDep == null){
+                JOptionPane.showMessageDialog(this, "Tên phòng ban không thể để trống hoặc chứa kí tự đặc biệt");
+                return;
+            }
+            if (depDAO.updateDepartment(newDep.getDepartmentID(),newDep.getName()) == false) {
+                JOptionPane.showMessageDialog(this, "Cập nhật phòng ban thất bại, vui lòng thử lại sau");
+                return;
+            }
+            loadNewDepartment();
+            loadTable();
+            JOptionPane.showMessageDialog(this, "Cập nhật phòng ban thành công");
+        }
+        if (o.equals(btnGoFirstPage)) {
+            index = 0;
+            loadTable();
+        }
+        if (o.equals(btnPreviousPage)) {
+            if (index == 0)
+                return;
+            else 
+                index -= num;
+            loadTable();
+        }
+        if (o.equals(btnNextPage)) {
+            if (index + num >= listDep.size())
+                return;
+            else 
+                index += num;
+            loadTable();
+        }
+        if (o.equals(btnGoLastPage)) {
+            index = (listDep.size() - 1) / num * num;
+            loadTable();
+        }
+    }
+
+    public void loadNewDepartment() {
+        txtID.setText(depDAO.getNewDeparmentID());
+        txtName.setText("");
+        tblDepartment.clearSelection();
+    }
+
+    public void loadTable() {
+        listDep = depDAO.getAllDepartments();
+        newList = listDep.subList(index, Math.min(index+num,listDep.size()));
+        while (tblModel.getRowCount() != 0)
+            tblModel.removeRow(0);
+        for (Department x : newList) {
+            String[] row = { x.getDepartmentID(), x.getName() };
+            tblModel.addRow(row);
+        }
+    }
+    
+    public Department getDepartment() {
+        String name = txtName.getText();
+        if (name == null || name.trim().isEmpty()||!Pattern.matches("[a-zA-Z0-9\s]+", name))
+            return null;
+        Department newDep = new Department();
+        newDep.setDepartmentID(txtID.getText());
+        newDep.setName(txtName.getText());
+        return newDep;
+    }
+
+    public static void main(String[] args) {
+        new DepartmentGUI().setVisible(true);
+        
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        int row = tblDepartment.getSelectedRow();
+        txtID.setText((String)tblDepartment.getValueAt(row, 0));
+        txtName.setText((String)tblDepartment.getValueAt(row, 1));
+    }
+
+    @Override       
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

@@ -22,64 +22,64 @@ import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
 
 public class AssignmentGUI extends JFrame implements ActionListener {
-	private JTable tblWorker, tblProduct, tblProdure, tblAssignment;
-	private DefaultTableModel modelWorker, modelProduct, modelProdure, modelAssignment; 
-	private JTable tblDepartment;
+	private JTable tblNhanVien, tblSanPham, tblQuyTrinh, tblPhanCong;
+	private DefaultTableModel modelNhanVien, modelSanPham, modelQuyTrinh, modelPhanCong; 
+	private JTable tblPhongBan;
 	private DefaultTableModel tblModel;
 	private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
 	
 	
-	private JButton btnAssignment, btnChangeAssignment, btnDeleteAssignment;
+	private JButton btnPhanCong, btnPhanCongLai, btnXoaPhanCong;
 	public AssignmentGUI() {
 		setSize(1200,690);
-		add(tabAssignment());
+		add(tabPhanCong());
 	}
 	
-	public Component tabAssignment(){
+	public Component tabPhanCong(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JPanel pnAssignment = new JPanel();
-		pnAssignment.setSize(1200,690);
-		pnAssignment.setLayout(new BoxLayout(pnAssignment, BoxLayout.Y_AXIS));
+		JPanel pnPhanCong = new JPanel();
+		pnPhanCong.setSize(1200,690);
+		pnPhanCong.setLayout(new BoxLayout(pnPhanCong, BoxLayout.Y_AXIS));
 		System.setProperty("Color", "0X000099");
 		
 		JPanel pn1 = new JPanel();	
 		pn1.setLayout(new MigLayout("", "[]20[]20[]", ""));
 		
-		JPanel pnWorker = new JPanel();
-		pnWorker.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách công nhân"));	
-		tblWorker = new JTable();
-		String[] row1 = { "Mã","Họ tên"};
-		tblWorker = new JTable(modelWorker = new DefaultTableModel(row1, 0));
-		JScrollPane sp1 = new JScrollPane(tblWorker);
-		pnWorker.add(sp1);
+		JPanel pnNhanVien = new JPanel();
+		pnNhanVien.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách nhân viên"));	
+		tblNhanVien = new JTable();
+		String[] row1 = { "A","B","B","C" };
+		tblNhanVien = new JTable(modelNhanVien = new DefaultTableModel(row1, 0));
+		JScrollPane sp1 = new JScrollPane(tblNhanVien);
+		pnNhanVien.add(sp1);
 		sp1.setPreferredSize(new Dimension(350, 200));
-		pn1.add(pnWorker, "cell 0 0");
+		pn1.add(pnNhanVien, "cell 0 0");
 		
-		JPanel pnProduct = new JPanel();
-		pnProduct.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Sản phẩm"));	
-		tblProduct = new JTable();
+		JPanel pnSanPham = new JPanel();
+		pnSanPham.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Sản phẩm"));	
+		tblSanPham = new JTable();
 		String[] row2 = { "A","B","B","C" };
-		tblProduct = new JTable(modelProduct = new DefaultTableModel(row2, 0));
-		JScrollPane sp2 = new JScrollPane(tblProduct);
-		pnProduct.add(sp2);
+		tblSanPham = new JTable(modelSanPham = new DefaultTableModel(row2, 0));
+		JScrollPane sp2 = new JScrollPane(tblSanPham);
+		pnSanPham.add(sp2);
 		sp2.setPreferredSize(new Dimension(350, 200));
-		pn1.add(pnProduct, "cell 1 0");
+		pn1.add(pnSanPham, "cell 1 0");
 		
-		JPanel pnProdure = new JPanel();
-		pnProdure.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Quy trình"));	
-		tblProdure = new JTable();
+		JPanel pnQuyTrinh = new JPanel();
+		pnQuyTrinh.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Quy trình"));	
+		tblQuyTrinh = new JTable();
 		String[] row3 = { "A","B","B","C" };
-		tblProdure = new JTable(modelProdure = new DefaultTableModel(row3, 0));
-		JScrollPane sp3 = new JScrollPane(tblProdure);
-		pnProdure.add(sp3);
+		tblQuyTrinh = new JTable(modelQuyTrinh = new DefaultTableModel(row3, 0));
+		JScrollPane sp3 = new JScrollPane(tblQuyTrinh);
+		pnQuyTrinh.add(sp3);
 		sp3.setPreferredSize(new Dimension(350, 200));
-		pn1.add(pnProdure, "cell 2 0");
+		pn1.add(pnQuyTrinh, "cell 2 0");
 		
 		JPanel pnButton = new JPanel();
 		pnButton.setLayout(new MigLayout("", "[]20[]20[]", ""));
-		pnButton.add(btnAssignment = new JButton("Phân công"));
-		pnButton.add(btnChangeAssignment = new JButton("Phân công lại"));
-		pnButton.add(btnDeleteAssignment = new JButton("Xóa phân công"));
+		pnButton.add(btnPhanCong = new JButton("Phân công"));
+		pnButton.add(btnPhanCongLai = new JButton("Phân công lại"));
+		pnButton.add(btnXoaPhanCong = new JButton("Xóa phân công"));
 		
 		JPanel pnChangePage = new JPanel();
 		pnChangePage.add(btnGoFirstPage = new JButton());
@@ -97,19 +97,21 @@ public class AssignmentGUI extends JFrame implements ActionListener {
 		
 		JPanel pn3 = new JPanel();
 		pn3.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Phân công"));	
-		tblAssignment = new JTable();
+		tblPhanCong = new JTable();
 		String[] row4 = { "A","B","B","C" };
-		tblAssignment = new JTable(modelAssignment = new DefaultTableModel(row4, 0));
-		JScrollPane sp4 = new JScrollPane(tblAssignment);
+		tblPhanCong = new JTable(modelPhanCong = new DefaultTableModel(row4, 0));
+		JScrollPane sp4 = new JScrollPane(tblPhanCong);
 		pn3.add(sp4);
 		sp4.setPreferredSize(new Dimension(1150, 300));
+		
+//		pn3.add(pnChangePage);
 		
 		pn1.add(pnButton,"cell 1 1");
 		pn1.add(pnChangePage, "dock south");
 		pn1.add(pn3, "dock south");
-		btnAssignment.setFocusable(false);
-		btnChangeAssignment.setFocusable(false);
-		btnDeleteAssignment.setFocusable(false);
+		btnPhanCong.setFocusable(false);
+		btnPhanCongLai.setFocusable(false);
+		btnXoaPhanCong.setFocusable(false);
 		return pn1;
 	}
 

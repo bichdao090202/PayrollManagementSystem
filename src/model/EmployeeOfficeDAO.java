@@ -12,23 +12,25 @@ import entity.EmployeeOffice;
 
 public class EmployeeOfficeDAO {
 	private Connection connection;
+	/**
+	 * fix
+	 */
 
 	public EmployeeOfficeDAO() {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 
-	public List<EmployeeOffice> getAllEmployeeOffice() {
-		List<EmployeeOffice> listEmp = new ArrayList<EmployeeOffice>();
+	public List<Employee> getAllEmployeeOffice() {
+		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENHANHCHINH");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				EmployeeOffice emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
+				Employee emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
 						rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
 						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"),
 						rs.getDouble("LuongTheoChucDanh"), rs.getString("ChucVu"), rs.getString("MaPhongBan"));
 				listEmp.add(emp);
-//				System.out.print(emp.getPosition());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
