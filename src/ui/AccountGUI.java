@@ -159,6 +159,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		btnCreateAccount.addActionListener(this);
 		btnDeleteAccount.addActionListener(this);
 		btnSetDefaultPassword.addActionListener(this);
+		loadTable();
 		return pnAccount;
 	}
 
@@ -206,12 +207,14 @@ public class AccountGUI extends JFrame implements ActionListener {
 				return;
 			}
 			String id = (String) tblAccount.getValueAt(row, 0);
+
 			if (accDAO.checkAccByEmpID(id) == false) {
                 JOptionPane.showMessageDialog(this, "Nhân viên này chưa có tài khoản");
                 return;
             }
 			if (accDAO.deleteAccount(id) == false) {
 				JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại, vui lòng thử lại sau");
+
 				return;
 			}
 			loadTable();
