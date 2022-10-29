@@ -114,7 +114,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		JPanel pnTable = new JPanel();
 		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách phòng ban"));
 		tblDepartment = new JTable();
-		String[] row0 = { "Mã phòng ban", "Tên phòng ban" };
+		String[] row0 = { "Mã phòng ban", "Tên phòng ban", "Tên trưởng phòng", "Số lượng nhân viên" };
 		pnTable.setLayout(new BorderLayout(0, 0));
 		tblDepartment = new JTable(tblModel = new DefaultTableModel(row0, 0));
 		JScrollPane sp = new JScrollPane(tblDepartment);
@@ -264,7 +264,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		while (tblModel.getRowCount() != 0)
 			tblModel.removeRow(0);
 		for (Department x : newList) {
-			String[] row = { x.getDepartmentID(), x.getName() };
+			String[] row = { x.getDepartmentID(), x.getName(), depDAO.getNameManagerByID(x.getManagerID()), depDAO.getQuantityEmployee(x.getDepartmentID()) };
 			tblModel.addRow(row);
 		}
 	}
