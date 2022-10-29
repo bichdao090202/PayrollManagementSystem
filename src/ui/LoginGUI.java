@@ -41,23 +41,6 @@ public class LoginGUI extends JFrame implements ActionListener {
 	private AccountDAO accountDAO;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-					LoginGUI frame = new LoginGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public LoginGUI() {
@@ -130,6 +113,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		pnUser.setLayout(new BorderLayout(0, 0));
 
 		txtUser = new JTextFieldHint("Username");
+		txtUser.setText("NV00001");
 		txtUser.setLocation(55, 0);
 		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtUser.setBorder(null);
@@ -155,6 +139,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 
 		txtPassword = new JPasswordFieldHint("Password");
 		lblIconPassword.setLabelFor(txtPassword);
+		txtPassword.setText("1111");
 		txtPassword.setLocation(55, 0);
 		txtPassword.setBorder(null);
 		txtPassword.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -174,9 +159,19 @@ public class LoginGUI extends JFrame implements ActionListener {
 			} else {
 				HashMap<String, String> account = accountDAO.getPasswordEncryption(username);
 				if (account != null & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"), account.get("salt"))) {
-					System.out.println("Dang nhap thanh cong");
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							try {
+								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+								MenuGUI menuGUI = new MenuGUI();
+								menuGUI.setVisible(true);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
 				}else {
-					System.out.println("Dang nhap khong thanh cong");
+					JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu không chính xác! Vui lòng nhập lại.", "Đăng nhập thất bại", JOptionPane.NO_OPTION, null);
 				}
 			}
 		}

@@ -24,6 +24,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import net.miginfocom.swing.MigLayout;
+import sidemenu.SideMenuPanel;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.border.TitledBorder;

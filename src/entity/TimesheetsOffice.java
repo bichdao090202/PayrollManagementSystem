@@ -4,26 +4,21 @@ import java.util.Date;
 import java.util.Objects;
 
 // chấm công hành chính
-public class Timesheets_Office {
+public class TimesheetsOffice {
 
 	private String timesheetID;
 	private Date date;
 	private Date checkInAM;
 	private Date checkOutAM;
 	private Date checkInPM;
-	private Date checkOutPm;
+	private Date checkOutPM;
 	private String employeeID;
 
-	public Timesheets_Office() {
+	public TimesheetsOffice() {
 		super();
 	}
 
-	public Timesheets_Office(String timesheetID) {
-		super();
-		this.timesheetID = timesheetID;
-	}
-
-	public Timesheets_Office(String timesheetID, Date date, Date checkInAM, Date checkOutAM, Date checkInPM,
+	public TimesheetsOffice(String timesheetID, Date date, Date checkInAM, Date checkOutAM, Date checkInPM,
 			Date checkOutPm, String employeeID) {
 		super();
 		this.timesheetID = timesheetID;
@@ -31,7 +26,7 @@ public class Timesheets_Office {
 		this.checkInAM = checkInAM;
 		this.checkOutAM = checkOutAM;
 		this.checkInPM = checkInPM;
-		this.checkOutPm = checkOutPm;
+		this.checkOutPM = checkOutPm;
 		this.employeeID = employeeID;
 	}
 
@@ -76,11 +71,11 @@ public class Timesheets_Office {
 	}
 
 	public Date getCheckOutPm() {
-		return checkOutPm;
+		return checkOutPM;
 	}
 
 	public void setCheckOutPm(Date checkOutPm) {
-		this.checkOutPm = checkOutPm;
+		this.checkOutPM = checkOutPm;
 	}
 
 	public String getEmployeeID() {
@@ -104,15 +99,13 @@ public class Timesheets_Office {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Timesheets_Office other = (Timesheets_Office) obj;
+		TimesheetsOffice other = (TimesheetsOffice) obj;
 		return Objects.equals(timesheetID, other.timesheetID);
 	}
 
 	@Override
 	public String toString() {
-		return "Timesheets_Office [timesheetID=" + timesheetID + ", date=" + date + ", checkInAM=" + checkInAM
-				+ ", checkOutAM=" + checkOutAM + ", checkInPM=" + checkInPM + ", checkOutPm=" + checkOutPm
-				+ ", employeeID=" + employeeID + "]";
+		return employeeID + "," + date + "," + checkInAM + "," + checkOutAM + "," + checkInPM + "," + checkOutPM;
 	}
 
 }

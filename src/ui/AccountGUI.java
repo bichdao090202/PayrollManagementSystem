@@ -60,7 +60,28 @@ public class AccountGUI extends JFrame implements ActionListener {
 		listDep = new ArrayList<>();
 		listDep = depDAO.getAllDepartments();
 		accDAO = new AccountDAO();
+		ds = new ArrayList<>();
+        Account acc1 = new Account("1", "1");
+        Account acc2 = new Account("2", "2");
+        Account acc3 = new Account("3", "3");
+        Account acc4 = new Account("4", "4");
+        Account acc5 = new Account("5", "5");
+        Account acc6 = new Account("6", "6");
+        Account acc7 = new Account("7", "7");
+        Account acc8 = new Account("8", "8");
+        ds.add(acc1);
+        ds.add(acc2);
+        ds.add(acc3);
+        ds.add(acc4);
+        ds.add(acc5);
+        ds.add(acc6);
+        ds.add(acc7);
+        ds.add(acc8);
+        index = 0;
+        num = 3;
+        newList = ds.subList(0, num);
 		add(tabAccount());
+		loadTable();
 //		System.out.print(listEmpOff);
 	}
 
@@ -138,27 +159,6 @@ public class AccountGUI extends JFrame implements ActionListener {
 		btnCreateAccount.addActionListener(this);
 		btnDeleteAccount.addActionListener(this);
 		btnSetDefaultPassword.addActionListener(this);
-		ds = new ArrayList<>();
-		Account acc1 = new Account("1", "1");
-		Account acc2 = new Account("2", "2");
-		Account acc3 = new Account("3", "3");
-		Account acc4 = new Account("4", "4");
-		Account acc5 = new Account("5", "5");
-		Account acc6 = new Account("6", "6");
-		Account acc7 = new Account("7", "7");
-		Account acc8 = new Account("8", "8");
-
-		ds.add(acc1);
-		ds.add(acc2);
-		ds.add(acc3);
-		ds.add(acc4);
-		ds.add(acc5);
-		ds.add(acc6);
-		ds.add(acc7);
-		ds.add(acc8);
-		index = 0;
-		num = 3;
-		newList = ds.subList(0, num);
 		loadTable();
 		return pnAccount;
 	}
@@ -207,8 +207,14 @@ public class AccountGUI extends JFrame implements ActionListener {
 				return;
 			}
 			String id = (String) tblAccount.getValueAt(row, 0);
+
+			if (accDAO.checkAccByEmpID(id) == false) {
+                JOptionPane.showMessageDialog(this, "Nhân viên này chưa có tài khoản");
+                return;
+            }
 			if (accDAO.deleteAccount(id) == false) {
-				JOptionPane.showMessageDialog(this, "Nhân viên này chưa có tài khoản");
+				JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại, vui lòng thử lại sau");
+
 				return;
 			}
 			loadTable();
