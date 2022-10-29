@@ -38,6 +38,10 @@ import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
 import custom_field.JTextFieldHint;
 import java.awt.Rectangle;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
 
 public class TimesheetsGUI extends JFrame implements ActionListener {
 
@@ -55,6 +59,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTable table;
+	private JTable table_1;
 	
 
 	/**
@@ -202,19 +207,37 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		scrollPane_2.setViewportView(table);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new EmptyBorder(20, 0, 0, 0));
 		panel_1.setAlignmentX(10.0f);
 //		panel_1.setBorder(new TitledBorder(new Lin, getTitle(), ALLBITS, ABORT, getFont()));
 		tabWorker.add(panel_1, BorderLayout.CENTER);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Bảng chấm công"));
+		panel_1.add(panel_5, BorderLayout.CENTER);
+		panel_5.setLayout(new BorderLayout(0, 0));
+		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		panel_1.add(scrollPane_1);
+		panel_5.add(scrollPane_1);
+		
+		table_1 = new JTable();
+		scrollPane_1.setViewportView(table_1);
 		
 		JPanel panel_4 = new JPanel();
-		panel_1.add(panel_4, BorderLayout.NORTH);
+		panel_5.add(panel_4, BorderLayout.NORTH);
+		panel_4.setLayout(new MigLayout("", "[7px][][]", "[20px,grow]"));
 		
-		JTextFieldHint textFieldHint = new JTextFieldHint();
-		panel_4.add(textFieldHint);
+		JTextFieldHint textFieldHint = new JTextFieldHint("Nhập mã nhân viên");
+		textFieldHint.setMinimumSize(new Dimension(150, 20));
+		panel_4.add(textFieldHint, "cell 0 0,growx,aligny top");
+		
+		JDateChooser dateChooser_3 = new JDateChooser();
+		dateChooser_3.setMinimumSize(new Dimension(150, 20));
+		panel_4.add(dateChooser_3, "cell 1 0,grow");
+		
+		JButton btnNewButton_3 = new JButton("New button");
+		panel_4.add(btnNewButton_3, "cell 2 0");
 		
 		JPanel tabEmpOffice = new JPanel();
 		tabbedPane.addTab("Nhân viên hành chính", null, tabEmpOffice, null);
