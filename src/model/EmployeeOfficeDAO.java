@@ -76,4 +76,17 @@ public class EmployeeOfficeDAO {
 		return depName;
 	}
 	
+	public List<String> getAllName(){
+		List<String> listEmp = new ArrayList<String>();
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT MaNhanVien, TenNhanVien  FROM NHANVIENHANHCHINH");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				listEmp.add(rs.getString("MaNhanVien") + " - " + rs.getString("TenNhanVien"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listEmp;
+	}
 }
