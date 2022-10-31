@@ -310,4 +310,19 @@ public class FactoryDAO {
 		}
 	}
 
+	
+	public List<String> getAllNameFactory(){
+		List<String> listName = new ArrayList<String>();
+		try {
+			prstm = con.prepareStatement("SELECT MaPhanXuong ,TenPhanXuong FROM PHANXUONG");
+			rs = prstm.executeQuery();
+			while(rs.next()) {
+				String name = new String(rs.getString("MaPhanXuong") +" - " + rs.getString("TenPhanXuong"));
+				listName.add(name);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listName;
+	}
 }
