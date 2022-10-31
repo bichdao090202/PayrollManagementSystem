@@ -134,6 +134,20 @@ public class DepartmentDAO {
 		return name;
     }
     
+    public String getNameDepartmentByID(String deptID) {
+    	String name = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT TenPhongBan FROM  PHONGBAN WHERE MaPhongBan= ?");
+			stmt.setString(1, deptID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next() )
+            	name = rs.getString("TenPhongBan");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+    }
+    
     public String getQuantityEmployee(String departmentID) {
     	int number = 0;
     	
