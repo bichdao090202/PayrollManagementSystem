@@ -61,6 +61,20 @@ public class EmployeeOfficeDAO {
 		return false;
 	}
 	
+	public boolean deleteEmployee(String empID) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("DELETE FROM NHANVIENHANHCHINH WHERE MaNhanVien = ?");
+			stmt.setString(1, empID);
+			int result = stmt.executeUpdate();
+			if (result < 0) {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
 	public String getDepNameByEmpID (String empID) {
 		String depName = null;
 		try {
