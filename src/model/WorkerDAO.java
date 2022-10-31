@@ -3,6 +3,7 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,4 +35,35 @@ public class WorkerDAO {
 		return listEmp;
 	}
 	
+	public Employee getWorker(String empID) {
+		Employee emp = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENSANXUAT WHERE MaNhanVien = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
+						rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
+						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"),
+						rs.getString("ChuyenMon"), rs.getString("MaTo"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return emp;
+	}
+	
+	public boolean deleteEmployee(String empID) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("DELETE FROM NHANVIENSANXUAT WHERE MaNhanVien = ?");
+			stmt.setString(1, empID);
+			int result = stmt.executeUpdate();
+			if (result < 0) {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
 }
