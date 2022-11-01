@@ -1,0 +1,38 @@
+Bảng lương 11/2022
+
+Mã nhân viên : NV00006
+
+Tên nhân viên : Trần Nam Anh
+
+Giới tính : Nam
+
+Ngày sinh : 06/12/1999
+
+Số điện thoại : 0973266558
+
+Địa chỉ : Thanh Xuân, Hà Nội
+
+Tên ngân hàng : BIDV
+
+Số tài khoản : 12305062001
+
+Người hưởng thụ : Trần Nam Anh
+
+Chuyên môn/Chức vụ : May cổ áo thun
+
+Mã tổ/Mã phòng ban : PX0102
+
+Số ngày làm việc : 0
+
+Số ngày nghỉ : 30
+
+Chỉ tiêu : Không đạt
+
+Lý do : Số lượng không đạt yêu cầu
+
+Tiền thưởng : 0.0
+
+Tiền phạt : 0.0
+
+Tổng lương : 0.0
+

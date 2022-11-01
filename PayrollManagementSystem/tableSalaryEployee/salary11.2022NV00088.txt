@@ -1,0 +1,38 @@
+Bảng lương 11/2022
+
+Mã nhân viên : NV00088
+
+Tên nhân viên : Tống Gia Hào
+
+Giới tính : Nam
+
+Ngày sinh : 28/04/1994
+
+Số điện thoại : 0354897262
+
+Địa chỉ : Lê Đức Thọ Gò Vấp
+
+Tên ngân hàng : MB Bank   
+
+Số tài khoản : 012305459010        
+
+Người hưởng thụ : Tống Gia Hào
+
+Chuyên môn/Chức vụ : Nhân Viên
+
+Mã tổ/Mã phòng ban : PB02
+
+Số ngày làm việc : 0
+
+Số ngày nghỉ : 30
+
+Chỉ tiêu : Không đạt
+
+Lý do : Số giờ làm không đạt yêu cầu
+
+Tiền thưởng : 500000.0
+
+Tiền phạt : 0.0
+
+Tổng lương : 500000.0
+
