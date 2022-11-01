@@ -20,12 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.border.MatteBorder;
 
 public class MenuGUI extends JFrame {
 	private final Color colorHover = Color.CYAN;
@@ -43,7 +39,7 @@ public class MenuGUI extends JFrame {
 	private JPanel pnChamCong;
 	private JPanel pnSanPham;
 	private JPanel pnLuong;
-	private JPanel pnThongKe;
+	private JPanel pnPhanXuong;
 	private JPanel pnTaiKhoan;
 	private boolean pnNhanSuClicked = true;
 	private boolean pnPhongBanClicked = false;
@@ -57,6 +53,19 @@ public class MenuGUI extends JFrame {
 	private Component pnContentNhanSu;
 	private TimesheetsGUI timesheetsGUI;
 	private Component pnContentChamCong;
+	private DepartmentGUI departmentGUI;
+	private Component pnContentPhongBan;
+	private ProductGUI productGUI;
+	private Component pnContentSanPham;
+	private AccountGUI accountGUI;
+	private Component pnContentAccount;
+	private AssignmentGUI assignmentGUI;
+	private Component pnContentPhanCong;
+	private SalaryGUI salaryGUI;
+	private Component pnContentSalary;
+	private FactoryGUI factoryGUI;
+	private Component pnContentFactory;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -85,6 +94,18 @@ public class MenuGUI extends JFrame {
 		pnContentChamCong = timesheetsGUI.getView();
 		employeeGUI = new EmployeeGUI();
 		pnContentNhanSu = employeeGUI.getView();
+		departmentGUI = new DepartmentGUI();
+		pnContentPhongBan = departmentGUI.tabDepartment();
+		productGUI = new ProductGUI();
+		pnContentSanPham = productGUI.getView();
+		accountGUI = new AccountGUI();
+		pnContentAccount = accountGUI.tabAccount();
+		assignmentGUI = new AssignmentGUI();
+		pnContentPhanCong = assignmentGUI.tabPhanCong();
+		salaryGUI = new SalaryGUI();
+		pnContentSalary = salaryGUI.getView();
+		factoryGUI = new FactoryGUI();
+		pnContentFactory = factoryGUI.getView();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 730);
@@ -120,7 +141,7 @@ public class MenuGUI extends JFrame {
 		lblName.setPreferredSize(new Dimension(pnSideMenu.getWidth(), pnSideMenu.getHeight()));
 
 		pnMenu = new JPanel();
-		pnMenu.setBounds(0, 180, 230, 465);
+		pnMenu.setBounds(0, 180, 179, 465);
 		pnMenu.setBackground(new Color(16, 84, 129));
 		pnMenu.setLayout(new GridLayout(8, 1, 0, 10));
 
@@ -153,7 +174,7 @@ public class MenuGUI extends JFrame {
 				pnChamCong.setBackground(color);
 				pnSanPham.setBackground(color);
 				pnLuong.setBackground(color);
-				pnThongKe.setBackground(color);
+				pnPhanXuong.setBackground(color);
 				pnTaiKhoan.setBackground(color);
 				
 				pnContent.removeAll();
@@ -177,9 +198,7 @@ public class MenuGUI extends JFrame {
 
 		JLabel lblIconNhanSu = new JLabel();
 		lblIconNhanSu.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgNhanSu = new ImageIcon("images\\side_menu\\businessman.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconNhanSu.setIcon(new ImageIcon(imgNhanSu));
+		lblIconNhanSu.setIcon(new ImageIcon("images\\side_menu\\businessman.png"));
 		pnNhanSu.add(lblIconNhanSu, BorderLayout.WEST);
 
 		pnPhongBan = new JPanel();
@@ -212,8 +231,14 @@ public class MenuGUI extends JFrame {
 				pnChamCong.setBackground(color);
 				pnSanPham.setBackground(color);
 				pnLuong.setBackground(color);
-				pnThongKe.setBackground(color);
+				pnPhanXuong.setBackground(color);
 				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentPhongBan);
+				pnContentPhongBan.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
 			}
 		});
 		pnPhongBan.setBorder(null);
@@ -229,10 +254,63 @@ public class MenuGUI extends JFrame {
 
 		JLabel lblIconPhongBan = new JLabel();
 		lblIconPhongBan.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgPhongBan = new ImageIcon("images\\side_menu\\dept.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconPhongBan.setIcon(new ImageIcon(imgPhongBan));
+		lblIconPhongBan.setIcon(new ImageIcon("images\\side_menu\\dept.png"));
 		pnPhongBan.add(lblIconPhongBan, BorderLayout.WEST);
+		
+		pnPhanXuong = new JPanel();
+		pnPhanXuong.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnPhanXuong.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnThongKeClicked) {
+					pnPhanXuong.setBackground(color);
+				}
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = false;
+				pnLuongClicked = false;
+				pnThongKeClicked = true;
+				pnTaiKhoanClicked = false;
+				pnNhanSu.setBackground(color);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(colorHover);
+				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentFactory);
+				pnContentFactory.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+			}
+		});
+		pnPhanXuong.setBorder(null);
+		pnPhanXuong.setBackground(new Color(16, 84, 129));
+		pnMenu.add(pnPhanXuong);
+		pnPhanXuong.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblPhanXuong = new JLabel("PHÂN XƯỞNG");
+		lblPhanXuong.setForeground(new Color(255, 255, 255));
+		lblPhanXuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblPhanXuong.setHorizontalAlignment(SwingConstants.CENTER);
+		pnPhanXuong.add(lblPhanXuong, BorderLayout.CENTER);
+
+		JLabel lblIconPhanXuong = new JLabel();
+		lblIconPhanXuong.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconPhanXuong.setIcon(new ImageIcon("images\\side_menu\\factory.png"));
+		pnPhanXuong.add(lblIconPhanXuong, BorderLayout.WEST);
 
 		pnPhanCong = new JPanel();
 		pnPhanCong.addMouseListener(new MouseAdapter() {
@@ -263,8 +341,14 @@ public class MenuGUI extends JFrame {
 				pnChamCong.setBackground(color);
 				pnSanPham.setBackground(color);
 				pnLuong.setBackground(color);
-				pnThongKe.setBackground(color);
+				pnPhanXuong.setBackground(color);
 				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentPhanCong);
+				pnContentPhanCong.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
 			}
 		});
 		pnPhanCong.setBorder(null);
@@ -280,9 +364,7 @@ public class MenuGUI extends JFrame {
 
 		JLabel lblIconPhanCong = new JLabel();
 		lblIconPhanCong.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgPhanCong = new ImageIcon("images\\side_menu\\allotment.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconPhanCong.setIcon(new ImageIcon(imgPhanCong));
+		lblIconPhanCong.setIcon(new ImageIcon("images\\side_menu\\allotment.png"));
 		pnPhanCong.add(lblIconPhanCong, BorderLayout.WEST);
 
 		pnChamCong = new JPanel();
@@ -314,7 +396,7 @@ public class MenuGUI extends JFrame {
 				pnChamCong.setBackground(colorHover);
 				pnSanPham.setBackground(color);
 				pnLuong.setBackground(color);
-				pnThongKe.setBackground(color);
+				pnPhanXuong.setBackground(color);
 				pnTaiKhoan.setBackground(color);
 				
 				pnContent.removeAll();
@@ -337,9 +419,7 @@ public class MenuGUI extends JFrame {
 
 		JLabel lblIconChamCong = new JLabel();
 		lblIconChamCong.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgChamCong = new ImageIcon("images\\side_menu\\timekeeping.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconChamCong.setIcon(new ImageIcon(imgChamCong));
+		lblIconChamCong.setIcon(new ImageIcon("images\\side_menu\\timekeeping.png"));
 		pnChamCong.add(lblIconChamCong, BorderLayout.WEST);
 
 		pnSanPham = new JPanel();
@@ -371,8 +451,13 @@ public class MenuGUI extends JFrame {
 				pnChamCong.setBackground(color);
 				pnSanPham.setBackground(colorHover);
 				pnLuong.setBackground(color);
-				pnThongKe.setBackground(color);
+				pnPhanXuong.setBackground(color);
 				pnTaiKhoan.setBackground(color);
+				pnContent.removeAll();
+				pnContent.add(pnContentSanPham);
+				pnContentSanPham.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
 			}
 		});
 		pnSanPham.setBorder(null);
@@ -388,9 +473,7 @@ public class MenuGUI extends JFrame {
 
 		JLabel lblIconSanPham = new JLabel();
 		lblIconSanPham.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgSanPham = new ImageIcon("images\\side_menu\\product.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconSanPham.setIcon(new ImageIcon(imgSanPham));
+		lblIconSanPham.setIcon(new ImageIcon("images\\side_menu\\product.png"));
 		pnSanPham.add(lblIconSanPham, BorderLayout.WEST);
 
 		pnLuong = new JPanel();
@@ -422,8 +505,14 @@ public class MenuGUI extends JFrame {
 				pnChamCong.setBackground(color);
 				pnSanPham.setBackground(color);
 				pnLuong.setBackground(colorHover);
-				pnThongKe.setBackground(color);
+				pnPhanXuong.setBackground(color);
 				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentSalary);
+				pnContentSalary.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
 			}
 		});
 		pnLuong.setBorder(null);
@@ -439,61 +528,8 @@ public class MenuGUI extends JFrame {
 
 		JLabel lblIconLuong = new JLabel();
 		lblIconLuong.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgLuong = new ImageIcon("images\\side_menu\\salary.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconLuong.setIcon(new ImageIcon(imgLuong));
+		lblIconLuong.setIcon(new ImageIcon("images\\side_menu\\salary.png"));
 		pnLuong.add(lblIconLuong, BorderLayout.WEST);
-
-		pnThongKe = new JPanel();
-		pnThongKe.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				pnThongKe.setBackground(colorHover);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				if (!pnThongKeClicked) {
-					pnThongKe.setBackground(color);
-				}
-			}
-			
-			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = false;
-				pnLuongClicked = false;
-				pnThongKeClicked = true;
-				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(color);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(color);
-				pnThongKe.setBackground(colorHover);
-				pnTaiKhoan.setBackground(color);
-			}
-		});
-		pnThongKe.setBorder(null);
-		pnThongKe.setBackground(new Color(16, 84, 129));
-		pnMenu.add(pnThongKe);
-		pnThongKe.setLayout(new BorderLayout(0, 0));
-
-		JLabel lblThongKe = new JLabel("THỐNG KÊ");
-		lblThongKe.setForeground(new Color(255, 255, 255));
-		lblThongKe.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblThongKe.setHorizontalAlignment(SwingConstants.CENTER);
-		pnThongKe.add(lblThongKe, BorderLayout.CENTER);
-
-		JLabel lblIconThongKe = new JLabel();
-		lblIconThongKe.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgThongKe = new ImageIcon("images\\side_menu\\statistical.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconThongKe.setIcon(new ImageIcon(imgThongKe));
-		pnThongKe.add(lblIconThongKe, BorderLayout.WEST);
 
 		pnTaiKhoan = new JPanel();
 		pnTaiKhoan.addMouseListener(new MouseAdapter() {
@@ -524,8 +560,14 @@ public class MenuGUI extends JFrame {
 				pnChamCong.setBackground(color);
 				pnSanPham.setBackground(color);
 				pnLuong.setBackground(color);
-				pnThongKe.setBackground(color);
+				pnPhanXuong.setBackground(color);
 				pnTaiKhoan.setBackground(colorHover);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentAccount);
+				pnContentAccount.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
 			}
 		});
 		pnTaiKhoan.setBorder(null);
@@ -541,9 +583,7 @@ public class MenuGUI extends JFrame {
 
 		JLabel lblIconTaiKhoan = new JLabel();
 		lblIconTaiKhoan.setBorder(new EmptyBorder(0, 10, 0, 0));
-		Image imgTaiKhoan = new ImageIcon("images\\side_menu\\account.png").getImage().getScaledInstance(40, 40,
-				Image.SCALE_DEFAULT);
-		lblIconTaiKhoan.setIcon(new ImageIcon(imgTaiKhoan));
+		lblIconTaiKhoan.setIcon(new ImageIcon("images\\side_menu\\account.png"));
 		pnTaiKhoan.add(lblIconTaiKhoan, BorderLayout.WEST);
 
 		JLabel lblVersion = new JLabel("Version 1.0.1");
@@ -589,8 +629,8 @@ public class MenuGUI extends JFrame {
 		pnContent.setLayout(new BorderLayout(0, 0));
 
 		
-		pnContent.add(pnContentNhanSu);
-		pnContentNhanSu.setVisible(true);
+//		pnContent.add(pnContentNhanSu);
+//		pnContentNhanSu.setVisible(true);
 	}
 
 }
