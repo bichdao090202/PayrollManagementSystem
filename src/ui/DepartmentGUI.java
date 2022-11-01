@@ -58,8 +58,6 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		getContentPane().add(tabDepartment());
 		refresh();
 		loadTable();
-//        System.out.print(depDAO.getNewDeparmentID());
-
 	}
 
 	public Component tabDepartment() {
@@ -286,7 +284,6 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		int row = tblDepartment.getSelectedRow();
 		txtID.setText((String) tblDepartment.getValueAt(row, 0));
 		txtName.setText((String) tblDepartment.getValueAt(row, 1));
@@ -294,25 +291,21 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
