@@ -82,7 +82,6 @@ public class AccountGUI extends JFrame implements ActionListener {
         newList = ds.subList(0, num);
 		add(tabAccount());
 		loadTable();
-//		System.out.print(listEmpOff);
 	}
 
 	public Component tabAccount() {
