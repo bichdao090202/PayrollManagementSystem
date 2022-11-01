@@ -26,8 +26,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import entity.Worker;
 import model.FactoryDAO;
+import entity.Worker;
 import entity.TeamProducing;
 import javax.swing.ImageIcon;
 
@@ -65,12 +65,12 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		getContentPane().setLayout(null);
 		
 		JPanel pnlFactory = new JPanel();
-		pnlFactory.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Ph\u00E2n x\u01B0\u1EDFng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlFactory.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Phân xưởng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		pnlFactory.setBounds(10, 10, 460, 191);
 		getContentPane().add(pnlFactory);
 		pnlFactory.setLayout(null);
 		
-		JLabel lblIdFactory = new JLabel("Mã phân xưởng:");
+		JLabel lblIdFactory = new JLabel("Mã phân xưởng :");
 		lblIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdFactory.setBounds(37, 35, 87, 13);
 		pnlFactory.add(lblIdFactory);
@@ -81,7 +81,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlFactory.add(txtIdFactory);
 		txtIdFactory.setColumns(10);
 		
-		JLabel lblNameFactory = new JLabel("Tên phân xưởng:");
+		JLabel lblNameFactory = new JLabel("Tên phân xưởng :");
 		lblNameFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameFactory.setBounds(37, 75, 100, 13);
 		pnlFactory.add(lblNameFactory);
@@ -108,7 +108,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	         }
 	      });
 		
-		JLabel lblIdLeadFactory = new JLabel("Mã quản đốc:");
+		JLabel lblIdLeadFactory = new JLabel("Mã quản đốc :");
 		lblIdLeadFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdLeadFactory.setBounds(37, 115, 87, 13);
 		pnlFactory.add(lblIdLeadFactory);
@@ -120,19 +120,19 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlFactory.add(txtIdLeadFactory);
 		
 		btnClean = new JButton("");
-		btnClean.setIcon(new ImageIcon("img\\Clear-icon.png"));
+		btnClean.setIcon(new ImageIcon("images\\Clear-icon.png"));
 		btnClean.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnClean.setFocusPainted(false);
 		btnClean.setBounds(37, 149, 50, 21);
 		pnlFactory.add(btnClean);
 		
 		JPanel pnlTeam = new JPanel();
-		pnlTeam.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "T\u1ED5", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlTeam.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Tổ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		pnlTeam.setBounds(513, 10, 485, 191);
 		getContentPane().add(pnlTeam);
 		pnlTeam.setLayout(null);
 		
-		JLabel lblIdTeam = new JLabel("Mã tổ:");
+		JLabel lblIdTeam = new JLabel("Mã tổ :");
 		lblIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdTeam.setBounds(40, 32, 53, 13);
 		pnlTeam.add(lblIdTeam);
@@ -145,9 +145,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtIdTeam.addFocusListener((FocusListener) new FocusListener() {
 	         public void focusGained(FocusEvent e) {
 //	            System.out.println("focus gained");
-	            if(btnInsertTeam.getIcon().toString().equals("img\\Close-2-icon.png")) {
-	            	btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-//	            	btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
+	            if(btnInsertTeam.getIcon().toString().equals("images\\Close-2-icon.png")) {
+	            	btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+//	            	btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 	            }
 	         }/*from w  ww  .  j a va2 s. c o m*/
 
@@ -156,7 +156,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	         }
 	      });
 		
-		JLabel lblNameTeam = new JLabel("Tên tổ:");
+		JLabel lblNameTeam = new JLabel("Tên tổ :");
 		lblNameTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameTeam.setBounds(40, 70, 53, 13);
 		pnlTeam.add(lblNameTeam);
@@ -169,9 +169,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtNameTeam.addFocusListener((FocusListener) new FocusListener() {
 	         public void focusGained(FocusEvent e) {
 //	            System.out.println("focus gained");
-	            if(btnInsertTeam.getIcon().toString().equals("img\\Close-2-icon.png")) {
-	            	btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-//	            	btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
+	            if(btnInsertTeam.getIcon().toString().equals("images\\Close-2-icon.png")) {
+	            	btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+//	            	btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 	            }
 	         }/*from w  ww  .  j a va2 s. c o m*/
 
@@ -180,7 +180,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	         }
 	      });
 		
-		JLabel lblIdLeadTeam = new JLabel("Mã tổ trưởng:");
+		JLabel lblIdLeadTeam = new JLabel("Mã tổ trưởng :");
 		lblIdLeadTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdLeadTeam.setBounds(237, 32, 87, 13);
 		pnlTeam.add(lblIdLeadTeam);
@@ -193,9 +193,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtIdLeadTeam.addFocusListener((FocusListener) new FocusListener() {
 	         public void focusGained(FocusEvent e) {
 //	            System.out.println("focus gained");
-	            if(btnInsertTeam.getIcon().toString().equals("img\\Close-2-icon.png")) {
-	            	btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-//	            	btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
+	            if(btnInsertTeam.getIcon().toString().equals("images\\Close-2-icon.png")) {
+	            	btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+//	            	btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 	            }
 	         }/*from w  ww  .  j a va2 s. c o m*/
 
@@ -205,7 +205,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	      });
 		
 		btnInsertTeam = new JButton("");
-		btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
+		btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
 		btnInsertTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnInsertTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -223,7 +223,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 t\u1ED5", "T\u00EAn t\u1ED5", "M\u00E3 t\u1ED5 tr\u01B0\u1EDFng"
+				"Mã tổ", "Tên tổ", "Mã tổ trưởng"
 			}
 		)
 			{
@@ -235,7 +235,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		scrTeam.setViewportView(tblTeam);
 		
 		btnInsertFactory = new JButton("Thêm phân xưởng");
-		btnInsertFactory.setIcon(new ImageIcon("img\\math-add-icon.png"));
+		btnInsertFactory.setIcon(new ImageIcon("images\\math-add-icon.png"));
 		btnInsertFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnInsertFactory.setBounds(1008, 90, 168, 40);
 		getContentPane().add(btnInsertFactory);
@@ -246,12 +246,12 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListFactories.setLayout(null);
 		
 		JPanel pnlListFactory = new JPanel();
-		pnlListFactory.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Danh s\u00E1ch ph\u00E2n x\u01B0\u1EDFng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlListFactory.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Danh sách phân xưởng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		pnlListFactory.setBounds(10, 10, 580, 432);
 		pnlListFactories.add(pnlListFactory);
 		pnlListFactory.setLayout(null);
 		
-		JLabel lblNoteIdFactory = new JLabel("Nhập mã phân xưởng:");
+		JLabel lblNoteIdFactory = new JLabel("Nhập mã phân xưởng :");
 		lblNoteIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNoteIdFactory.setBounds(25, 17, 120, 15);
 		pnlListFactory.add(lblNoteIdFactory);
@@ -263,19 +263,19 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListFactory.add(txtSearchIdFactory);
 		
 		btnSearchIdFactory = new JButton("");
-		btnSearchIdFactory.setIcon(new ImageIcon("img\\Zoom-icon.png"));
+		btnSearchIdFactory.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSearchIdFactory.setBounds(297, 15, 70, 21);
 		pnlListFactory.add(btnSearchIdFactory);
 		
 		btnDeleteFactory = new JButton("");
-		btnDeleteFactory.setIcon(new ImageIcon("img\\Close-2-icon.png"));
+		btnDeleteFactory.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDeleteFactory.setBounds(382, 15, 70, 21);
 		pnlListFactory.add(btnDeleteFactory);
 		
 		btnUpdateFactory = new JButton("");
-		btnUpdateFactory.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
+		btnUpdateFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnUpdateFactory.setBounds(462, 15, 70, 21);
 		pnlListFactory.add(btnUpdateFactory);
@@ -289,7 +289,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 ph\u00E2n x\u01B0\u1EDFng", "T\u00EAn ph\u00E2n x\u01B0\u1EDFng", "M\u00E3 qu\u1EA3 \u0111\u1ED1c"
+				"Mã phân xưởng", "Tên phân xưởng", "Mã quản đốc"
 			}
 		)
 			{
@@ -301,7 +301,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		scrListFactory.setViewportView(tblListFactory);
 		
 		JPanel pnlListTeam = new JPanel();
-		pnlListTeam.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Danh s\u00E1ch t\u1ED5", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlListTeam.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Danh sách tổ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		pnlListTeam.setBounds(596, 10, 580, 211);
 		pnlListFactories.add(pnlListTeam);
 		pnlListTeam.setLayout(null);
@@ -315,7 +315,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 t\u1ED5", "T\u00EAn t\u1ED5", "M\u00E3 t\u1ED5 tr\u01B0\u1EDFng"
+					"Mã tổ", "Tên tổ", "Mã tổ trưởng"
 			}
 		)
 			{
@@ -326,7 +326,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		);
 		scrListTeam.setViewportView(tblListTeam);
 		
-		JLabel lblNoteIdTeam = new JLabel("Nhập mã tổ:");
+		JLabel lblNoteIdTeam = new JLabel("Nhập mã tổ :");
 		lblNoteIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNoteIdTeam.setBounds(25, 19, 70, 15);
 		pnlListTeam.add(lblNoteIdTeam);
@@ -338,26 +338,26 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListTeam.add(txtSearchIdTeam);
 		
 		btnSearchIdTeam = new JButton("");
-		btnSearchIdTeam.setIcon(new ImageIcon("img\\Zoom-icon.png"));
+		btnSearchIdTeam.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSearchIdTeam.setBounds(297, 17, 70, 21);
 		pnlListTeam.add(btnSearchIdTeam);
 		
 		btnDeleteTeam = new JButton("");
-		btnDeleteTeam.setIcon(new ImageIcon("img\\Close-2-icon.png"));
+		btnDeleteTeam.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDeleteTeam.setBounds(382, 17, 70, 21);
 		pnlListTeam.add(btnDeleteTeam);
 		
 		btnUpdateTeam = new JButton("");
-		btnUpdateTeam.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
+		btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnUpdateTeam.setBounds(462, 17, 70, 21);
 		pnlListTeam.add(btnUpdateTeam);
 		
 		JPanel pnlListEmployeeByTeam = new JPanel();
 		pnlListEmployeeByTeam.setLayout(null);
-		pnlListEmployeeByTeam.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Danh s\u00E1ch nh\u00E2n vi\u00EAn", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlListEmployeeByTeam.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Danh sách nhân viên", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		pnlListEmployeeByTeam.setBounds(596, 231, 580, 201);
 		pnlListFactories.add(pnlListEmployeeByTeam);
 		
@@ -370,7 +370,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			new Object[][] {
 			},
 			new String[] {
-				"M\u00E3 nh\u00E2n vi\u00EAn", "T\u00EAn nh\u00E2n vi\u00EAn", "Gi\u1EDBi t\u00EDnh", "Ng\u00E0y sinh", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i"
+				"Mã nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh", "Số điện thoại"
 			}
 		)
 			{
@@ -382,7 +382,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		scrListEmployeeByTeam.setViewportView(tblEmployeeByTeam);
 		
 		btnChange = new JButton("");
-		btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
+		btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 		btnChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -552,17 +552,17 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtIdLeadFactory.setText("");
 		cleanTextFieldTeam();
 		txtNameFactory.requestFocus();
-		btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-		btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
-		btnInsertFactory.setIcon(new ImageIcon("img\\math-add-icon.png"));
-		btnUpdateFactory.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
+		btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+		btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
+		btnInsertFactory.setIcon(new ImageIcon("images\\math-add-icon.png"));
+		btnUpdateFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnInsertFactory.setText("Thêm phân xưởng");
 	}
 	
 	public void resetTeam() {
-		btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-		btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
-		btnUpdateTeam.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
+		btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+		btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
+		btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 	}
 	
 	public static void main(String[] args) {
@@ -577,8 +577,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			deleteDataOnTableModel(dtmTeam);
 			deleteDataOnTableModel(dtmListEmployee);
 			btnInsertFactory.setText("Thêm phân xưởng");
-			btnInsertFactory.setIcon(new ImageIcon("img\\math-add-icon.png"));
-			btnUpdateFactory.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
+			btnInsertFactory.setIcon(new ImageIcon("images\\math-add-icon.png"));
+			btnUpdateFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 			String idFactory;
 			int rowFactorySelected = tblListFactory.getSelectedRow();
 			idFactory = dtmListFactory.getValueAt(rowFactorySelected, 0).toString();
@@ -616,8 +616,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				deleteDataOnTableModel(dtmTeam);
 				loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
 				
-				btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-				btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
+				btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+				btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 			}
 			
 		}
@@ -627,9 +627,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				txtIdTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
 				txtNameTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 1).toString());
 				txtIdLeadTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 2).toString());
-				btnInsertTeam.setIcon(new ImageIcon("img\\Close-2-icon.png"));
-				btnUpdateTeam.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
-				btnChange.setIcon(new ImageIcon("img\\exchange.png"));
+				btnInsertTeam.setIcon(new ImageIcon("images\\Close-2-icon.png"));
+				btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
+				btnChange.setIcon(new ImageIcon("images\\exchange.png"));
 				
 				deleteDataOnTableModel(dtmListEmployee);
 				tblListTeam.setRowSelectionInterval(rowTeamSelected, rowTeamSelected);
@@ -671,12 +671,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			if(rowSelected >= 0) {
 				tblTeam.removeRowSelectionInterval(rowSelected, rowSelected);
 			}
-//			if(btnChange.getIcon().toString().equals("img\\Clear-icon.png")) {
-//				deleteDataOnTableModel(dtmTeam);
-//			}
-			btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-			btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
-			btnUpdateTeam.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
+			btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+			btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
+			btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 			cleanTextFieldTeam();
 			txtNameTeam.requestFocus();
 			if(!txtIdFactory.getText().isEmpty()) {
@@ -684,10 +681,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			}
 		}
 		else if(o.equals(btnInsertTeam)) {
-//			boolean regexProcedure = regexProcedure();
-			boolean regexProcedure = true;
-			if(regexProcedure) {
-				if(btnInsertTeam.getIcon().toString().equals("img\\math-add-icon.png")) {
+			boolean regexTeam = regexTeam();
+			if(regexTeam) {
+				if(btnInsertTeam.getIcon().toString().equals("images\\math-add-icon.png")) {
 					int rowCountTeam = dtmTeam.getRowCount();
 					boolean checkContainTeam = false;
 					for(int i = 0; i < rowCountTeam; i++) {
@@ -702,13 +698,14 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 						TeamProducing team = new TeamProducing(txtIdTeam.getText(), txtNameTeam.getText(), txtIdLeadTeam.getText(), txtIdFactory.getText());
 						addRowListTeam(team, dtmTeam);
 						JOptionPane.showMessageDialog(this, "Thêm tổ thành công!!!");
+						randomIdTeam();
 						List<entity.Factory> listFactory = Dao_Factory.getListFactory();
 						if(listFactory.contains(Dao_Factory.searchFactoryByIdFactory(txtIdFactory.getText()))) {
 							List<TeamProducing> listTeam = Dao_Factory.getListTeamByIdFactory(txtIdFactory.getText());
 							if(dtmTeam.getRowCount() != listTeam.size()) {
 								btnInsertFactory.setText("Sửa phân xưởng");
-								btnInsertFactory.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
-								btnUpdateFactory.setIcon(new ImageIcon("img\\math-add-icon.png"));
+								btnInsertFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
+								btnUpdateFactory.setIcon(new ImageIcon("images\\math-add-icon.png"));
 							}
 						}
 						else {
@@ -718,7 +715,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 					
 				}
 				else {
-					if(btnInsertTeam.getIcon().toString().equals("img\\Text-Edit-icon.png")) {
+					if(btnInsertTeam.getIcon().toString().equals("images\\Text-Edit-icon.png")) {
 						TeamProducing team = new TeamProducing(txtIdTeam.getText(), txtNameTeam.getText(), txtIdLeadTeam.getText(), txtIdFactory.getText());
 						if(Dao_Factory.updateTeam(team)) {
 							JOptionPane.showMessageDialog(this, "Sửa tổ thành công!!!");
@@ -739,11 +736,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 							deleteDataOnTableModel(dtmTeam);
 							loadListTeamByIdFactory(txtIdFactory.getText(), dtmListTeam);
 							loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
-							btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-							btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
+							btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+							btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 						}
 						else {
-							JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc,không thể xóa tổ");
+							JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc, không thể xóa");
 						}
 					}
 					
@@ -751,9 +748,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			}
 		}
 		else if(o.equals(btnInsertFactory)) {
-//			boolean regexProduct = regexProduct();
-			boolean regexProduct = true;
-			if(regexProduct) {
+			boolean regexFactory = regexFactory();
+			System.out.println(regexFactory);
+			if(regexFactory) {
 				if(btnInsertFactory.getText().equals("Thêm phân xưởng")) {
 					entity.Factory factory = new entity.Factory(txtIdFactory.getText(), txtNameFactory.getText(), txtIdLeadFactory.getText());
 					boolean checkContainFactory = checkContainFactory(factory);
@@ -807,7 +804,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				loadListFactory();
 			}
 			else {
-				JOptionPane.showMessageDialog(this, "Phân xưởng hiện đang có Tổ thực hiện,không thể xóa phân xưởng!!! ");
+				JOptionPane.showMessageDialog(this, "Phân xưởng hiện đang có tổ thực hiện, không thể xóa!!! ");
 			}
 		}
 		else if(o.equals(btnDeleteTeam)) {
@@ -819,35 +816,35 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
 			}
 			else {
-				JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc,không thể xóa tổ");
+				JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc, không thể xóa");
 			}
 		}
 		else if(o.equals(btnUpdateFactory)) {
-			if(btnUpdateFactory.getIcon().toString().equals("img\\Text-Edit-icon.png")) {
+			if(btnUpdateFactory.getIcon().toString().equals("images\\Text-Edit-icon.png")) {
 				btnInsertFactory.setText("Sửa phân xưởng");
-				btnInsertFactory.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
-				btnUpdateFactory.setIcon(new ImageIcon("img\\math-add-icon.png"));
+				btnInsertFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
+				btnUpdateFactory.setIcon(new ImageIcon("images\\math-add-icon.png"));
 				if(!txtIdFactory.getText().isEmpty()) {
 					randomIdTeam();
 				}
 			}
 			else {
 				btnInsertFactory.setText("Thêm phân xưởng");
-				btnInsertFactory.setIcon(new ImageIcon("img\\math-add-icon.png"));
-				btnUpdateFactory.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
+				btnInsertFactory.setIcon(new ImageIcon("images\\math-add-icon.png"));
+				btnUpdateFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 				cleanFactory();
 				randomIdFactory();
 			}
 		}
 		else if(o.equals(btnUpdateTeam)) {
-			if(btnUpdateTeam.getIcon().toString().equals("img\\Text-Edit-icon.png")) {
-				btnInsertTeam.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
-				btnUpdateTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
+			if(btnUpdateTeam.getIcon().toString().equals("images\\Text-Edit-icon.png")) {
+				btnInsertTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
+				btnUpdateTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
 			}
 			else {
-				btnInsertTeam.setIcon(new ImageIcon("img\\math-add-icon.png"));
-				btnUpdateTeam.setIcon(new ImageIcon("img\\Text-Edit-icon.png"));
-				btnChange.setIcon(new ImageIcon("img\\Clear-icon.png"));
+				btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+				btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
+				btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 			}
 		}
 		else if(o.equals(btnSearchIdFactory)) {
@@ -881,6 +878,63 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 					dtmListTeam.setRowCount(0);
 				}
 			}
+		}
+		
+	}
+	
+	public boolean regexFactory() {
+		String announce = "";
+		String regexIdFactory = "^(PX)[0-9]{2}$";
+		String regexIdLeadFactory = "^(NV)[0-9]{5}$";
+		if(txtIdFactory.getText().isEmpty() || txtNameFactory.getText().isEmpty() || txtIdLeadFactory.getText().isEmpty()) {
+			announce += "Vui lòng nhập đầy đủ thông tin phân xưởng";
+		}
+		else {
+			if(!txtIdFactory.getText().matches(regexIdFactory)) {
+				announce += "Mã phân xưởng phải bắt đầu bằng PX và theo sau là 2 chữ số \n";
+				txtIdFactory.requestFocus();
+				txtIdFactory.selectAll();
+			}
+			else if(!txtIdLeadFactory.getText().matches(regexIdLeadFactory)) {
+				announce += "Mã quản đốc phải bắt đầu bằng NV và theo sau là 5 chữ số \n";
+				txtIdLeadFactory.requestFocus();
+				txtIdLeadFactory.selectAll();
+			}
+		}
+		if(announce.isEmpty()) {
+			return true;
+		}
+		else {
+			JOptionPane.showMessageDialog(this, announce);
+			return false;
+		}
+	}
+	
+	public boolean regexTeam() {
+		String announce = "";
+		String regexIdTeam = "^"+txtIdFactory.getText()+"[0-9]{2}$";
+		String regexIdLeadTeam = "^(NV)[0-9]{5}$";
+		if(txtIdTeam.getText().isEmpty() || txtNameTeam.getText().isEmpty() || txtIdLeadTeam.getText().isEmpty()) {
+			announce += "Vui lòng nhập đầy đủ thông tin tổ";
+		}
+		else {
+			if(!txtIdTeam.getText().matches(regexIdTeam)) {
+				announce += "Mã tổ phải bắt đầu bằng mã phân xưởng và theo sau 2 chữ số \n";
+				txtIdTeam.requestFocus();
+				txtIdTeam.selectAll();
+			}
+			else if(!txtIdLeadTeam.getText().matches(regexIdLeadTeam)) {
+				announce += "Mã tổ trưởng phải bắt đầu bằng NV và theo sau là 5 chữ số \n";
+				txtIdLeadTeam.requestFocus();
+				txtIdLeadTeam.selectAll();
+			}
+		}
+		if(announce.isEmpty()) {
+			return true;
+		}
+		else {
+			JOptionPane.showMessageDialog(this, announce);
+			return false;
 		}
 		
 	}

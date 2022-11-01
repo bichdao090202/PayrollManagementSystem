@@ -103,12 +103,12 @@ public class DepartmentDAO {
         return id;
     }
     
-    public Boolean updateDepartment(String id, String name) {
+    public Boolean updateDepartment(String departmentID, String newName) {
         try {
             String query = "update PhongBan set TenPhongBan = ? where MaPhongBan = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, name);
-            stmt.setString(2, id);
+            stmt.setString(1, newName);
+            stmt.setString(2, departmentID);
             int Result = stmt.executeUpdate();
             if (Result > 0)
                 return true;
@@ -116,7 +116,39 @@ public class DepartmentDAO {
             e.printStackTrace();
         }
         return false;
-        
+    }
+    
+    public String getNameManagerByID(String managerID) {
+    	String name = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select TenNhanVien from  NhanVienHanhChinh where MaNhanVien = ?");
+			stmt.setString(1, managerID);
+			ResultSet rs = stmt.executeQuery();
+			if (!rs.next() )
+                return "";
+            else
+            	name = rs.getString("TenNhanVien");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+    }
+    
+    public String getQuantityEmployee(String departmentID) {
+    	int number = 0;
+    	
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select number = count(MaNhanVien) from NhanVienHanhChinh where MaPhongBan = ?");
+			stmt.setString(1, departmentID);
+			ResultSet rs = stmt.executeQuery();
+			if (!rs.next() )
+                return null;
+            else
+            	number = rs.getInt("number");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return number==0?"Chưa có nhân viên":(""+number);
     }
 
 }
