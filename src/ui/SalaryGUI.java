@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -76,7 +78,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private DefaultComboBoxModel<String> dcmbTeam;
 	private DefaultComboBoxModel<String> dcmbFactoryDeparment;
 
-	public SalaryGUI() {
+	public Component getView() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
 
@@ -519,6 +521,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		});
 
 		loadListEmployee();
+		return getContentPane();
 	}
 
 	public static void main(String[] args) {
@@ -772,6 +775,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+
 		}
 	}
 
