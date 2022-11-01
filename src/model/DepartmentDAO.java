@@ -134,6 +134,20 @@ public class DepartmentDAO {
 		return name;
     }
     
+    public String getNameDepartmentByID(String deptID) {
+    	String name = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT TenPhongBan FROM  PHONGBAN WHERE MaPhongBan= ?");
+			stmt.setString(1, deptID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next() )
+            	name = rs.getString("TenPhongBan");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+    }
+    
     public String getQuantityEmployee(String departmentID) {
     	int number = 0;
     	
@@ -151,4 +165,18 @@ public class DepartmentDAO {
 		return number==0?"Chưa có nhân viên":(""+number);
     }
 
+    public List<String> getAllNameDepartment() {
+    	List<String> listName = new ArrayList<String>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT MaPhongBan, TenPhongBan FROM PHONGBAN");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String name = new String(rs.getString("MaPhongBan")+" - "+rs.getString("TenPhongBan"));
+                listName.add(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listName;
+    }
 }
