@@ -9,6 +9,13 @@ public class Worker extends Employee {
 	public Worker() {
 		super();
 	}
+	
+	public Worker(String name, boolean gender, Date birthday, String address, String phone,
+			String bankName, String accountNumber, String beneficiany, String speciality, String teamID) {
+		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		this.speciality = speciality;
+		this.teamID = teamID;
+	}
 
 	public Worker(String employeeID, String name, boolean gender, Date birthday, String address, String phone,
 			String bankName, String accountNumber, String beneficiany, String speciality, String teamID) {
@@ -36,9 +43,9 @@ public class Worker extends Employee {
 	@Override
 	public String toString() {
 		if (isGender() == true) {
-			return getEmployeeID() + "," + getName() + ",Nam," + getBirthday() + "," + getAddress() + "," + getPhone();
+			return getEmployeeID() + ";" + getName() + ";Nam;" + getBirthday() + ";" + getAddress() + ";" + getPhone();
 		} else {
-			return getEmployeeID() + "," + getName() + ",Nữ," + getBirthday() + "," + getAddress() + "," + getPhone();
+			return getEmployeeID() + ";" + getName() + ";Nữ;" + getBirthday() + ";" + getAddress() + ";" + getPhone();
 		}
 	}
 

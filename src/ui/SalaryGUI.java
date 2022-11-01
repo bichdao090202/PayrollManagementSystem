@@ -598,7 +598,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		}
 		for(TimesheetsOffice time : listTimeKeep) {
 			timeWorkOfMonth += (time.getCheckOutAM().getHours() - time.getCheckInAM().getHours()) + 
-								(time.getCheckOutPm().getHours() - time.getCheckInPM().getHours());
+								(time.getCheckOutPM().getHours() - time.getCheckInPM().getHours());
 		}
 		LocalDate date = LocalDate.now();
 		if(

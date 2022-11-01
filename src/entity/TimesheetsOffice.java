@@ -17,6 +17,17 @@ public class TimesheetsOffice {
 	public TimesheetsOffice() {
 		super();
 	}
+	
+	public TimesheetsOffice(Date date, Date checkInAM, Date checkOutAM, Date checkInPM,
+			Date checkOutPm, String employeeID) {
+		super();
+		this.date = date;
+		this.checkInAM = checkInAM;
+		this.checkOutAM = checkOutAM;
+		this.checkInPM = checkInPM;
+		this.checkOutPM = checkOutPm;
+		this.employeeID = employeeID;
+	}
 
 	public TimesheetsOffice(String timesheetID, Date date, Date checkInAM, Date checkOutAM, Date checkInPM,
 			Date checkOutPm, String employeeID) {
@@ -70,11 +81,11 @@ public class TimesheetsOffice {
 		this.checkInPM = checkInPM;
 	}
 
-	public Date getCheckOutPm() {
+	public Date getCheckOutPM() {
 		return checkOutPM;
 	}
 
-	public void setCheckOutPm(Date checkOutPm) {
+	public void setCheckOutPM(Date checkOutPm) {
 		this.checkOutPM = checkOutPm;
 	}
 

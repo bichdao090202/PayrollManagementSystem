@@ -11,6 +11,15 @@ public class EmployeeOffice extends Employee {
 	public EmployeeOffice() {
 		super();
 	}
+	
+	public EmployeeOffice(String name, boolean gender, Date birthday, String address, String phone,
+			String bankName, String accountNumber, String beneficiany, double salary, String position,
+			String departmentID) {
+		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		this.salary = salary;
+		this.position = position;
+		this.departmentID = departmentID;
+	}
 
 	public EmployeeOffice(String employeeID, String name, boolean gender, Date birthday, String address, String phone,
 			String bankName, String accountNumber, String beneficiany, double salary, String position,
@@ -55,9 +64,9 @@ public class EmployeeOffice extends Employee {
 	@Override
 	public String toString() {
 		if (isGender() == true) {
-			return getEmployeeID() + "," + getName() + ",Nam," + getBirthday() + "," + getAddress() + "," + getPhone();
+			return getEmployeeID() + ";" + getName() + ";Nam;" + getBirthday() + ";" + getAddress() + ";" + getPhone();
 		} else {
-			return getEmployeeID() + "," + getName() + ",Nữ," + getBirthday() + "," + getAddress() + "," + getPhone();
+			return getEmployeeID() + ";" + getName() + ";Nữ;" + getBirthday() + ";" + getAddress() + ";" + getPhone();
 		}
 	}
 

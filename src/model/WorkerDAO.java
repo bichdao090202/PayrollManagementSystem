@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Employee;
+import entity.EmployeeOffice;
 import entity.Worker;
 
 public class WorkerDAO {
@@ -33,6 +34,72 @@ public class WorkerDAO {
 			e.printStackTrace();
 		}
 		return listEmp;
+	}
+	
+	public boolean addWorker(Employee emp) {
+		try {
+			PreparedStatement stmt1 = connection.prepareStatement("SELECT MAX(MaNhanVien) FROM NHANVIENSANXUAT");
+			ResultSet rs = stmt1.executeQuery();
+			int maxEmpID = 0;
+			if (rs.next()) {
+				maxEmpID = Integer.parseInt(rs.getString(1).substring(2));
+			}
+			int empID = (maxEmpID + 1);
+			if (empID < 10) {
+				emp.setEmployeeID("NV0000" + empID);
+			} else if (empID < 100) {
+				emp.setEmployeeID("NV000" + empID);
+			}else if (empID < 1000) {
+				emp.setEmployeeID("NV00" + empID);
+			}else if (empID < 10000) {
+				emp.setEmployeeID("NV0" + empID);
+			}else{
+				emp.setEmployeeID("NV" + empID);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			PreparedStatement stmt2 = connection.prepareStatement(
+					"INSERT INTO NHANVIENSANXUAT (MaNhanVien, TenNhanVien, GioiTinh, NgaySinh, DiaChi, SDT, ChuyenMon, MaTo) values(?,?,?,?,?,?,?,?)");
+			stmt2.setString(1, emp.getEmployeeID());
+			stmt2.setString(2, emp.getName());
+			stmt2.setBoolean(3, emp.isGender());
+			stmt2.setDate(4, new java.sql.Date(emp.getBirthday().getTime()));
+			stmt2.setString(5, emp.getAddress());
+			stmt2.setString(6, emp.getPhone());
+			stmt2.setString(7, ((Worker)emp).getSpeciality());
+			stmt2.setString(8, ((Worker)emp).getTeamID());
+			int insertResult = stmt2.executeUpdate();
+			if (insertResult > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean updateWorker(Employee emp) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement(
+					"UPDATE NHANVIENSANXUAT SET TenNhanVien = ?, GioiTinh = ?, NgaySinh = ?, DiaChi = ?, SDT = ?, ChuyenMon = ?, MaTo = ? WHERE MaNhanVien = ?");
+			stmt.setString(1, emp.getName());
+			stmt.setBoolean(2, emp.isGender());
+			stmt.setDate(3, new java.sql.Date(emp.getBirthday().getTime()));
+			stmt.setString(4, emp.getAddress());
+			stmt.setString(5, emp.getPhone());
+			stmt.setString(6, ((Worker)emp).getSpeciality());
+			stmt.setString(7, ((Worker)emp).getTeamID());
+			stmt.setString(8, emp.getEmployeeID());
+			int insertResult = stmt.executeUpdate();
+			if (insertResult > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public Employee getWorker(String empID) {
