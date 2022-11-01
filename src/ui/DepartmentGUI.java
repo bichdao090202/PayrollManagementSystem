@@ -57,7 +57,6 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		index = 0;
 		getContentPane().add(tabDepartment());
 		refresh();
-		loadTable();
 	}
 
 	public Component tabDepartment() {
@@ -162,6 +161,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		tblDepartment.addMouseListener(this);
+		loadTable();
 		return pnDepartment;
 	}
 
