@@ -163,9 +163,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		tblListEmployee = new JTable();
 		tblListEmployee.setModel(dtmListEmployee = new DefaultTableModel(new Object[][] {}, new String[] {
 				"Mã nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh", "Số điện thoại", "Địa chỉ" }) {
-			/**
-					 * 
-					 */
 			private static final long serialVersionUID = 1L;
 
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -553,7 +550,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		int numberDayOfMonth = 0;
 		double bonus = 0;
 		double fine = 0;
-		double totalSalary = 0;
 		for (Bonus_Discipline rd : listRD) {
 			if (rd.getAmountMoney() >= 0) {
 				bonus += rd.getAmountMoney();
