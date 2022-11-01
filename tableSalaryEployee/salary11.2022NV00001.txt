@@ -1,0 +1,38 @@
+Bảng lương 11/2022
+
+Mã nhân viên : NV00001
+
+Tên nhân viên : B�i C�ng Minh
+
+Giới tính : Nam
+
+Ngày sinh : 10/03/1994
+
+Số điện thoại : 0924608193
+
+�?ịa chỉ : 18 L� ??c Th? P6 Qu?n G� V?p
+
+Tên ngân hàng : Agribank �
+
+Số tài khoản : 4901234567890 ������
+
+Ngư�?i hưởng thụ : B�i C�ng Minh
+
+Chuyên môn/Chức vụ : May c�c �o thun
+
+Mã tổ/Mã phòng ban : PX0101
+
+Số ngày làm việc : 0
+
+Số ngày nghỉ : 30
+
+Chỉ tiêu : Không đạt
+
+Lý do : Số lượng không đạt yêu cầu
+
+Ti�?n thưởng : 500000.0
+
+Ti�?n phạt : 0.0
+
+Tổng lương : 500000.0
+

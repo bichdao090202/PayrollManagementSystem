@@ -8,8 +8,9 @@ public class Bonus_Discipline {
 	private String bonusDiscipline_ID;
 	private String reason; // lý do
 	private Date effectiveDate; // ngày áp dụng
-	private float amountMoney;
-	private String employeeID;
+	private double amountMoney;
+	private String idEmployeeProductive;
+	private String idEmployeeAdministrative;
 
 	public Bonus_Discipline() {
 		super();
@@ -20,14 +21,15 @@ public class Bonus_Discipline {
 		this.bonusDiscipline_ID = bonusDiscipline_ID;
 	}
 
-	public Bonus_Discipline(String bonusDiscipline_ID, String reason, Date effectiveDate, float amountMoney,
-			String employeeID) {
+	public Bonus_Discipline(String bonusDiscipline_ID, String reason, Date effectiveDate, double amountMoney,
+			String idEmployeeProductive, String idEmployeeAdministrative) {
 		super();
 		this.bonusDiscipline_ID = bonusDiscipline_ID;
 		this.reason = reason;
 		this.effectiveDate = effectiveDate;
 		this.amountMoney = amountMoney;
-		this.employeeID = employeeID;
+		this.idEmployeeProductive = idEmployeeProductive;
+		this.idEmployeeAdministrative = idEmployeeAdministrative;
 	}
 
 	public String getBonusDiscipline_ID() {
@@ -54,20 +56,28 @@ public class Bonus_Discipline {
 		this.effectiveDate = effectiveDate;
 	}
 
-	public float getAmountMoney() {
+	public double getAmountMoney() {
 		return amountMoney;
 	}
 
-	public void setAmountMoney(float amountMoney) {
+	public void setAmountMoney(double amountMoney) {
 		this.amountMoney = amountMoney;
 	}
 
-	public String getEmployeeID() {
-		return employeeID;
+	public String getIdEmployeeProductive() {
+		return idEmployeeProductive;
 	}
 
-	public void setEmployeeID(String employeeID) {
-		this.employeeID = employeeID;
+	public void setIdEmployeeProductive(String idEmployeeProductive) {
+		this.idEmployeeProductive = idEmployeeProductive;
+	}
+
+	public String getIdEmployeeAdministrative() {
+		return idEmployeeAdministrative;
+	}
+
+	public void setIdEmployeeAdministrative(String idEmployeeAdministrative) {
+		this.idEmployeeAdministrative = idEmployeeAdministrative;
 	}
 
 	@Override
@@ -90,7 +100,9 @@ public class Bonus_Discipline {
 	@Override
 	public String toString() {
 		return "Bonus_Discipline [bonusDiscipline_ID=" + bonusDiscipline_ID + ", reason=" + reason + ", effectiveDate="
-				+ effectiveDate + ", amountMoney=" + amountMoney + ", employeeID=" + employeeID + "]";
+				+ effectiveDate + ", amountMoney=" + amountMoney + ", idEmployeeProductive=" + idEmployeeProductive
+				+ ", idEmployeeAdministrative=" + idEmployeeAdministrative + "]";
 	}
 
+	
 }

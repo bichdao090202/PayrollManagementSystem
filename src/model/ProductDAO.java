@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 
 import entity.Produre;
@@ -31,6 +34,7 @@ public class ProductDAO {
 				listProduct.add(sanPham);
 			}
 		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return listProduct;
@@ -43,10 +47,11 @@ public class ProductDAO {
 			prstm = con.prepareStatement(sql);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				Produre qt = new Produre(rs.getString("MaQuyTrinh"), rs.getString("TenQuyTrinh"), rs.getFloat("GiaQuyTrinh"), rs.getInt("SoThuTu"), rs.getString("MaSanPham"));
+				Produre qt = new Produre(rs.getString("MaQuyTrinh"), rs.getString("TenQuyTrinh"), rs.getDouble("GiaQuyTrinh"), rs.getInt("ThuTuSanXuat"), rs.getString("MaSanPham"));
 				listProcedure.add(qt);
 			}
 		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return listProcedure;
@@ -60,10 +65,11 @@ public class ProductDAO {
 			prstm.setString(1, idProduct);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				Produre qt = new Produre(rs.getString("MaQuyTrinh"), rs.getString("TenQuyTrinh"), rs.getFloat("GiaQuyTrinh"), rs.getInt("SoThuTu"), rs.getString("MaSanPham"));
+				Produre qt = new Produre(rs.getString("MaQuyTrinh"), rs.getString("TenQuyTrinh"), rs.getDouble("GiaQuyTrinh"),rs.getInt("ThuTuSanXuat"), rs.getString("MaSanPham"));
 				dsQuyTrinh.add(qt);
 			}
 		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return dsQuyTrinh;
@@ -88,7 +94,7 @@ public class ProductDAO {
 	}
 	
 	public boolean insertListProcedure(List<Produre> listProcedure) {
-		String sql = "insert into QuyTrinh values(?,?,?,?)";
+		String sql = "insert into QuyTrinh values(?,?,?,?,?)";
 		String announce = "";
 		try {
 			for(Produre procedure : listProcedure) {
@@ -97,6 +103,7 @@ public class ProductDAO {
 				prstm.setString(2, procedure.getName());
 				prstm.setDouble(3, procedure.getPrice());
 				prstm.setString(4, procedure.getProductID());
+				prstm.setInt(5, procedure.getNumberOrdinal());
 				int n = prstm.executeUpdate();
 				if(!(n > 0)) {
 					announce += "false";
@@ -115,13 +122,14 @@ public class ProductDAO {
 	}
 	
 	public boolean insertProcedure(Produre procedure) {
-		String sql = "insert into QuyTrinh values(?,?,?,?)";
+		String sql = "insert into QuyTrinh values(?,?,?,?,?)";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, procedure.getProcedureID());
 			prstm.setString(2, procedure.getName());
 			prstm.setDouble(3, procedure.getPrice());
 			prstm.setString(4, procedure.getProductID());
+			prstm.setInt(5, procedure.getNumberOrdinal());
 			int n = prstm.executeUpdate();
 			if(n > 0) {
 				return true;
@@ -205,7 +213,6 @@ public class ProductDAO {
 	}
 	
 	public boolean updateListProcedure(List<Produre> listProcedure, String idProduct) {
-		String sqlUpdate = "update QuyTrinh set MaQuyTrinh = ?, TenQuyTrinh = ?, GiaQuyTrinh = ?, MaSanPham = ? where MaQuyTrinh = ?";
 		String announce = "";
 		List<Produre> listProcedurePresent = getListProcedurebyIdProduct(idProduct);
 		try {
@@ -244,14 +251,15 @@ public class ProductDAO {
 			Produre procedureById = searchProcedureByIdProcedure(procedure.getProcedureID());
 			procedure.setProductID(procedureById.getProductID());
 		}
-		String sql = "update QuyTrinh set MaQuyTrinh = ?, TenQuyTrinh = ?, GiaQuyTrinh = ?, MaSanPham = ? where MaQuyTrinh = ?";
+		String sql = "update QuyTrinh set MaQuyTrinh = ?, TenQuyTrinh = ?, GiaQuyTrinh = ?, ThuTuSanXuat = ?, MaSanPham = ? where MaQuyTrinh = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, procedure.getProcedureID());
 			prstm.setString(2, procedure.getName());
 			prstm.setDouble(3, procedure.getPrice());
-			prstm.setString(4, procedure.getProductID());
-			prstm.setString(5, procedure.getProcedureID());
+			prstm.setInt(4, procedure.getNumberOrdinal());
+			prstm.setString(5, procedure.getProductID());
+			prstm.setString(6, procedure.getProcedureID());
 			int n = prstm.executeUpdate();
 			if(n > 0) {
 				return true;
@@ -274,6 +282,7 @@ public class ProductDAO {
 				product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt("SoLuongSanXuat"));
 			}
 		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return product;
@@ -287,9 +296,10 @@ public class ProductDAO {
 			prstm.setString(1, idProcedure);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				procedure = new Produre(rs.getString("MaQuyTrinh"), rs.getString("TenQuyTrinh"), rs.getFloat("GiaQuyTrinh"), rs.getInt("SoThuTu"), rs.getString("MaSanPham"));
+				procedure = new Produre(rs.getString("MaQuyTrinh"), rs.getString("TenQuyTrinh"), rs.getDouble("GiaQuyTrinh"),rs.getInt("ThuTuSanXuat"), rs.getString("MaSanPham"));
 			}
 		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return procedure;

@@ -7,8 +7,7 @@ public class TimesheetsFactory {
 	private String timesheetID;
 	private Date date;
 	private int quantity; // số lượng
-	private String procedureID; // quy trình
-	private String employeeID;
+	private String assignmentID;
 
 	public TimesheetsFactory() {
 		super();
@@ -20,13 +19,12 @@ public class TimesheetsFactory {
 		this.timesheetID = timesheetID;
 	}
 
-	public TimesheetsFactory(String timesheetID, Date date, int quantity, String procedureID, String employeeID) {
+	public TimesheetsFactory(String timesheetID, Date date, int quantity, String assignmentID) {
 		super();
 		this.timesheetID = timesheetID;
 		this.date = date;
 		this.quantity = quantity;
-		this.procedureID = procedureID;
-		this.employeeID = employeeID;
+		this.assignmentID = assignmentID;
 	}
 
 	public String getTimesheetID() {
@@ -53,20 +51,12 @@ public class TimesheetsFactory {
 		this.quantity = quantity;
 	}
 
-	public String getProcedureID() {
-		return procedureID;
+	public String getassignmentID() {
+		return assignmentID;
 	}
 
-	public void setProcedureID(String procedureID) {
-		this.procedureID = procedureID;
-	}
-
-	public String getEmployeeID() {
-		return employeeID;
-	}
-
-	public void setEmployeeID(String employeeID) {
-		this.employeeID = employeeID;
+	public void setassignmentID(String assignmentID) {
+		this.assignmentID = assignmentID;
 	}
 
 	@Override
@@ -89,7 +79,7 @@ public class TimesheetsFactory {
 	@Override
 	public String toString() {
 		return "Timesheets_Factory [timesheetID=" + timesheetID + ", date=" + date + ", quantity=" + quantity
-				+ ", procedureID=" + procedureID + ", employeeID=" + employeeID + "]";
+				+ ", assignmentID=" + assignmentID + "]";
 	}
 
 }
