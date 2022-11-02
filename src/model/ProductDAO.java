@@ -3,6 +3,7 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,38 @@ public class ProductDAO {
 	
 	public ProductDAO() {
 		con = ConnectDB.getInstance().getConnection();
+	}
+	
+	public List<Product> getAllProduct() {
+		List<Product> listProduct = new ArrayList<Product>();
+		try {
+			PreparedStatement stmt = con.prepareStatement("select * from SanPham");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Product product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt(3));
+				listProduct.add(product);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listProduct;
+	}
+	
+	public Product getProductByProdureID(String idProdure) {
+		Product product = new Product();
+		try {
+			PreparedStatement stmt = con.prepareStatement(
+					"select sp.MaSanPham, sp.TenSanPham, sp.SoLuongSanXuat from  SanPham sp join QuyTrinh qt on sp.MaSanPham = qt.MaSanPham where MaQuyTrinh = ?");
+			stmt.setString(1, idProdure);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt(3));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return product;
 	}
 	
 	public List<Product> getListProduct(){

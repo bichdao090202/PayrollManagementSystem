@@ -56,7 +56,10 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		num = 29;
 		index = 0;
 		getContentPane().add(tabDepartment());
-		refresh();
+		
+		
+//        System.out.print(depDAO.getNewDeparmentID());
+
 	}
 
 	public Component tabDepartment() {
@@ -152,6 +155,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		btnGoLastPage.setFocusable(false);
 		btnNextPage.setFocusable(false);
 		btnPreviousPage.setFocusable(false);
+		btnRefresh.setFocusable(false);
 		btnGoFirstPage.addActionListener(this);
 		btnGoLastPage.addActionListener(this);
 		btnPreviousPage.addActionListener(this);
@@ -161,6 +165,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		tblDepartment.addMouseListener(this);
+		refresh();
 		loadTable();
 		return pnDepartment;
 	}
@@ -186,7 +191,9 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 				JOptionPane.showMessageDialog(this, "Xóa phòng ban thất bại, vui lòng thử lại sau");
 				return;
 			}
-			index += num;
+			while (index + num <= listDep.size()) {
+				index += num;
+			}
 			refresh();
 			JOptionPane.showMessageDialog(this, "Thêm phòng ban thành công");
 		}
@@ -199,11 +206,16 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 				return;
 			}
 			String id = (String) tblDepartment.getValueAt(row, 0);
+			if (depDAO.getQuantityEmployee(id) != 0) {
+				JOptionPane.showMessageDialog(this, "Phòng ban này vẫn còn nhân viên, không thể xóa");
+				return;
+			}
 			if (depDAO.deleteDepartment(id) == false) {
 				JOptionPane.showMessageDialog(this, "Xóa phòng ban thất bại, vui lòng thử lại sau");
 				return;
 			}
-			index -= num;
+			if (index == listDep.size() - 1)
+				index -= num;
 			refresh();
 			JOptionPane.showMessageDialog(this, "Xóa phòng ban thành công");
 		}
@@ -262,7 +274,9 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		while (tblModel.getRowCount() != 0)
 			tblModel.removeRow(0);
 		for (Department x : newList) {
-			String[] row = { x.getDepartmentID(), x.getName(), depDAO.getNameManagerByID(x.getManagerID()), depDAO.getQuantityEmployee(x.getDepartmentID()) };
+			String[] row = { x.getDepartmentID(), x.getName(), depDAO.getNameManagerByID(x.getManagerID()),
+					depDAO.getQuantityEmployee(x.getDepartmentID()) == 0 ? "Chưa có nhân viên"
+							: depDAO.getQuantityEmployee(x.getDepartmentID()) + "" };
 			tblModel.addRow(row);
 		}
 	}
@@ -284,6 +298,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
 		int row = tblDepartment.getSelectedRow();
 		txtID.setText((String) tblDepartment.getValueAt(row, 0));
 		txtName.setText((String) tblDepartment.getValueAt(row, 1));
@@ -291,21 +306,25 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 

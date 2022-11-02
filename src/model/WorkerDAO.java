@@ -36,6 +36,41 @@ public class WorkerDAO {
 		return listEmp;
 	}
 	
+	public List<Worker> getListWorker() {
+		List<Worker> list = new ArrayList<Worker>();
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select * from NhanVienSanXuat");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Worker emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
+						rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
+						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"),
+						rs.getString("ChuyenMon"), rs.getString("MaTo"));
+				list.add(emp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public String getWorkerNameByID(String idWorker) {
+		String name = null;
+		try {
+			PreparedStatement stmt = connection
+					.prepareStatement("select TenNhanVien from NhanVienSanXuat where MaNhanVien = ?");
+			stmt.setString(1, idWorker);
+			ResultSet rs = stmt.executeQuery();
+			if (!rs.next())
+				return "";
+			else
+				name = rs.getString("TenNhanVien");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+	}
+	
 	public boolean addWorker(Employee emp) {
 		try {
 			PreparedStatement stmt1 = connection.prepareStatement("SELECT MAX(MaNhanVien) FROM NHANVIENSANXUAT");

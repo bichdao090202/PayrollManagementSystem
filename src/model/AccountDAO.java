@@ -15,20 +15,6 @@ public class AccountDAO {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 	
-//	public boolean checkLogin(Account account) {
-//		try {
-//			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM PHONGBAN");
-//			ResultSet rs = stmt.executeQuery();
-//			while (rs.next()) {
-//				Department dept = new Department(rs.getString("MaPhongBan"), rs.getString("TenPhongBan"),
-//						rs.getString("MaTruongPhong"));
-//				departments.add(dept);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
 	public HashMap<String, String> getPasswordEncryption(String username) {
 		HashMap<String, String> account = new HashMap<String, String>();
 		try {
@@ -49,7 +35,7 @@ public class AccountDAO {
 	public boolean createAccount(String id) {
 		try {			
 			PreparedStatement stmt = connection.prepareStatement(
-					"insert into TaiKhoan values (?,'1111',null,?)");
+					"insert into TaiKhoan values (?,'V+FJJVVD6UnIU7+iVlRvA9tvnDrZ8rt8lWgNjbVqWtM=','9wlad4hsa9l9fflj99f4s9lndll28s',null,?)");
 			stmt.setString(1, id);
 			stmt.setString(2, id);
 			int insertResult = stmt.executeUpdate();
@@ -78,11 +64,10 @@ public class AccountDAO {
 	public boolean setDefaultPassword (String id) {
 		int n = 0;
 		try {
-			PreparedStatement stmt = connection.prepareStatement("update TaiKhoan set matKhau = '1111' where TenDangNhap = ?");
+			PreparedStatement stmt = connection.prepareStatement("update TaiKhoan set matKhau = 'V+FJJVVD6UnIU7+iVlRvA9tvnDrZ8rt8lWgNjbVqWtM=', GiaTriSalt = '9wlad4hsa9l9fflj99f4s9lndll28s' where TenDangNhap = ?");
 			stmt.setString(1, id);
 			n= stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return n>0;
@@ -104,6 +89,7 @@ public class AccountDAO {
 		}
 		return num>0?true:false;
 	}
+	
 	
 	
 	
