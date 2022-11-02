@@ -31,7 +31,6 @@ public class MenuGUI extends JFrame {
 	private JPanel contentPane;
 	private SideMenuPanel side;
 	private JLabel lblName;
-	private JPanel pnMenu;
 	private boolean click = true;
 	private JPanel pnNhanSu;
 	private JPanel pnPhongBan;
@@ -65,6 +64,9 @@ public class MenuGUI extends JFrame {
 	private Component pnContentSalary;
 	private FactoryGUI factoryGUI;
 	private Component pnContentFactory;
+	private JLabel lblPhanCong;
+	private JPanel pnMenu;
+	private ImageAvatar imageAvatar;
 	
 	/**
 	 * Launch the application.
@@ -77,6 +79,7 @@ public class MenuGUI extends JFrame {
 					MenuGUI frame = new MenuGUI();
 					frame.setTitle("Phần mềm tính lương nhân sự");
 					frame.setIconImage(ICON_APPLICATION);
+					frame.setLocationRelativeTo(null);
 					frame.setResizable(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -127,7 +130,7 @@ public class MenuGUI extends JFrame {
 		pnSideMenu.setBorder(new EmptyBorder(0, 10, 0, 0));
 		pnSideMenu.setBackground(new Color(16, 84, 129));
 
-		ImageAvatar imageAvatar = new ImageAvatar();
+		imageAvatar = new ImageAvatar();
 		imageAvatar.setBounds(0, 50, 108, 100);
 		imageAvatar.setIcon(new ImageIcon("images\\avatar.jpg"));
 		imageAvatar.setVisible(false);
@@ -141,7 +144,7 @@ public class MenuGUI extends JFrame {
 		lblName.setPreferredSize(new Dimension(pnSideMenu.getWidth(), pnSideMenu.getHeight()));
 
 		pnMenu = new JPanel();
-		pnMenu.setBounds(0, 180, 179, 465);
+		pnMenu.setBounds(0, 180, 190, 465);
 		pnMenu.setBackground(new Color(16, 84, 129));
 		pnMenu.setLayout(new GridLayout(8, 1, 0, 10));
 
@@ -182,6 +185,7 @@ public class MenuGUI extends JFrame {
 				pnContentNhanSu.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnNhanSu.setBackground(new Color(16, 84, 129));
@@ -239,6 +243,7 @@ public class MenuGUI extends JFrame {
 				pnContentPhongBan.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnPhongBan.setBorder(null);
@@ -294,6 +299,7 @@ public class MenuGUI extends JFrame {
 				pnContentFactory.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnPhanXuong.setBorder(null);
@@ -349,6 +355,7 @@ public class MenuGUI extends JFrame {
 				pnContentPhanCong.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnPhanCong.setBorder(null);
@@ -356,7 +363,7 @@ public class MenuGUI extends JFrame {
 		pnMenu.add(pnPhanCong);
 		pnPhanCong.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblPhanCong = new JLabel("PHÂN CÔNG");
+		lblPhanCong = new JLabel("PHÂN CÔNG");
 		lblPhanCong.setForeground(new Color(255, 255, 255));
 		lblPhanCong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPhanCong.setHorizontalAlignment(SwingConstants.CENTER);
@@ -404,6 +411,7 @@ public class MenuGUI extends JFrame {
 				pnContentChamCong.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnChamCong.setBorder(null);
@@ -458,6 +466,7 @@ public class MenuGUI extends JFrame {
 				pnContentSanPham.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnSanPham.setBorder(null);
@@ -513,6 +522,7 @@ public class MenuGUI extends JFrame {
 				pnContentSalary.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnLuong.setBorder(null);
@@ -568,6 +578,7 @@ public class MenuGUI extends JFrame {
 				pnContentAccount.setVisible(true);
 				pnContent.repaint();
 				pnContent.revalidate();
+				clickMenu();
 			}
 		});
 		pnTaiKhoan.setBorder(null);
@@ -610,17 +621,7 @@ public class MenuGUI extends JFrame {
 		lblNewLabel.addMouseListener(new MouseAdapter()  { 
 			@Override
 		    public void mouseClicked(MouseEvent e)  {  
-		    	side.onSideMenu();
-		    	if (click) {
-		    		imageAvatar.setVisible(true);
-			    	lblName.setVisible(true);
-			    	click = false;
-		    	}else {
-		    		imageAvatar.setVisible(false);
-			    	lblName.setVisible(false);
-			    	click = true;
-		    	}
-		    	
+				clickMenu();
 		    }  
 		}); 
 		lblNewLabel.setBounds(10, 11, 46, 14);
@@ -629,8 +630,20 @@ public class MenuGUI extends JFrame {
 		pnContent.setLayout(new BorderLayout(0, 0));
 
 		
-//		pnContent.add(pnContentNhanSu);
-//		pnContentNhanSu.setVisible(true);
+		pnContent.add(pnContentNhanSu);
+		pnContentNhanSu.setVisible(true);
 	}
 
+	public void clickMenu() {
+		side.onSideMenu();
+    	if (click) {
+    		imageAvatar.setVisible(true);
+	    	lblName.setVisible(true);
+	    	click = false;
+    	}else {
+    		imageAvatar.setVisible(false);
+	    	lblName.setVisible(false);
+	    	click = true;
+    	}
+	}
 }

@@ -50,6 +50,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		setIconImage(ICON_APPLICATION);
 		setTitle("Đăng nhập");
 		setResizable(false);
+		setLocationRelativeTo(null);
 		setBounds(100, 100, 1001, 566);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -162,6 +163,8 @@ public class LoginGUI extends JFrame implements ActionListener {
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
+								setVisible(false);
+								dispose();
 								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 								MenuGUI menuGUI = new MenuGUI();
 								menuGUI.setVisible(true);
