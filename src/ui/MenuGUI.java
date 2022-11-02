@@ -6,12 +6,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import imgavt.ImageAvatar;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -21,33 +22,52 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JTabbedPane;
-import javax.swing.JButton;
-import net.miginfocom.swing.MigLayout;
-import sidemenu.SideMenuPanel;
-
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 public class MenuGUI extends JFrame {
-
+	private final Color colorHover = Color.CYAN;
+	private final Color color = new Color(16, 84, 129);
 	private static final long serialVersionUID = 1L;
 	private static final Image ICON_APPLICATION = new ImageIcon("images\\icon_application.png").getImage();
 	private JPanel contentPane;
 	private SideMenuPanel side;
 	private JLabel lblName;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTable table;
+	private boolean click = true;
+	private JPanel pnNhanSu;
+	private JPanel pnPhongBan;
+	private JPanel pnPhanCong;
+	private JPanel pnChamCong;
+	private JPanel pnSanPham;
+	private JPanel pnLuong;
+	private JPanel pnPhanXuong;
+	private JPanel pnTaiKhoan;
+	private boolean pnNhanSuClicked = true;
+	private boolean pnPhongBanClicked = false;
+	private boolean pnPhanCongClicked = false;
+	private boolean pnChamCongClicked = false;
+	private boolean pnSanPhamClicked = false;
+	private boolean pnLuongClicked = false;
+	private boolean pnThongKeClicked = false;
+	private boolean pnTaiKhoanClicked = false;
+	private EmployeeGUI employeeGUI;
+	private Component pnContentNhanSu;
+	private TimesheetsGUI timesheetsGUI;
+	private Component pnContentChamCong;
+	private DepartmentGUI departmentGUI;
+	private Component pnContentPhongBan;
+	private ProductGUI productGUI;
+	private Component pnContentSanPham;
+	private AccountGUI accountGUI;
+	private Component pnContentAccount;
+	private AssignmentGUI assignmentGUI;
+	private Component pnContentPhanCong;
+	private SalaryGUI salaryGUI;
+	private Component pnContentSalary;
+	private FactoryGUI factoryGUI;
+	private Component pnContentFactory;
+	private JLabel lblPhanCong;
 	private JPanel pnMenu;
-
+	private ImageAvatar imageAvatar;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,6 +79,7 @@ public class MenuGUI extends JFrame {
 					MenuGUI frame = new MenuGUI();
 					frame.setTitle("Phần mềm tính lương nhân sự");
 					frame.setIconImage(ICON_APPLICATION);
+					frame.setLocationRelativeTo(null);
 					frame.setResizable(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -72,6 +93,23 @@ public class MenuGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public MenuGUI() {
+		timesheetsGUI = new TimesheetsGUI();
+		pnContentChamCong = timesheetsGUI.getView();
+		employeeGUI = new EmployeeGUI();
+		pnContentNhanSu = employeeGUI.getView();
+		departmentGUI = new DepartmentGUI();
+		pnContentPhongBan = departmentGUI.tabDepartment();
+		productGUI = new ProductGUI();
+		pnContentSanPham = productGUI.getView();
+		accountGUI = new AccountGUI();
+		pnContentAccount = accountGUI.tabAccount();
+		assignmentGUI = new AssignmentGUI();
+		pnContentPhanCong = assignmentGUI.tabAssignment();
+		salaryGUI = new SalaryGUI();
+		pnContentSalary = salaryGUI.getView();
+		factoryGUI = new FactoryGUI();
+		pnContentFactory = factoryGUI.getView();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 730);
 		contentPane = new JPanel();
@@ -79,189 +117,491 @@ public class MenuGUI extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel pnContainer = new JPanel();
 		contentPane.add(pnContainer);
-		
+
 		JPanel pnContent = new JPanel();
-		pnContent.setBounds(66, 0, 1199, 690);
+		pnContent.setBounds(64, 0, 1201, 690);
 		pnContent.setBackground(new Color(128, 128, 0));
-		
+
 		JPanel pnSideMenu = new JPanel();
-		pnSideMenu.setBounds(0, 0, 60, 691);
+		pnSideMenu.setBounds(0, 0, 65, 691);
 		pnSideMenu.setBorder(new EmptyBorder(0, 10, 0, 0));
-		pnSideMenu.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				side.onSideMenu();
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				side.onSideMenu();
-			}
-		});
 		pnSideMenu.setBackground(new Color(16, 84, 129));
-		
-		ImageAvatar imageAvatar = new ImageAvatar();
-		imageAvatar.setBounds(0, 23, 108, 100);
+
+		imageAvatar = new ImageAvatar();
+		imageAvatar.setBounds(0, 50, 108, 100);
 		imageAvatar.setIcon(new ImageIcon("images\\avatar.jpg"));
-		
+		imageAvatar.setVisible(false);
+
 		lblName = new JLabel("Nguyễn Văn A");
-		lblName.setBounds(0, 134, 160, 33);
+		lblName.setBounds(0, 149, 160, 33);
 		lblName.setForeground(new Color(255, 255, 255));
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblName.setVisible(false);
 		lblName.setPreferredSize(new Dimension(pnSideMenu.getWidth(), pnSideMenu.getHeight()));
-//		lblName.setVisible(false);
-		
+
 		pnMenu = new JPanel();
-		pnMenu.setBounds(0, 180, 230, 465);
+		pnMenu.setBounds(0, 180, 190, 465);
 		pnMenu.setBackground(new Color(16, 84, 129));
 		pnMenu.setLayout(new GridLayout(8, 1, 0, 10));
-		
-		JPanel pnNhanSu = new JPanel();
+
+		pnNhanSu = new JPanel();
+		pnNhanSu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnNhanSu.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnNhanSuClicked) {
+					pnNhanSu.setBackground(new Color(16, 84, 129));
+				}
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = true;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = false;
+				pnLuongClicked = false;
+				pnThongKeClicked = false;
+				pnTaiKhoanClicked = false;
+				pnNhanSu.setBackground(colorHover);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(color);
+				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentNhanSu);
+				pnContentNhanSu.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
 		pnNhanSu.setBackground(new Color(16, 84, 129));
+		pnNhanSu.setBackground(colorHover);
 		pnNhanSu.setSize(new Dimension(100, 100));
-		pnNhanSu.setBorder(new MatteBorder(0, 10, 0, 0, Color.RED));
 		pnMenu.add(pnNhanSu);
 		pnNhanSu.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblNhanSu = new JLabel("NHÂN SỰ");
 		lblNhanSu.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNhanSu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNhanSu.setForeground(new Color(255, 255, 255));
 		pnNhanSu.add(lblNhanSu);
-		
+
 		JLabel lblIconNhanSu = new JLabel();
-		Image imgNhanSu = new ImageIcon("images\\side_menu\\businessman.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconNhanSu.setIcon(new ImageIcon(imgNhanSu));
+		lblIconNhanSu.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconNhanSu.setIcon(new ImageIcon("images\\side_menu\\businessman.png"));
 		pnNhanSu.add(lblIconNhanSu, BorderLayout.WEST);
-		
-		JPanel pnPhongBan = new JPanel();
-		pnPhongBan.setBorder(new MatteBorder(0, 10, 0, 0, (Color) new Color(16, 84, 129)));
+
+		pnPhongBan = new JPanel();
+		pnPhongBan.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnPhongBan.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnPhongBanClicked) {
+					pnPhongBan.setBackground(new Color(16, 84, 129));
+				}
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = true;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = false;
+				pnLuongClicked = false;
+				pnThongKeClicked = false;
+				pnTaiKhoanClicked = false;
+				pnPhongBan.setBackground(colorHover);
+				pnNhanSu.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(color);
+				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentPhongBan);
+				pnContentPhongBan.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
+		pnPhongBan.setBorder(null);
 		pnPhongBan.setBackground(new Color(16, 84, 129));
 		pnMenu.add(pnPhongBan);
 		pnPhongBan.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblPhongBan = new JLabel("PHÒNG BAN");
 		lblPhongBan.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPhongBan.setForeground(new Color(255, 255, 255));
 		lblPhongBan.setHorizontalAlignment(SwingConstants.CENTER);
 		pnPhongBan.add(lblPhongBan, BorderLayout.CENTER);
-		
+
 		JLabel lblIconPhongBan = new JLabel();
-		Image imgPhongBan = new ImageIcon("images\\side_menu\\dept.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconPhongBan.setIcon(new ImageIcon(imgPhongBan));
+		lblIconPhongBan.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconPhongBan.setIcon(new ImageIcon("images\\side_menu\\dept.png"));
 		pnPhongBan.add(lblIconPhongBan, BorderLayout.WEST);
 		
-		JPanel pnPhanCong = new JPanel();
-		pnPhanCong.setBorder(new MatteBorder(0, 10, 0, 0, (Color) new Color(16, 84, 129)));
+		pnPhanXuong = new JPanel();
+		pnPhanXuong.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnPhanXuong.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnThongKeClicked) {
+					pnPhanXuong.setBackground(color);
+				}
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = false;
+				pnLuongClicked = false;
+				pnThongKeClicked = true;
+				pnTaiKhoanClicked = false;
+				pnNhanSu.setBackground(color);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(colorHover);
+				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentFactory);
+				pnContentFactory.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
+		pnPhanXuong.setBorder(null);
+		pnPhanXuong.setBackground(new Color(16, 84, 129));
+		pnMenu.add(pnPhanXuong);
+		pnPhanXuong.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblPhanXuong = new JLabel("PHÂN XƯỞNG");
+		lblPhanXuong.setForeground(new Color(255, 255, 255));
+		lblPhanXuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblPhanXuong.setHorizontalAlignment(SwingConstants.CENTER);
+		pnPhanXuong.add(lblPhanXuong, BorderLayout.CENTER);
+
+		JLabel lblIconPhanXuong = new JLabel();
+		lblIconPhanXuong.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconPhanXuong.setIcon(new ImageIcon("images\\side_menu\\factory.png"));
+		pnPhanXuong.add(lblIconPhanXuong, BorderLayout.WEST);
+
+		pnPhanCong = new JPanel();
+		pnPhanCong.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnPhanCong.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnPhanCongClicked) {
+					pnPhanCong.setBackground(color);
+				}
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = true;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = false;
+				pnLuongClicked = false;
+				pnThongKeClicked = false;
+				pnTaiKhoanClicked = false;
+				pnNhanSu.setBackground(color);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(colorHover);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(color);
+				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentPhanCong);
+				pnContentPhanCong.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
+		pnPhanCong.setBorder(null);
 		pnPhanCong.setBackground(new Color(16, 84, 129));
 		pnMenu.add(pnPhanCong);
 		pnPhanCong.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblPhanCong = new JLabel("PHÂN CÔNG");
+
+		lblPhanCong = new JLabel("PHÂN CÔNG");
 		lblPhanCong.setForeground(new Color(255, 255, 255));
 		lblPhanCong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPhanCong.setHorizontalAlignment(SwingConstants.CENTER);
 		pnPhanCong.add(lblPhanCong, BorderLayout.CENTER);
-		
+
 		JLabel lblIconPhanCong = new JLabel();
-		Image imgPhanCong = new ImageIcon("images\\side_menu\\allotment.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconPhanCong.setIcon(new ImageIcon(imgPhanCong));
+		lblIconPhanCong.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconPhanCong.setIcon(new ImageIcon("images\\side_menu\\allotment.png"));
 		pnPhanCong.add(lblIconPhanCong, BorderLayout.WEST);
-		
-		JPanel pnChamCong = new JPanel();
-		pnChamCong.setBorder(new MatteBorder(0, 10, 0, 0, (Color) new Color(16, 84, 129)));
+
+		pnChamCong = new JPanel();
+		pnChamCong.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnChamCong.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnChamCongClicked) {
+					pnChamCong.setBackground(color);
+				}
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = true;
+				pnSanPhamClicked = false;
+				pnLuongClicked = false;
+				pnThongKeClicked = false;
+				pnTaiKhoanClicked = false;
+				pnNhanSu.setBackground(color);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(colorHover);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(color);
+				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentChamCong);
+				pnContentChamCong.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
+		pnChamCong.setBorder(null);
 		pnChamCong.setBackground(new Color(16, 84, 129));
 		pnMenu.add(pnChamCong);
 		pnChamCong.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblChamCong = new JLabel("CHẤM CÔNG");
 		lblChamCong.setForeground(new Color(255, 255, 255));
 		lblChamCong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblChamCong.setHorizontalAlignment(SwingConstants.CENTER);
 		pnChamCong.add(lblChamCong, BorderLayout.CENTER);
-		
+
 		JLabel lblIconChamCong = new JLabel();
-		Image imgChamCong = new ImageIcon("images\\side_menu\\timekeeping.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconChamCong.setIcon(new ImageIcon(imgChamCong));
+		lblIconChamCong.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconChamCong.setIcon(new ImageIcon("images\\side_menu\\timekeeping.png"));
 		pnChamCong.add(lblIconChamCong, BorderLayout.WEST);
-		
-		JPanel pnSanPham = new JPanel();
-		pnSanPham.setBorder(new MatteBorder(0, 10, 0, 0, (Color) new Color(16, 84, 129)));
+
+		pnSanPham = new JPanel();
+		pnSanPham.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnSanPham.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnSanPhamClicked) {
+					pnSanPham.setBackground(color);
+				}
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = true;
+				pnLuongClicked = false;
+				pnThongKeClicked = false;
+				pnTaiKhoanClicked = false;
+				pnNhanSu.setBackground(color);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(colorHover);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(color);
+				pnTaiKhoan.setBackground(color);
+				pnContent.removeAll();
+				pnContent.add(pnContentSanPham);
+				pnContentSanPham.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
+		pnSanPham.setBorder(null);
 		pnSanPham.setBackground(new Color(16, 84, 129));
 		pnMenu.add(pnSanPham);
 		pnSanPham.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblSanPham = new JLabel("SẢN PHẨM");
 		lblSanPham.setForeground(new Color(255, 255, 255));
 		lblSanPham.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblSanPham.setHorizontalAlignment(SwingConstants.CENTER);
 		pnSanPham.add(lblSanPham, BorderLayout.CENTER);
-		
+
 		JLabel lblIconSanPham = new JLabel();
-		Image imgSanPham = new ImageIcon("images\\side_menu\\product.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconSanPham.setIcon(new ImageIcon(imgSanPham));
+		lblIconSanPham.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconSanPham.setIcon(new ImageIcon("images\\side_menu\\product.png"));
 		pnSanPham.add(lblIconSanPham, BorderLayout.WEST);
-		
-		JPanel pnLuong = new JPanel();
-		pnLuong.setBorder(new MatteBorder(0, 10, 0, 0, (Color) new Color(16, 84, 129)));
+
+		pnLuong = new JPanel();
+		pnLuong.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnLuong.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnLuongClicked) {
+					pnLuong.setBackground(color);
+				}
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = false;
+				pnLuongClicked = true;
+				pnThongKeClicked = false;
+				pnTaiKhoanClicked = false;
+				pnNhanSu.setBackground(color);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(colorHover);
+				pnPhanXuong.setBackground(color);
+				pnTaiKhoan.setBackground(color);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentSalary);
+				pnContentSalary.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
+		pnLuong.setBorder(null);
 		pnLuong.setBackground(new Color(16, 84, 129));
 		pnMenu.add(pnLuong);
 		pnLuong.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblLuong = new JLabel("LƯƠNG");
 		lblLuong.setForeground(new Color(255, 255, 255));
 		lblLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblLuong.setHorizontalAlignment(SwingConstants.CENTER);
 		pnLuong.add(lblLuong, BorderLayout.CENTER);
-		
+
 		JLabel lblIconLuong = new JLabel();
-		Image imgLuong = new ImageIcon("images\\side_menu\\salary.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconLuong.setIcon(new ImageIcon(imgLuong));
+		lblIconLuong.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconLuong.setIcon(new ImageIcon("images\\side_menu\\salary.png"));
 		pnLuong.add(lblIconLuong, BorderLayout.WEST);
-		
-		JPanel pnThongKe = new JPanel();
-		pnThongKe.setBorder(new MatteBorder(0, 10, 0, 0, (Color) new Color(16, 84, 129)));
-		pnThongKe.setBackground(new Color(16, 84, 129));
-		pnMenu.add(pnThongKe);
-		pnThongKe.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblThongKe = new JLabel("THỐNG KÊ");
-		lblThongKe.setForeground(new Color(255, 255, 255));
-		lblThongKe.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblThongKe.setHorizontalAlignment(SwingConstants.CENTER);
-		pnThongKe.add(lblThongKe, BorderLayout.CENTER);
-		
-		JLabel lblIconThongKe = new JLabel();
-		Image imgThongKe = new ImageIcon("images\\side_menu\\statistical.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconThongKe.setIcon(new ImageIcon(imgThongKe));
-		pnThongKe.add(lblIconThongKe, BorderLayout.WEST);
-		
-		JPanel pnTaiKhoan = new JPanel();
-		pnTaiKhoan.setBorder(new MatteBorder(0, 10, 0, 0, (Color) new Color(16, 84, 129)));
+
+		pnTaiKhoan = new JPanel();
+		pnTaiKhoan.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pnTaiKhoan.setBackground(colorHover);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!pnTaiKhoanClicked) {
+					pnTaiKhoan.setBackground(color);
+				}
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				pnNhanSuClicked = false;
+				pnPhongBanClicked = false;
+				pnPhanCongClicked = false;
+				pnChamCongClicked = false;
+				pnSanPhamClicked = false;
+				pnLuongClicked = false;
+				pnThongKeClicked = false;
+				pnTaiKhoanClicked = true;
+				pnNhanSu.setBackground(color);
+				pnPhongBan.setBackground(color);
+				pnPhanCong.setBackground(color);
+				pnChamCong.setBackground(color);
+				pnSanPham.setBackground(color);
+				pnLuong.setBackground(color);
+				pnPhanXuong.setBackground(color);
+				pnTaiKhoan.setBackground(colorHover);
+				
+				pnContent.removeAll();
+				pnContent.add(pnContentAccount);
+				pnContentAccount.setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				clickMenu();
+			}
+		});
+		pnTaiKhoan.setBorder(null);
 		pnTaiKhoan.setBackground(new Color(16, 84, 129));
 		pnMenu.add(pnTaiKhoan);
 		pnTaiKhoan.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblTaiKhoan = new JLabel("TÀI KHOẢN");
 		lblTaiKhoan.setForeground(new Color(255, 255, 255));
 		lblTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTaiKhoan.setHorizontalAlignment(SwingConstants.CENTER);
 		pnTaiKhoan.add(lblTaiKhoan, BorderLayout.CENTER);
-		
+
 		JLabel lblIconTaiKhoan = new JLabel();
-		Image imgTaiKhoan = new ImageIcon("images\\side_menu\\account.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		lblIconTaiKhoan.setIcon(new ImageIcon(imgTaiKhoan));
+		lblIconTaiKhoan.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblIconTaiKhoan.setIcon(new ImageIcon("images\\side_menu\\account.png"));
 		pnTaiKhoan.add(lblIconTaiKhoan, BorderLayout.WEST);
-		
+
 		JLabel lblVersion = new JLabel("Version 1.0.1");
-		lblVersion.setBounds(20, 666, 190, 14);
+		lblVersion.setBounds(10, 666, 190, 14);
 		lblVersion.setFont(new Font("Microsoft JhengHei Light", Font.PLAIN, 9));
 		lblVersion.setForeground(new Color(255, 255, 255));
-		
+
 		side = new SideMenuPanel(this);
 		side.setMinWidth(65);
 		side.setMaxWidth(190);
@@ -275,137 +615,35 @@ public class MenuGUI extends JFrame {
 		pnSideMenu.add(lblName);
 		pnSideMenu.add(lblVersion);
 		pnSideMenu.add(pnMenu);
+		
+		JLabel lblNewLabel = new JLabel();
+		lblNewLabel.setIcon(new ImageIcon("images\\side_menu\\menu.png"));
+		lblNewLabel.addMouseListener(new MouseAdapter()  { 
+			@Override
+		    public void mouseClicked(MouseEvent e)  {  
+				clickMenu();
+		    }  
+		}); 
+		lblNewLabel.setBounds(10, 11, 46, 14);
+		pnSideMenu.add(lblNewLabel);
 		pnContainer.add(pnContent);
 		pnContent.setLayout(new BorderLayout(0, 0));
+
 		
-		JPanel panel = new JPanel();
-		pnContent.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		panel.add(tabbedPane);
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Nhân viên hành chính", null, panel_1, null);
-		panel_1.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 4, true), "Nhập thông tin nhân sự"));
-		panel_1.add(panel_3, BorderLayout.NORTH);
-		panel_3.setLayout(new MigLayout("", "[][grow][][grow][][grow]", "[][][][grow]"));
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		panel_3.add(lblNewLabel, "cell 0 0,alignx left");
-		
-		textField = new JTextField();
-		panel_3.add(textField, "cell 1 0,growx");
-		textField.setColumns(10);
-		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		panel_3.add(lblNewLabel_1, "cell 2 0,alignx trailing");
-		
-		textField_1 = new JTextField();
-		panel_3.add(textField_1, "cell 3 0,growx");
-		textField_1.setColumns(10);
-		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		panel_3.add(lblNewLabel_2, "cell 4 0,alignx trailing");
-		
-		JComboBox comboBox = new JComboBox();
-		panel_3.add(comboBox, "cell 5 0,growx");
-		
-		JLabel lblNewLabel_3 = new JLabel("New label");
-		panel_3.add(lblNewLabel_3, "cell 0 1");
-		
-		textField_2 = new JTextField();
-		panel_3.add(textField_2, "cell 1 1,growx");
-		textField_2.setColumns(10);
-		
-		JLabel lblNewLabel_4 = new JLabel("New label");
-		panel_3.add(lblNewLabel_4, "cell 2 1,alignx trailing");
-		
-		textField_3 = new JTextField();
-		panel_3.add(textField_3, "cell 3 1,growx");
-		textField_3.setColumns(10);
-		
-		JLabel lblNewLabel_5 = new JLabel("New label");
-		panel_3.add(lblNewLabel_5, "cell 4 1,alignx trailing");
-		
-		JComboBox comboBox_1 = new JComboBox();
-		panel_3.add(comboBox_1, "cell 5 1,growx");
-		
-		JLabel lblNewLabel_6 = new JLabel("New label");
-		panel_3.add(lblNewLabel_6, "cell 0 2,alignx trailing");
-		
-		JComboBox comboBox_2 = new JComboBox();
-		panel_3.add(comboBox_2, "cell 1 2,growx");
-		
-		JLabel lblNewLabel_7 = new JLabel("New label");
-		panel_3.add(lblNewLabel_7, "cell 2 2,alignx trailing");
-		
-		JComboBox comboBox_3 = new JComboBox();
-		panel_3.add(comboBox_3, "cell 3 2,growx");
-		
-		JLabel lblNewLabel_8 = new JLabel("New label");
-		panel_3.add(lblNewLabel_8, "cell 4 2,alignx trailing");
-		
-		JComboBox comboBox_4 = new JComboBox();
-		panel_3.add(comboBox_4, "cell 5 2,growx");
-		
-		JPanel panel_4 = new JPanel();
-		panel_1.add(panel_4, BorderLayout.CENTER);
-		panel_4.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel_5 = new JPanel();
-		panel_4.add(panel_5, BorderLayout.NORTH);
-		
-		JButton btnNewButton = new JButton("New button");
-		panel_5.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("New button");
-		panel_5.add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("New button");
-		panel_5.add(btnNewButton_2);
-		
-		JButton btnNewButton_3 = new JButton("New button");
-		panel_5.add(btnNewButton_3);
-		
-		JPanel panel_6 = new JPanel();
-		panel_4.add(panel_6, BorderLayout.CENTER);
-		panel_6.setLayout(new BorderLayout(0, 0));
-		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"c\u1ED9t 1", "New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		));
-		panel_6.add(table);
-		
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("Nhân viên sản xuất", null, panel_2, null);
-		
-		
-		
+		pnContent.add(pnContentNhanSu);
+		pnContentNhanSu.setVisible(true);
+	}
+
+	public void clickMenu() {
+		side.onSideMenu();
+    	if (click) {
+    		imageAvatar.setVisible(true);
+	    	lblName.setVisible(true);
+	    	click = false;
+    	}else {
+    		imageAvatar.setVisible(false);
+	    	lblName.setVisible(false);
+	    	click = true;
+    	}
 	}
 }

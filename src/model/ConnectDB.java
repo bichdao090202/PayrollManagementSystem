@@ -12,6 +12,7 @@ public class ConnectDB {
 		String url = "jdbc:sqlserver://localhost:1433;databaseName=PayrollManagementSystem";
 		String user = "sa";
 		String pwd = "sa";
+//		String pwd = "123456789";
 		try {
 			connection = DriverManager.getConnection(url, user, pwd);
 		} catch (SQLException e) {

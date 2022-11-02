@@ -1,24 +1,31 @@
 package entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Assignment {
 	private String assignmentID;
 	private String produreID;
 	private String workerID;
-	private Date date;
+	private LocalDate date;
 
 	public Assignment() {
 		super();
 	}
-
+	
 	public Assignment(String assignmentID, String produreID, String workerID) {
 		super();
 		this.assignmentID = assignmentID;
 		this.produreID = produreID;
 		this.workerID = workerID;
-		this.date = new Date();
+	}
+
+	public Assignment(String assignmentID, String produreID, String workerID, LocalDate date) {
+		super();
+		this.assignmentID = assignmentID;
+		this.produreID = produreID;
+		this.workerID = workerID;
+		this.date = date;
 	}
 
 	public String getAssignmentID() {
@@ -45,11 +52,11 @@ public class Assignment {
 		this.workerID = workerID;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

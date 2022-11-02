@@ -119,36 +119,66 @@ public class DepartmentDAO {
     }
     
     public String getNameManagerByID(String managerID) {
-    	String name = null;
+		String name = null;
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select TenNhanVien from  NhanVienHanhChinh where MaNhanVien = ?");
+			PreparedStatement stmt = connection
+					.prepareStatement("select TenNhanVien from  NhanVienHanhChinh where MaNhanVien = ?");
 			stmt.setString(1, managerID);
 			ResultSet rs = stmt.executeQuery();
-			if (!rs.next() )
-                return "";
-            else
-            	name = rs.getString("TenNhanVien");
+			if (!rs.next())
+				return "";
+			else
+				name = rs.getString("TenNhanVien");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+	}
+    
+    public String getNameDepartmentByID(String deptID) {
+    	String name = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT TenPhongBan FROM  PHONGBAN WHERE MaPhongBan= ?");
+			stmt.setString(1, deptID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next() )
+            	name = rs.getString("TenPhongBan");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return name;
     }
     
-    public String getQuantityEmployee(String departmentID) {
-    	int number = 0;
-    	
+    public int getQuantityEmployee(String departmentID) {
+		int number = 0;
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select number = count(MaNhanVien) from NhanVienHanhChinh where MaPhongBan = ?");
+			PreparedStatement stmt = connection
+					.prepareStatement("select number = count(MaNhanVien) from NhanVienHanhChinh where MaPhongBan = ?");
 			stmt.setString(1, departmentID);
 			ResultSet rs = stmt.executeQuery();
-			if (!rs.next() )
-                return null;
-            else
-            	number = rs.getInt("number");
+			if (!rs.next())
+				return 0;
+			else
+				number = rs.getInt("number");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return number==0?"Chưa có nhân viên":(""+number);
-    }
+		return number;
+	}
 
+    public List<String> getAllNameDepartment() {
+    	List<String> listName = new ArrayList<String>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT MaPhongBan, TenPhongBan FROM PHONGBAN");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String name = new String(rs.getString("MaPhongBan")+" - "+rs.getString("TenPhongBan"));
+                listName.add(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listName;
+    }
+    
 }

@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Produre {
 	private String procedureID;
 	private String name;
-	private float price;
+	private double price;
 	private int numberOrdinal; // thứ tự
 	private String productID;
 
@@ -19,7 +19,7 @@ public class Produre {
 		this.procedureID = procedureID;
 	}
 
-	public Produre(String procedureID, String name, float price, int numberOrdinal, String productID) {
+	public Produre(String procedureID, String name, double price, int numberOrdinal, String productID) {
 		super();
 		this.procedureID = procedureID;
 		this.name = name;
@@ -44,11 +44,11 @@ public class Produre {
 		this.name = name;
 	}
 
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 

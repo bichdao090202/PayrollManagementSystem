@@ -16,6 +16,19 @@ public class Employee {
 	public Employee() {
 		super();
 	}
+	
+	public Employee(String name, boolean gender, Date birthday, String address, String phone,
+			String bankName, String accountNumber, String beneficiany) {
+		super();
+		this.name = name;
+		this.gender = gender;
+		this.birthday = birthday;
+		this.address = address;
+		this.phone = phone;
+		this.bankName = bankName;
+		this.accountNumber = accountNumber;
+		this.beneficiany = beneficiany;
+	}
 
 	public Employee(String employeeID, String name, boolean gender, Date birthday, String address, String phone,
 			String bankName, String accountNumber, String beneficiany) {

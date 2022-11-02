@@ -3,7 +3,9 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import entity.Worker;
@@ -187,14 +189,13 @@ public class FactoryDAO {
 				return true;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
 	public boolean updateListTeam(List<TeamProducing> listTeam, String idFactory) {
-		String sqlUpdate = "update ToSanXuat set MaTo = ?, TenTo = ?, MaToTruong = ?, MaPhanXuong = ? where MaTo = ?";
+//		String sqlUpdate = "update ToSanXuat set MaTo = ?, TenTo = ?, MaToTruong = ?, MaPhanXuong = ? where MaTo = ?";
 		String announce = "";
 		List<TeamProducing> listTeamPresent = getListTeamByIdFactory(idFactory);
 		try {
@@ -263,7 +264,6 @@ public class FactoryDAO {
 				factory = new Factory(rs.getString("MaPhanXuong"), rs.getString("TenPhanXuong"), rs.getString("MaQuanDoc"));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return factory;
@@ -299,7 +299,6 @@ public class FactoryDAO {
 				listEmployee.add(employee);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		if(listEmployee.size() > 0) {
@@ -310,4 +309,48 @@ public class FactoryDAO {
 		}
 	}
 
+	
+	public List<String> getAllNameFactory(){
+		List<String> listName = new ArrayList<String>();
+		try {
+			prstm = con.prepareStatement("SELECT MaPhanXuong ,TenPhanXuong FROM PHANXUONG");
+			rs = prstm.executeQuery();
+			while(rs.next()) {
+				String name = new String(rs.getString("MaPhanXuong") +" - " + rs.getString("TenPhanXuong"));
+				listName.add(name);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listName;
+	}
+	
+	public String getNameFactoryByID(String factoryID){
+		String name = null;
+		try {
+			prstm = con.prepareStatement("SELECT TenPhanXuong FROM PHANXUONG WHERE MaPhanXuong = ?");
+			prstm.setString(1, name);
+			rs = prstm.executeQuery();
+			if(rs.next()) {
+				name = new String(rs.getString("TenPhanXuong"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return name;
+	}
+	
+	public String getNameFactoryByTeamID(String teamID) {
+    	String name = null;
+		try {
+			prstm = con.prepareStatement("SELECT PX.TenPhanXuong, PX.MaPhanXuong FROM PhanXuong AS PX INNER JOIN ToSanXuat AS TSX ON PX.MaPhanXuong = TSX.MaPhanXuong WHERE MaTo= ?");
+			prstm.setString(1, teamID);
+			ResultSet rs = prstm.executeQuery();
+			if (rs.next())
+            	name = rs.getString("MaPhanXuong") + " - "+ rs.getString("TenPhanXuong");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+    }
 }

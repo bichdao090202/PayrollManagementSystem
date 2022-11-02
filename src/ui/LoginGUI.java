@@ -13,6 +13,7 @@ import custom_field.JPasswordFieldHint;
 import custom_field.JTextFieldHint;
 import entity.PasswordBasedEncryption;
 import model.AccountDAO;
+import model.EmployeeOfficeDAO;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -39,17 +40,20 @@ public class LoginGUI extends JFrame implements ActionListener {
 	private JTextFieldHint txtUser;
 	private JPasswordFieldHint txtPassword;
 	private AccountDAO accountDAO;
+	private EmployeeOfficeDAO employeeOfficeDAO;
 
 	/**
 	 * Create the frame.
 	 */
 	public LoginGUI() {
 		accountDAO = new AccountDAO();
+		employeeOfficeDAO = new EmployeeOfficeDAO();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(ICON_APPLICATION);
 		setTitle("Đăng nhập");
 		setResizable(false);
+		setLocationRelativeTo(null);
 		setBounds(100, 100, 1001, 566);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -162,8 +166,12 @@ public class LoginGUI extends JFrame implements ActionListener {
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
+								setVisible(false);
+								dispose();
 								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 								MenuGUI menuGUI = new MenuGUI();
+								menuGUI.setLocationRelativeTo(null);
+								menuGUI.setResizable(false);
 								menuGUI.setVisible(true);
 							} catch (Exception e) {
 								e.printStackTrace();

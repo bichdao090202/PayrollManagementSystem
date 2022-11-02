@@ -1,0 +1,38 @@
+Bảng lương 11/2022
+
+Mã nhân viên : NV00008
+
+Tên nhân viên : Nguyễn Thị Kim Dung
+
+Giới tính : Nữ
+
+Ngày sinh : 02/12/2000
+
+Số điện thoại : 0941688538
+
+Địa chỉ : Quận 2, HCM
+
+Tên ngân hàng : MB Bank
+
+Số tài khoản : 12305062003
+
+Người hưởng thụ : Nguyễn Thị Kim Dung
+
+Chuyên môn/Chức vụ : May cổ áo thun
+
+Mã tổ/Mã phòng ban : PX0102
+
+Số ngày làm việc : 0
+
+Số ngày nghỉ : 30
+
+Chỉ tiêu : Không đạt
+
+Lý do : Số lượng không đạt yêu cầu
+
+Tiền thưởng : 0.0
+
+Tiền phạt : 0.0
+
+Tổng lương : 0.0
+
