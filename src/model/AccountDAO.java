@@ -55,7 +55,6 @@ public class AccountDAO {
 			stmt.setString(1, id);
 			n= stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return n>0;

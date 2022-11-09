@@ -20,6 +20,7 @@ import com.toedter.components.JSpinField;
 import entity.TimesheetsOffice;
 import model.EmployeeOfficeDAO;
 import model.TimesheetsDAO;
+import model.TimesheetsFactoryDAO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,10 +42,17 @@ import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
+
 import javax.swing.border.TitledBorder;
 import custom_field.JTextFieldHint;
+import javax.swing.JCheckBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class TimesheetsGUI extends JFrame implements ActionListener {
+	public TimesheetsGUI() {
+		tabTimesheet();
+	}
 
 	private static final long serialVersionUID = 1L;
 	private SimpleDateFormat sdfDate;
@@ -58,7 +66,9 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 	private String[] headerTableAssignmentWorker = new String[] { "Mã nhân viên", "Tên nhân viên", "Mã quy trình",
 			"Tên quy trình", "Ngày tham gia" };
 	private DefaultTableModel dtmEmpOffice;
+	private DefaultTableModel dtmAssignment;
 	private TimesheetsDAO timesheetsDAO;
+	private TimesheetsFactoryDAO timesheetsFactoryDAO;
 	private EmployeeOfficeDAO employeeOfficeDAO;
 	private JButton btnUpdateOfEmpOffice;
 	private JButton btnAddOfEmpOffice;
@@ -86,10 +96,12 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 	private JComboBox<String> cboIDWorker;
 	private JComboBox<String> cboProductID;
 	private JComboBox<String> cboProduceID;
+	private JCheckBox chkAbsentPM;
+	private JPanel pnInputEmpOffice;
+	private JCheckBox chkAbsentAM;
+	private JDateChooser dateSearchEmpOffice;
+	private JComboBox<String> cboSearchEmpOffice;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -102,29 +114,26 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 			}
 		});
 	}
-	
-	public TimesheetsGUI() {
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public Component getView() {
+	public Component tabTimesheet() {
 		sdfDate = new SimpleDateFormat("yyyy-MM-dd");
 		sdfTime = new SimpleDateFormat("HH:mm:ss");
 		timesheetsDAO = new TimesheetsDAO();
 		employeeOfficeDAO = new EmployeeOfficeDAO();
+		timesheetsFactoryDAO = new TimesheetsFactoryDAO();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setSize(1200, 690);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBackground(new Color(255, 255, 255));
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 
 		JPanel tabWorker = new JPanel();
@@ -181,8 +190,10 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		JLabel lblNewLabel_17 = new JLabel("Ngày chấm công:");
 		panel_2.add(lblNewLabel_17, "cell 0 3,alignx left,aligny top");
 
-		JDateChooser dateChooser_2 = new JDateChooser();
-		panel_2.add(dateChooser_2, "cell 1 3,growx,aligny top");
+		JDateChooser dateJoin = new JDateChooser();
+		dateJoin.setMaxSelectableDate(new Date());
+		dateJoin.setDateFormatString("yyyy-MM-dd");
+		panel_2.add(dateJoin, "cell 1 3,growx,aligny top");
 
 		JLabel lblNewLabel_18 = new JLabel("Số lượng thành phẩm:");
 		panel_2.add(lblNewLabel_18, "cell 2 3,alignx left,aligny top");
@@ -217,7 +228,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		scrollPane_2.setMaximumSize(new Dimension(32767, 167));
 		panel.add(scrollPane_2, BorderLayout.WEST);
 
-		tblAssignmentWorker = new JTable(new DefaultTableModel(headerTableAssignmentWorker, 0)) {
+		tblAssignmentWorker = new JTable(dtmAssignment = new DefaultTableModel(headerTableAssignmentWorker, 0)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -269,13 +280,15 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		panel_4.add(btnSearchOfWorker, "cell 2 0");
 
 		JPanel tabEmpOffice = new JPanel();
+		tabEmpOffice.setBackground(new Color(255, 255, 255));
 		tabbedPane.addTab("Nhân viên hành chính", null, tabEmpOffice, null);
 		tabEmpOffice.setLayout(new BorderLayout(0, 0));
 
-		JPanel pnInputEmpOffice = new JPanel();
+		pnInputEmpOffice = new JPanel();
+		pnInputEmpOffice.setBackground(new Color(255, 255, 255));
 		pnInputEmpOffice.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		tabEmpOffice.add(pnInputEmpOffice, BorderLayout.NORTH);
-		pnInputEmpOffice.setLayout(new MigLayout("", "[][200px:n:300px][40px][][][40px][][][grow][]", "[grow][grow]"));
+		pnInputEmpOffice.setLayout(new MigLayout("", "[][200px][40px][][][40px][][][40px][grow][]", "[grow][grow]"));
 
 		JLabel lblEmpOffice = new JLabel("Nhân viên");
 		pnInputEmpOffice.add(lblEmpOffice, "cell 0 0,alignx left");
@@ -288,6 +301,8 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		pnInputEmpOffice.add(lblCheckInAM, "cell 3 0");
 
 		spinHourCheckInAM = new JSpinField(0, 23);
+		spinHourCheckInAM.setMaximum(9);
+		spinHourCheckInAM.setMinimum(7);
 		spinHourCheckInAM.setValue(8);
 		spinHourCheckInAM.setPreferredSize(new Dimension(40, 20));
 		pnInputEmpOffice.add(spinHourCheckInAM, "flowx,cell 4 0,growx,aligny center");
@@ -309,22 +324,26 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 
 		spinHourCheckOutAM = new JSpinField();
 		spinHourCheckOutAM.setValue(12);
-		spinHourCheckOutAM.setMaximum(23);
-		spinHourCheckOutAM.setMinimum(0);
+		spinHourCheckOutAM.setMaximum(13);
+		spinHourCheckOutAM.setMinimum(11);
 		spinHourCheckOutAM.setPreferredSize(new Dimension(40, 20));
 		pnInputEmpOffice.add(spinHourCheckOutAM, "flowx,cell 7 0,alignx left,aligny center");
 
 		btnAddOfEmpOffice = new JButton("Thêm");
+		btnAddOfEmpOffice.setBackground(new Color(255, 255, 255));
 		btnAddOfEmpOffice.addActionListener(this);
 		btnAddOfEmpOffice.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAddOfEmpOffice.setFocusable(false);
-		pnInputEmpOffice.add(btnAddOfEmpOffice, "flowx,cell 9 0");
+		pnInputEmpOffice.add(btnAddOfEmpOffice, "flowx,cell 10 0");
 
 		JLabel lblDateTimesheets = new JLabel("Ngày chấm công:");
 		pnInputEmpOffice.add(lblDateTimesheets, "cell 0 1");
 
 		dateTimesheetOffice = new JDateChooser();
+		dateTimesheetOffice.getCalendarButton().setBackground(new Color(255, 255, 255));
+		dateTimesheetOffice.setDate(new Date());
 		dateTimesheetOffice.setDateFormatString("yyyy-MM-dd");
+		dateTimesheetOffice.setMaxSelectableDate(new Date());
 		pnInputEmpOffice.add(dateTimesheetOffice, "cell 1 1,grow");
 
 		JLabel lblNewLabel_8 = new JLabel("giờ");
@@ -344,8 +363,8 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 
 		spinHourCheckInPM = new JSpinField();
 		spinHourCheckInPM.setValue(13);
-		spinHourCheckInPM.setMaximum(23);
-		spinHourCheckInPM.setMinimum(0);
+		spinHourCheckInPM.setMaximum(14);
+		spinHourCheckInPM.setMinimum(12);
 		spinHourCheckInPM.setPreferredSize(new Dimension(40, 20));
 		pnInputEmpOffice.add(spinHourCheckInPM, "flowx,cell 4 1,alignx left,aligny center");
 
@@ -354,8 +373,8 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 
 		spinHourCheckOutPM = new JSpinField();
 		spinHourCheckOutPM.setValue(17);
-		spinHourCheckOutPM.setMaximum(23);
-		spinHourCheckOutPM.setMinimum(0);
+		spinHourCheckOutPM.setMaximum(18);
+		spinHourCheckOutPM.setMinimum(16);
 		spinHourCheckOutPM.setPreferredSize(new Dimension(40, 20));
 		pnInputEmpOffice.add(spinHourCheckOutPM, "flowx,cell 7 1,alignx left,aligny center");
 
@@ -386,45 +405,96 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		pnInputEmpOffice.add(lblNewLabel_15, "cell 7 1");
 
 		btnUpdateOfEmpOffice = new JButton("Cập nhật");
+		btnUpdateOfEmpOffice.setBorder(new LineBorder(new Color(8, 96, 100), 2));
+		btnUpdateOfEmpOffice.setBackground(new Color(255, 255, 255));
 		btnUpdateOfEmpOffice.addActionListener(this);
+
+		chkAbsentPM = new JCheckBox("Vắng chiều");
+		chkAbsentPM.setBackground(new Color(255, 255, 255));
+		chkAbsentPM.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					spinHourCheckInPM.setEnabled(false);
+					spinMinuteCheckInPM.setEnabled(false);
+					spinHourCheckOutPM.setEnabled(false);
+					spinMinuteCheckOutPM.setEnabled(false);
+				} else {
+					spinHourCheckInPM.setEnabled(true);
+					spinMinuteCheckInPM.setEnabled(true);
+					spinHourCheckOutPM.setEnabled(true);
+					spinMinuteCheckOutPM.setEnabled(true);
+				}
+			}
+		});
+		chkAbsentPM.setFocusable(false);
+		pnInputEmpOffice.add(chkAbsentPM, "cell 9 1");
 		btnUpdateOfEmpOffice.setIcon(new ImageIcon("images\\operations\\update.png"));
 		btnUpdateOfEmpOffice.setFocusable(false);
-		pnInputEmpOffice.add(btnUpdateOfEmpOffice, "cell 9 1,growx");
+		pnInputEmpOffice.add(btnUpdateOfEmpOffice, "cell 10 1,growx");
 
 		btnDeleteOfEmpOffice = new JButton("Xóa");
 		btnDeleteOfEmpOffice.setIcon(new ImageIcon("images\\operations\\delete.png"));
 		btnDeleteOfEmpOffice.setFocusable(false);
 		btnDeleteOfEmpOffice.setEnabled(false);
-		pnInputEmpOffice.add(btnDeleteOfEmpOffice, "cell 9 0");
+		pnInputEmpOffice.add(btnDeleteOfEmpOffice, "cell 10 0");
+
+		chkAbsentAM = new JCheckBox("Vắng sáng");
+		chkAbsentAM.setBackground(new Color(255, 255, 255));
+		chkAbsentAM.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					spinHourCheckInAM.setEnabled(false);
+					spinMinuteCheckInAM.setEnabled(false);
+					spinHourCheckOutAM.setEnabled(false);
+					spinMinuteCheckOutAM.setEnabled(false);
+				} else {
+					spinHourCheckInAM.setEnabled(true);
+					spinMinuteCheckInAM.setEnabled(true);
+					spinHourCheckOutAM.setEnabled(true);
+					spinMinuteCheckOutAM.setEnabled(true);
+				}
+			}
+		});
+		chkAbsentAM.setForeground(new Color(0, 0, 0));
+		chkAbsentAM.addActionListener(this);
+		chkAbsentAM.setFocusable(false);
+		pnInputEmpOffice.add(chkAbsentAM, "cell 9 0");
 
 		JPanel pnTableEmpOffice = new JPanel();
+		pnTableEmpOffice.setBackground(new Color(255, 255, 255));
 		tabEmpOffice.add(pnTableEmpOffice, BorderLayout.CENTER);
 		pnTableEmpOffice.setLayout(new BorderLayout(0, 0));
 
 		JPanel pnSearchEmpOffice = new JPanel();
+		pnSearchEmpOffice.setBackground(new Color(255, 255, 255));
 		pnTableEmpOffice.add(pnSearchEmpOffice, BorderLayout.NORTH);
-		pnSearchEmpOffice.setLayout(new MigLayout("", "[70px:n][200px:n][40px][][200px:n][][]", "[22px]"));
+		pnSearchEmpOffice.setLayout(new MigLayout("", "[70px:n][200px:n][40px][][200px:n][][][][]", "[22px]"));
 
 		JLabel lblNewLabel = new JLabel("Nhân viên");
 		pnSearchEmpOffice.add(lblNewLabel, "cell 0 0,alignx left,aligny center");
 
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setModel(new DefaultComboBoxModel<String>(employeeOfficeDAO.getAllName().toArray(String[]::new)));
-		pnSearchEmpOffice.add(comboBox, "cell 1 0,growx,aligny center");
+		cboSearchEmpOffice = new JComboBox<String>();
+		cboSearchEmpOffice
+				.setModel(new DefaultComboBoxModel<String>(timesheetsDAO.getAllNameEmp().toArray(String[]::new)));
+		pnSearchEmpOffice.add(cboSearchEmpOffice, "cell 1 0,growx,aligny center");
 
 		JLabel lblNewLabel_1 = new JLabel("Ngày chấm công");
 		pnSearchEmpOffice.add(lblNewLabel_1, "cell 3 0,alignx left,aligny center");
 
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setDateFormatString("yyyy-MM-dd");
-		pnSearchEmpOffice.add(dateChooser, "cell 4 0,growx,aligny center");
+		dateSearchEmpOffice = new JDateChooser();
+		dateSearchEmpOffice.setMaxSelectableDate(new Date());
+		dateSearchEmpOffice.setDate(new Date());
+		dateSearchEmpOffice.setDateFormatString("yyyy-MM-dd");
+		pnSearchEmpOffice.add(dateSearchEmpOffice, "cell 4 0,growx,aligny center");
 
 		btnSearch = new JButton("");
+		btnSearch.addActionListener(this);
 		btnSearch.setFocusable(false);
 		btnSearch.setIcon(new ImageIcon("images\\operations\\filter.png"));
 		pnSearchEmpOffice.add(btnSearch, "cell 6 0,alignx center,aligny center");
 
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBackground(new Color(255, 255, 255));
 		pnTableEmpOffice.add(scrollPane, BorderLayout.CENTER);
 
 		tblEmpOffice = new JTable(dtmEmpOffice = new DefaultTableModel(headerTableEmpOffice, 0)) {
@@ -445,22 +515,31 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 					cboEmpOffice.setSelectedItem(dtmEmpOffice.getValueAt(rowSelected, 0).toString());
 					try {
 						dateTimesheetOffice.setDate(sdfDate.parse(dtmEmpOffice.getValueAt(rowSelected, 1).toString()));
+						try {
+							Date checkInAM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 2).toString());
+							spinHourCheckInAM.setValue(checkInAM.getHours());
+							spinMinuteCheckInAM.setValue(checkInAM.getMinutes());
 
-						Date checkInAM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 2).toString());
-						spinHourCheckInAM.setValue(checkInAM.getHours());
-						spinMinuteCheckInAM.setValue(checkInAM.getMinutes());
+							Date checkOutAM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 3).toString());
+							spinHourCheckOutAM.setValue(checkOutAM.getHours());
+							spinMinuteCheckOutAM.setValue(checkOutAM.getMinutes());
+						} catch (ParseException e2) {
+							chkAbsentAM.setSelected(true);
+							chkAbsentPM.setSelected(false);
+						}
 
-						Date checkOutAM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 3).toString());
-						spinHourCheckOutAM.setValue(checkOutAM.getHours());
-						spinMinuteCheckOutAM.setValue(checkOutAM.getMinutes());
+						try {
+							Date checkInPM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 4).toString());
+							spinHourCheckInPM.setValue(checkInPM.getHours());
+							spinMinuteCheckInPM.setValue(checkInPM.getMinutes());
 
-						Date checkInPM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 4).toString());
-						spinHourCheckInPM.setValue(checkInPM.getHours());
-						spinMinuteCheckInPM.setValue(checkInPM.getMinutes());
-
-						Date checkOutPM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 5).toString());
-						spinHourCheckOutPM.setValue(checkOutPM.getHours());
-						spinMinuteCheckOutPM.setValue(checkOutPM.getMinutes());
+							Date checkOutPM = sdfTime.parse(dtmEmpOffice.getValueAt(rowSelected, 5).toString());
+							spinHourCheckOutPM.setValue(checkOutPM.getHours());
+							spinMinuteCheckOutPM.setValue(checkOutPM.getMinutes());
+						} catch (ParseException e3) {
+							chkAbsentPM.setSelected(true);
+							chkAbsentAM.setSelected(false);
+						}
 					} catch (ParseException e1) {
 						e1.printStackTrace();
 					}
@@ -469,11 +548,28 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		});
 		scrollPane.setViewportView(tblEmpOffice);
 
-		loadDataToTable();
+		loadDataToTable(timesheetsDAO.getAllTimesheetsOffices());
+		loadDateToTableAssignment();
 		return contentPane;
 	}
+	
+	public void loadDateToTableAssignment() {
+		dtmAssignment = new DefaultTableModel(headerTableAssignmentWorker, 0) {
+			private static final long serialVersionUID = 1L;
 
-	public void loadDataToTable() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		tblAssignmentWorker.setModel(dtmAssignment);
+		List<String> listAssignment = timesheetsFactoryDAO.getAllAssignment();
+		for (String assignment : listAssignment) {
+			dtmAssignment.addRow(assignment.split(";"));
+		}
+	}
+
+	public void loadDataToTable(List<TimesheetsOffice> timesheetsOffice) {
 		dtmEmpOffice = new DefaultTableModel(headerTableEmpOffice, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -483,7 +579,6 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 			}
 		};
 		tblEmpOffice.setModel(dtmEmpOffice);
-		List<TimesheetsOffice> timesheetsOffice = timesheetsDAO.getAllTimesheetsOffices();
 		for (TimesheetsOffice timesheets : timesheetsOffice) {
 			dtmEmpOffice.addRow(timesheets.toString().split(","));
 		}
@@ -498,16 +593,28 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		}
 		return time;
 	}
-	
+
 	public TimesheetsOffice createTimesheetsOfficeFromInput() {
-		String employeeID = cboEmpOffice.getSelectedItem().toString().substring(0, 7);
+		String employeeID = cboEmpOffice.getSelectedItem().toString().substring(0, 9);
 		Date date = dateTimesheetOffice.getDate();
-		Date checkInAM = getTime(spinHourCheckInAM, spinMinuteCheckInAM);
-		Date checkOutAM = getTime(spinHourCheckOutAM, spinMinuteCheckOutAM);
-		Date checkInPM = getTime(spinHourCheckInPM, spinMinuteCheckInPM);
-		Date checkOutPM = getTime(spinHourCheckOutPM, spinMinuteCheckOutPM);
-		TimesheetsOffice timesheets = new TimesheetsOffice(date, checkInAM, checkOutAM, checkInPM, checkOutPM,
-				employeeID);
+		TimesheetsOffice timesheets = new TimesheetsOffice(date, employeeID);
+		if (!chkAbsentAM.isSelected() & !chkAbsentPM.isSelected()) {
+			Date checkInAM = getTime(spinHourCheckInAM, spinMinuteCheckInAM);
+			Date checkOutAM = getTime(spinHourCheckOutAM, spinMinuteCheckOutAM);
+			Date checkInPM = getTime(spinHourCheckInPM, spinMinuteCheckInPM);
+			Date checkOutPM = getTime(spinHourCheckOutPM, spinMinuteCheckOutPM);
+			timesheets = new TimesheetsOffice(date, checkInAM, checkOutAM, checkInPM, checkOutPM, employeeID);
+		} else if (!chkAbsentAM.isSelected() | chkAbsentPM.isSelected()) {
+			Date checkInPM = getTime(spinHourCheckInPM, spinMinuteCheckInPM);
+			Date checkOutAM = getTime(spinHourCheckOutAM, spinMinuteCheckOutAM);
+			timesheets.setCheckInAM(checkInPM);
+			timesheets.setCheckOutAM(checkOutAM);
+		} else {
+			Date checkInPM = getTime(spinHourCheckInPM, spinMinuteCheckInPM);
+			Date checkOutPM = getTime(spinHourCheckOutPM, spinMinuteCheckOutPM);
+			timesheets.setCheckInPM(checkInPM);
+			timesheets.setCheckOutPM(checkOutPM);
+		}
 		return timesheets;
 	}
 
@@ -516,39 +623,53 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		if (e.getSource() == btnAddOfEmpOffice) {
 			TimesheetsOffice timesheets = createTimesheetsOfficeFromInput();
 			if (timesheetsDAO.addTimesheetsOffice(timesheets)) {
-				loadDataToTable();
+				loadDataToTable(timesheetsDAO.getAllTimesheetsOffices());
 				JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo", JOptionPane.NO_OPTION,
 						null);
 			} else {
 				JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
 						JOptionPane.NO_OPTION, null);
 			}
-		} else if (e.getSource() == btnUpdateOfEmpOffice) {
+		}
+		if (e.getSource() == btnUpdateOfEmpOffice) {
 			int rowSelected = tblEmpOffice.getSelectedRow();
 			if (rowSelected < 0) {
 				JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên trước", "Thông báo", JOptionPane.NO_OPTION,
 						null);
-			}else {
+			} else {
 				try {
 					TimesheetsOffice timesheets = createTimesheetsOfficeFromInput();
 					String employeeID = dtmEmpOffice.getValueAt(rowSelected, 0).toString().substring(0, 7);
 					Date date = sdfDate.parse(dtmEmpOffice.getValueAt(rowSelected, 1).toString());
 					if (timesheets.getDate().compareTo(date) != 0 & timesheets.getEmployeeID() != employeeID) {
-						JOptionPane.showMessageDialog(this, "Không được cập nhật nhân viên và ngày chấm công", "Thông báo", JOptionPane.NO_OPTION,
-								null);
+						JOptionPane.showMessageDialog(this, "Không được cập nhật nhân viên và ngày chấm công",
+								"Thông báo", JOptionPane.NO_OPTION, null);
 					} else {
 						if (timesheetsDAO.updateTimesheetsOffice(timesheets)) {
-							loadDataToTable();
-							JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo", JOptionPane.NO_OPTION,
-									null);
+							loadDataToTable(timesheetsDAO.getAllTimesheetsOffices());
+							JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
 						} else {
-							JOptionPane.showMessageDialog(this, "Cập nhật chấm công không thành công.", "Thông báo", JOptionPane.NO_OPTION,
-									null);
+							JOptionPane.showMessageDialog(this, "Cập nhật chấm công không thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
 						}
 					}
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
+			}
+		}
+		if (e.getSource() == btnSearch) {
+			Date date = dateSearchEmpOffice.getDate();
+			String emp = cboSearchEmpOffice.getSelectedItem().toString();
+			if (date == null) {
+				if (emp.equals("Tất cả nhân viên")) {
+					loadDataToTable(timesheetsDAO.getAllTimesheetsOffices());
+				} else {
+					loadDataToTable(timesheetsDAO.searchByEmp(emp));
+				}
+			} else {
+				loadDataToTable(timesheetsDAO.searchByDateAndEmp(emp, date));
 			}
 		}
 	}

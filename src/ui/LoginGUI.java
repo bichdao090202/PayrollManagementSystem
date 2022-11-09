@@ -11,9 +11,11 @@ import javax.swing.border.MatteBorder;
 
 import custom_field.JPasswordFieldHint;
 import custom_field.JTextFieldHint;
+import entity.Employee;
 import entity.PasswordBasedEncryption;
 import model.AccountDAO;
 import model.EmployeeOfficeDAO;
+import model.WorkerDAO;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -41,13 +43,13 @@ public class LoginGUI extends JFrame implements ActionListener {
 	private JPasswordFieldHint txtPassword;
 	private AccountDAO accountDAO;
 	private EmployeeOfficeDAO employeeOfficeDAO;
+	private WorkerDAO workerDAO;
+	private Employee emp;
 
-	/**
-	 * Create the frame.
-	 */
 	public LoginGUI() {
 		accountDAO = new AccountDAO();
 		employeeOfficeDAO = new EmployeeOfficeDAO();
+		workerDAO = new WorkerDAO();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(ICON_APPLICATION);
@@ -117,7 +119,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		pnUser.setLayout(new BorderLayout(0, 0));
 
 		txtUser = new JTextFieldHint("Username");
-		txtUser.setText("NV00001");
+		txtUser.setText("NVHC00081");
 		txtUser.setLocation(55, 0);
 		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtUser.setBorder(null);
@@ -162,14 +164,20 @@ public class LoginGUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống", "Lỗi", JOptionPane.NO_OPTION, null);
 			} else {
 				HashMap<String, String> account = accountDAO.getPasswordEncryption(username);
-				if (account != null & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"), account.get("salt"))) {
+				if (!account.isEmpty() & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"), account.get("salt"))) {
+					emp = null;
+					if (username.contains("NVHC")) {
+						emp = employeeOfficeDAO.getEmployeeOffice(username);
+					}else {
+						emp = workerDAO.getWorker(username);
+					}
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
 								setVisible(false);
 								dispose();
 								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-								MenuGUI menuGUI = new MenuGUI();
+								MenuGUI menuGUI = new MenuGUI(emp);
 								menuGUI.setLocationRelativeTo(null);
 								menuGUI.setResizable(false);
 								menuGUI.setVisible(true);

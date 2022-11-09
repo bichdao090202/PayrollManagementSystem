@@ -1,10 +1,11 @@
 package ui;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import entity.Employee;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,10 +15,10 @@ import java.awt.Dimension;
 import imgavt.ImageAvatar;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -67,36 +68,14 @@ public class MenuGUI extends JFrame {
 	private JLabel lblPhanCong;
 	private JPanel pnMenu;
 	private ImageAvatar imageAvatar;
+	private Employee employee;
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-					MenuGUI frame = new MenuGUI();
-					frame.setTitle("Phần mềm tính lương nhân sự");
-					frame.setIconImage(ICON_APPLICATION);
-					frame.setLocationRelativeTo(null);
-					frame.setResizable(false);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public MenuGUI() {
+	public MenuGUI(Employee employee) {
+		this.employee = employee;
 		timesheetsGUI = new TimesheetsGUI();
-		pnContentChamCong = timesheetsGUI.getView();
+		pnContentChamCong = timesheetsGUI.tabTimesheet();
 		employeeGUI = new EmployeeGUI();
-		pnContentNhanSu = employeeGUI.getView();
+		pnContentNhanSu = employeeGUI.tabEmployee();
 		departmentGUI = new DepartmentGUI();
 		pnContentPhongBan = departmentGUI.tabDepartment();
 		productGUI = new ProductGUI();
@@ -131,11 +110,25 @@ public class MenuGUI extends JFrame {
 		pnSideMenu.setBackground(new Color(16, 84, 129));
 
 		imageAvatar = new ImageAvatar();
+		imageAvatar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					UserProfileGUI dialog = new UserProfileGUI(employee);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+					dialog.setLocationRelativeTo(null);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		imageAvatar.setBounds(0, 50, 108, 100);
 		imageAvatar.setIcon(new ImageIcon("images\\avatar.jpg"));
 		imageAvatar.setVisible(false);
 
-		lblName = new JLabel("Nguyễn Văn A");
+		lblName = new JLabel();
+		lblName.setText(employee.getName());
 		lblName.setBounds(0, 149, 160, 33);
 		lblName.setForeground(new Color(255, 255, 255));
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -646,4 +639,12 @@ public class MenuGUI extends JFrame {
 	    	click = true;
     	}
 	}
+	
+	public void showInfoEmployee() {
+		JFrame frame = new JFrame();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		
+	}
+	
 }

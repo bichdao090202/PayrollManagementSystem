@@ -17,15 +17,21 @@ public class TimesheetsOffice {
 	public TimesheetsOffice() {
 		super();
 	}
-	
-	public TimesheetsOffice(Date date, Date checkInAM, Date checkOutAM, Date checkInPM,
-			Date checkOutPm, String employeeID) {
+
+	public TimesheetsOffice(Date date, String employeeID) {
+		super();
+		this.date = date;
+		this.employeeID = employeeID;
+	}
+
+	public TimesheetsOffice(Date date, Date checkInAM, Date checkOutAM, Date checkInPM, Date checkOutPM,
+			String employeeID) {
 		super();
 		this.date = date;
 		this.checkInAM = checkInAM;
 		this.checkOutAM = checkOutAM;
 		this.checkInPM = checkInPM;
-		this.checkOutPM = checkOutPm;
+		this.checkOutPM = checkOutPM;
 		this.employeeID = employeeID;
 	}
 
@@ -116,7 +122,14 @@ public class TimesheetsOffice {
 
 	@Override
 	public String toString() {
-		return employeeID + "," + date + "," + checkInAM + "," + checkOutAM + "," + checkInPM + "," + checkOutPM;
+		if (checkInAM == null) {
+			return employeeID + "," + date + ", , ," + checkInPM + "," + checkOutPM;
+		} else if (checkInPM == null) {
+			return employeeID + "," + date + "," + checkInAM + "," + checkOutAM + ", , ";
+		} else {
+			return employeeID + "," + date + "," + checkInAM + "," + checkOutAM + "," + checkInPM + "," + checkOutPM;
+		}
+
 	}
 
 }

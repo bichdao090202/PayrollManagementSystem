@@ -40,6 +40,8 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JScrollPane;
 import custom_field.JTextFieldHint;
@@ -111,14 +113,12 @@ public class EmployeeGUI extends JFrame implements ActionListener {
 			}
 		});
 	}
-	
-	public EmployeeGUI() {}
 
-	/**
-	 * Create the frame.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Component getView() {
+	public EmployeeGUI() {
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
+	public Component tabEmployee() {
 		employeeOfficeDAO = new EmployeeOfficeDAO();
 		workerDAO = new WorkerDAO();
 		departmentDAO = new DepartmentDAO();
@@ -157,6 +157,10 @@ public class EmployeeGUI extends JFrame implements ActionListener {
 		panel_3.add(lblDob, "cell 2 0,alignx left");
 
 		txtDob = new JDateChooser();
+		Date minSelectedDate = new Date();
+		minSelectedDate.setYear(minSelectedDate.getYear() - 18);
+		txtDob.setMaxSelectableDate(minSelectedDate);
+		txtDob.setDate(minSelectedDate);
 		txtDob.setDateFormatString("yyyy-MM-dd");
 		panel_3.add(txtDob, "cell 3 0,growx");
 
@@ -424,7 +428,7 @@ public class EmployeeGUI extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 
 		loadDataToTable();
-		
+
 		return contentPane;
 	}
 
@@ -458,10 +462,41 @@ public class EmployeeGUI extends JFrame implements ActionListener {
 		tblEmpOffice.setModel(dtmEmployeeOffice);
 	}
 
+	public boolean checkInput(String input, String patternStr) {
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher macth = pattern.matcher(input);
+		return macth.matches();
+	}
+
+	public String validInput(String name, Date birthday, String address, String phone, String accountNumber,
+			String beneficiany, Double salary) {
+		if (name.isBlank() | birthday == null | address.isEmpty() | phone.isEmpty() | accountNumber.isEmpty()
+				| beneficiany.isEmpty() | salary == 0) {
+			return "Hãy nhập đầy đủ thông tin trước";
+		} else {
+			if (!name.matches(
+					"^[A-Z][a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+(\s[A-Z][a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+)*")) {
+				return "Tên gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa";
+			}
+			else if (!address.matches("^[A-Za-z0-9][A-Za-z0-9/,\s]")) {
+				return "Địa chỉ bắt đầu bằng chữ cái, chữ số có thể chứa \"/\" hoặc dấu \",\"";
+			} else if (phone.matches("^[0-9][0-9]{9}$")) {
+				return "Số điện thoại gồm 10 số và bắt đầu bằng số 0";
+			} else if (accountNumber.matches("^[A-Z][A-Z\s]$")) {
+				return "Tên người thụ hưởng chỉ chứa chữ cái và phải viết in hoa";
+			} else if (salary == 0) {
+				return "Lương phải lớn hơn 0";
+			}else {
+				return "";
+			}
+		}
+		
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAdd) {
-			String name = txtName.getText();
+			String name = txtName.getText().trim();
 			boolean gender;
 			if (cboGender.getSelectedItem() == "Nam") {
 				gender = true;
@@ -469,27 +504,40 @@ public class EmployeeGUI extends JFrame implements ActionListener {
 				gender = false;
 			}
 			Date birthday = txtDob.getDate();
-			String address = txtAddress.getText();
-			String phone = txtPhone.getText();
+			String address = txtAddress.getText().trim();
+			String phone = txtPhone.getText().trim();
 			String bankName = (String) cboBankName.getSelectedItem();
-			String accountNumber = txtAccountNumber.getText();
-			String beneficiany = txtBeneficiany.getText();
+			String accountNumber = txtAccountNumber.getText().trim();
+			String beneficiany = txtBeneficiany.getText().trim();
 			if (cboTypeEmployee.getSelectedIndex() == 0) {
-				double salary = Double.parseDouble(txtSalary.getText().replace(".", ""));
+				double salary = 0;
+				try {
+					salary = Double.parseDouble(txtSalary.getText().replace(".", ""));
+				} catch (Exception e2) {
+//					e2.printStackTrace();
+				}
 				String position = (String) cboPosition.getSelectedItem();
 				String departmentID = ((String) cboDept_Factory.getSelectedItem()).substring(0, 4);
-				Employee employee = new EmployeeOffice(name, gender, birthday, address, phone, bankName, accountNumber,
-						beneficiany, salary, position, departmentID);
-				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (employeeOfficeDAO.addEmployeeOffice(employee)) {
-						loadDataToTable();
-						JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.", "Thông báo xóa",
-								JOptionPane.NO_OPTION, null);
-					} else {
-						JOptionPane.showMessageDialog(this, "Thêm nhân viên không thành công.", "Thông báo",
-								JOptionPane.NO_OPTION, null);
+				String message = validInput(name, birthday, address, phone, accountNumber, beneficiany, salary);
+				System.out.println(message);
+				System.out.println(message.isEmpty());
+				if (message.isEmpty()) {
+					Employee employee = new EmployeeOffice(name, gender, birthday, address, phone, bankName, accountNumber,
+							beneficiany, salary, position, departmentID);
+					if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						if (employeeOfficeDAO.addEmployeeOffice(employee)) {
+							loadDataToTable();
+							JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.", "Thông báo xóa",
+									JOptionPane.NO_OPTION, null);
+						} else {
+							JOptionPane.showMessageDialog(this, "Thêm nhân viên không thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
+						}
 					}
+				} else {
+					JOptionPane.showMessageDialog(this, message, "Thông báo",
+							JOptionPane.NO_OPTION, null);
 				}
 			} else {
 				String speciality = txtSpeciality.getText();
@@ -552,8 +600,8 @@ public class EmployeeGUI extends JFrame implements ActionListener {
 					String speciality = txtSpeciality.getText();
 					String teamID = cboTeam.getSelectedItem().toString().substring(0, 6);
 					String empID = tblWorker.getValueAt(rowSelectedEmpOffice, 0).toString();
-					Employee employee = new Worker(empID, name, gender, birthday, address, phone, bankName, accountNumber,
-							beneficiany, speciality, teamID);
+					Employee employee = new Worker(empID, name, gender, birthday, address, phone, bankName,
+							accountNumber, beneficiany, speciality, teamID);
 					if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 						if (workerDAO.updateWorker(employee)) {

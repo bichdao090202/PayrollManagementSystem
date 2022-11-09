@@ -39,15 +39,23 @@ public class PasswordBasedEncryption {
 	
 	public static String generateSecurePassword(String password, String salt) {
 		String finalval = null;
-		byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
-		finalval = Base64.getEncoder().encodeToString(securePassword);
+		try {
+			byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
+			finalval = Base64.getEncoder().encodeToString(securePassword);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return finalval;
 	}
 	
 	public static boolean verifyUserPassword(String providedPassword, String securedPassword, String salt) {
 		boolean finalval = false;
-		String newSecurePassword = generateSecurePassword(providedPassword, salt);
-		finalval = newSecurePassword.equalsIgnoreCase(securedPassword);
+		try {
+			String newSecurePassword = generateSecurePassword(providedPassword, salt);
+			finalval = newSecurePassword.equalsIgnoreCase(securedPassword);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return finalval;
 	}
 }
