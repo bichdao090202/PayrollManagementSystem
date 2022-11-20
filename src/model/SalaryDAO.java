@@ -238,34 +238,16 @@ public class SalaryDAO {
 		return procedure.getPrice();
 	}
 	
-//	public List<TimesheetsFactory> workDayOfEmployyProductive(String idEmployee) {
-//		String sql = "select * from ChamCongSanXuat where MaNhanVien = ?";
-//		List<TimesheetsFactory> listTimeKeep = new ArrayList<TimesheetsFactory>();
-//		TimesheetsFactory timeKeep = null;
-//		try {
-//			prstm = con.prepareStatement(sql);
-//			prstm.setString(1, idEmployee);
-//			rs = prstm.executeQuery();
-//			while(rs.next()) {
-//				timeKeep = new TimesheetsFactory(rs.getString("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getString("MaQuyTrinh"), rs.getString("MaNhanVien"));
-//				if(timeKeep != null) {
-//					listTimeKeep.add(timeKeep);
-//				}
-//			}
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
-//		return listTimeKeep;
-//	}
 	
-	public List<Assignment> listAssignmentOfEmployee(String idEmployee){
-		String sql = "select * from PhanCong where MaNhanVien = ?";
+	public List<Assignment> listAssignmentOfEmployee(String idEmployee, int month, int year){
+		String sql = "select * from PhanCong where DATEPART(MONTH, NgayThamGia) = ? AND DATEPART(YEAR, NgayThamGia) = ? AND MaNhanVien = ?";
 		List<Assignment> listAssignment = new ArrayList<Assignment>();
 		Assignment assignment = null;
 		try {
 			prstm = con.prepareStatement(sql);
-			prstm.setString(1, idEmployee);
+			prstm.setInt(1, month);
+			prstm.setInt(2, year);
+			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
 				assignment = new Assignment(rs.getString("MaPhanCong"), rs.getString("MaQuyTrinh"), rs.getString("MaNhanVien"));
@@ -280,8 +262,8 @@ public class SalaryDAO {
 		return listAssignment;
 	}
 	
-	public List<TimesheetsFactory> workDayOfEmployyProductive(String idEmployee) {
-		List<Assignment> listAssignment = listAssignmentOfEmployee(idEmployee);
+	public List<TimesheetsFactory> workDayOfEmployyProductive(String idEmployee, int month, int year) {
+		List<Assignment> listAssignment = listAssignmentOfEmployee(idEmployee, month, year);
 		List<TimesheetsFactory> listTime = new ArrayList<TimesheetsFactory>();
 		
 		for(Assignment a : listAssignment) {
@@ -290,9 +272,9 @@ public class SalaryDAO {
 		return listTime;
 	}
 	
-	public double totalSalaryOfE(String idEmployee) {
+	public double totalSalaryOfE(String idEmployee, int month, int year) {
 		double totalSalary = 0;
-		List<Assignment> listAssignment = listAssignmentOfEmployee(idEmployee);
+		List<Assignment> listAssignment = listAssignmentOfEmployee(idEmployee, month, year);
 		List<TimesheetsFactory> listTime = new ArrayList<TimesheetsFactory>();
 		ProductDAO productDao = new ProductDAO();
 		for(Assignment a : listAssignment) {
@@ -306,15 +288,15 @@ public class SalaryDAO {
 		return totalSalary;
 	}
 	
-	public List<TimesheetsOffice> hourWorkOfEmployeeAdministrative(String idEmployee){
-		LocalDateTime date = LocalDateTime.now();
+	public List<TimesheetsOffice> hourWorkOfEmployeeAdministrative(String idEmployee, int month, int year){
+//		LocalDateTime date = LocalDateTime.now();
 		String sql = "SELECT * from ChamCongHanhChinh where DATEPART(MONTH, NgayChamCong) = ? AND DATEPART(YEAR, NgayChamCong) = ? AND MaNhanVien = ?";
 		List<TimesheetsOffice> listTimeKeep = new ArrayList<TimesheetsOffice>();
 		TimesheetsOffice timeKeep = null;
 		try {
 			prstm = con.prepareStatement(sql);
-			prstm.setInt(1, date.getMonthValue());
-			prstm.setInt(2, date.getYear());
+			prstm.setInt(1, month);
+			prstm.setInt(2, year);
 			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
@@ -330,13 +312,15 @@ public class SalaryDAO {
 		return listTimeKeep;
 	}
 	
-	public List<Bonus_Discipline> listRDEmployeeProductive(String idEmployee) {
-		String sql = "select * from KhenThuongKyLuat where MaNVSX = ?";
+	public List<Bonus_Discipline> listRDEmployeeProductive(String idEmployee, int month, int year) {
+		String sql = "select * from KhenThuongKyLuat where DATEPART(MONTH, NgayApDung) = ? AND DATEPART(YEAR, NgayApDung) = ? AND MaNVSX = ?";
 		List<Bonus_Discipline> listRD = new ArrayList<Bonus_Discipline>();
 		Bonus_Discipline rd = null;
 		try {
 			prstm = con.prepareStatement(sql);
-			prstm.setString(1, idEmployee);
+			prstm.setInt(1, month);
+			prstm.setInt(2, year);
+			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
 				rd = new Bonus_Discipline(rs.getString("MaKT_KL"), rs.getString("LyDo"), rs.getDate("NgayApDung"), rs.getDouble("SoTien"), rs.getString("MaNVSX"), "");
@@ -351,13 +335,15 @@ public class SalaryDAO {
 		return listRD;
 	}
 	
-	public List<Bonus_Discipline> listRDEmployeeAdministrative(String idEmployee) {
-		String sql = "select * from KhenThuongKyLuat where MaNVHC = ?";
+	public List<Bonus_Discipline> listRDEmployeeAdministrative(String idEmployee, int month, int year) {
+		String sql = "select * from KhenThuongKyLuat where DATEPART(MONTH, NgayApDung) = ? AND DATEPART(YEAR, NgayApDung) = ? AND MaNVHC = ?";
 		List<Bonus_Discipline> listRD = new ArrayList<Bonus_Discipline>();
 		Bonus_Discipline rd = null;
 		try {
 			prstm = con.prepareStatement(sql);
-			prstm.setString(1, idEmployee);
+			prstm.setInt(1, month);
+			prstm.setInt(2, year);
+			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
 				rd = new Bonus_Discipline(rs.getString("MaKT_KL"), rs.getString("LyDo"), rs.getDate("NgayApDung"), rs.getDouble("SoTien"), "", rs.getString("MaNVHC"));

@@ -15,6 +15,8 @@ import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,11 +28,15 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 import model.SalaryDAO;
 import entity.TimesheetsOffice;
@@ -43,6 +49,8 @@ import entity.Bonus_Discipline;
 import entity.TeamProducing;
 
 import javax.swing.DefaultComboBoxModel;
+import com.toedter.calendar.JMonthChooser;
+import com.toedter.calendar.JYearChooser;
 
 public class SalaryGUI extends JFrame implements ActionListener, MouseListener, ItemListener {
 
@@ -77,19 +85,25 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private DefaultComboBoxModel<String> dcmbPosition;
 	private DefaultComboBoxModel<String> dcmbTeam;
 	private DefaultComboBoxModel<String> dcmbFactoryDeparment;
+	private JMonthChooser mChMonth;
+	private JYearChooser yChYear;
 
-	public Component getView() {
+//	public Component getView() {
+	public SalaryGUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
+		getContentPane().setBackground(new Color(0,140,140));
 
 		JPanel pnlTopSalary = new JPanel();
-		pnlTopSalary.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Nhập thôn tin",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnlTopSalary.setBackground(new Color(0,140,140));
+		pnlTopSalary.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Nhập thôn tin",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlTopSalary.setBounds(10, 10, 924, 150);
 		getContentPane().add(pnlTopSalary);
 		pnlTopSalary.setLayout(null);
 
 		JLabel lblNoteIdEmployee = new JLabel("Nhập mã nhân viên :");
+		lblNoteIdEmployee.setForeground(Color.WHITE);
 		lblNoteIdEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNoteIdEmployee.setBounds(43, 30, 116, 13);
 		pnlTopSalary.add(lblNoteIdEmployee);
@@ -107,13 +121,15 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTopSalary.add(btnSearchIdEmployee);
 
 		JPanel pnlFilterInformation = new JPanel();
-		pnlFilterInformation.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Lọc", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
+		pnlFilterInformation.setBackground(new Color(0,140,140));
+		pnlFilterInformation.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Lọc", TitledBorder.LEADING,
+				TitledBorder.TOP, null, Color.WHITE));
 		pnlFilterInformation.setBounds(10, 53, 904, 87);
 		pnlTopSalary.add(pnlFilterInformation);
 		pnlFilterInformation.setLayout(null);
 
 		JLabel lblTypeEmployee = new JLabel("Loại nhân sự:");
+		lblTypeEmployee.setForeground(Color.WHITE);
 		lblTypeEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTypeEmployee.setBounds(36, 35, 85, 13);
 		pnlFilterInformation.add(lblTypeEmployee);
@@ -127,6 +143,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlFilterInformation.add(cmbTypeEmployee);
 
 		JLabel lblFactoryDeparment = new JLabel("PX/PB:");
+		lblFactoryDeparment.setForeground(Color.WHITE);
 		lblFactoryDeparment.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblFactoryDeparment.setBounds(355, 35, 50, 13);
 		pnlFilterInformation.add(lblFactoryDeparment);
@@ -140,6 +157,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		dcmbPosition = new DefaultComboBoxModel<String>(new String[] {});
 
 		JLabel lblTeam = new JLabel("Tổ :");
+		lblTeam.setForeground(Color.WHITE);
 		lblTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTeam.setBounds(664, 35, 31, 13);
 		pnlFilterInformation.add(lblTeam);
@@ -150,10 +168,20 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		cmbTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		cmbTeam.setBounds(718, 35, 145, 21);
 		pnlFilterInformation.add(cmbTeam);
+		
+		mChMonth = new JMonthChooser();
+		mChMonth.getComboBox().setFont(new Font("Tahoma", Font.PLAIN, 12));
+		mChMonth.setBounds(741, 30, 96, 19);
+		pnlTopSalary.add(mChMonth);
+		
+		yChYear = new JYearChooser();
+		yChYear.setBounds(840, 30, 46, 19);
+		pnlTopSalary.add(yChYear);
 
 		JPanel pnlTableSalary = new JPanel();
-		pnlTableSalary.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Bảng lương",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnlTableSalary.setBackground(new Color(0,140,140));
+		pnlTableSalary.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Bảng lương",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlTableSalary.setBounds(10, 170, 1166, 473);
 		getContentPane().add(pnlTableSalary);
 		pnlTableSalary.setLayout(null);
@@ -163,6 +191,16 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTableSalary.add(scrListEmployee);
 
 		tblListEmployee = new JTable();
+		tblListEmployee.setBackground(new Color(0,140,140));
+		tblListEmployee.setForeground(Color.WHITE);
+		tblListEmployee.setGridColor(Color.WHITE);
+		tblListEmployee.setRowHeight(25);
+		tblListEmployee.setBorder(new LineBorder(Color.WHITE));
+		JTableHeader tblHeaderListEmployee = tblListEmployee.getTableHeader();
+		tblHeaderListEmployee.setBackground(new Color(14,85,78));
+		tblHeaderListEmployee.setForeground(Color.WHITE);
+		tblHeaderListEmployee.setPreferredSize(new Dimension(100, 30));
+		tblHeaderListEmployee.setFont(new Font("Tahoma", Font.BOLD, 12));
 		tblListEmployee.setModel(dtmListEmployee = new DefaultTableModel(new Object[][] {}, new String[] {
 				"Mã nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh", "Số điện thoại", "Địa chỉ" }) {
 			private static final long serialVersionUID = 1L;
@@ -174,13 +212,15 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		scrListEmployee.setViewportView(tblListEmployee);
 
 		JPanel pnlDetailSalary = new JPanel();
-		pnlDetailSalary.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Thông tin bảng lương",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnlDetailSalary.setBackground(new Color(0,140,140));
+		pnlDetailSalary.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Thông tin bảng lương",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlDetailSalary.setBounds(604, 27, 552, 436);
 		pnlTableSalary.add(pnlDetailSalary);
 		pnlDetailSalary.setLayout(null);
 
 		JLabel lblIdEmployee = new JLabel("Mã nhân viên :");
+		lblIdEmployee.setForeground(Color.WHITE);
 		lblIdEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdEmployee.setBounds(10, 25, 86, 13);
 		pnlDetailSalary.add(lblIdEmployee);
@@ -192,6 +232,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtIdEmployee.setColumns(10);
 
 		JLabel lblNameEmployee = new JLabel("Tên nhân viên :");
+		lblNameEmployee.setForeground(Color.WHITE);
 		lblNameEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameEmployee.setBounds(10, 65, 86, 13);
 		pnlDetailSalary.add(lblNameEmployee);
@@ -203,6 +244,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtNameEmployee);
 
 		JLabel lblGenderEmployee = new JLabel("Giới tính :");
+		lblGenderEmployee.setForeground(Color.WHITE);
 		lblGenderEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblGenderEmployee.setBounds(10, 105, 86, 13);
 		pnlDetailSalary.add(lblGenderEmployee);
@@ -214,11 +256,13 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtGenderEmployee);
 
 		JLabel lblBirthDay = new JLabel("Ngày sinh :");
+		lblBirthDay.setForeground(Color.WHITE);
 		lblBirthDay.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblBirthDay.setBounds(10, 145, 86, 13);
 		pnlDetailSalary.add(lblBirthDay);
 
 		JLabel lblPhonenumberEmployee = new JLabel("Số điện thoại :");
+		lblPhonenumberEmployee.setForeground(Color.WHITE);
 		lblPhonenumberEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblPhonenumberEmployee.setBounds(10, 185, 86, 13);
 		pnlDetailSalary.add(lblPhonenumberEmployee);
@@ -230,6 +274,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtPhonenumberEmployee);
 
 		JLabel lblNameBank = new JLabel("Tên ngân hàng :");
+		lblNameBank.setForeground(Color.WHITE);
 		lblNameBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameBank.setBounds(288, 25, 102, 13);
 		pnlDetailSalary.add(lblNameBank);
@@ -241,6 +286,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtNameBank);
 
 		JLabel lblSTKBank = new JLabel("Số tài khoản :");
+		lblSTKBank.setForeground(Color.WHITE);
 		lblSTKBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblSTKBank.setBounds(288, 65, 102, 13);
 		pnlDetailSalary.add(lblSTKBank);
@@ -252,6 +298,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtSTKBank);
 
 		JLabel lblNameOwnerBank = new JLabel("Người hưởng thụ :");
+		lblNameOwnerBank.setForeground(Color.WHITE);
 		lblNameOwnerBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameOwnerBank.setBounds(288, 105, 102, 13);
 		pnlDetailSalary.add(lblNameOwnerBank);
@@ -263,6 +310,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtNameOwnerBank);
 
 		JLabel lblSpecializePosition = new JLabel("Chuyên môn/Chức vụ:");
+		lblSpecializePosition.setForeground(Color.WHITE);
 		lblSpecializePosition.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblSpecializePosition.setBounds(274, 145, 128, 13);
 		pnlDetailSalary.add(lblSpecializePosition);
@@ -274,6 +322,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtSpecializePosition);
 
 		JLabel lblIdTeamIdDeparment = new JLabel("Mã tổ/Mã PB:");
+		lblIdTeamIdDeparment.setForeground(Color.WHITE);
 		lblIdTeamIdDeparment.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdTeamIdDeparment.setBounds(274, 185, 128, 13);
 		pnlDetailSalary.add(lblIdTeamIdDeparment);
@@ -285,6 +334,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtIdTeamIdDeparment);
 
 		JLabel lblAddressEmployee = new JLabel("Địa chỉ :");
+		lblAddressEmployee.setForeground(Color.WHITE);
 		lblAddressEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblAddressEmployee.setBounds(10, 225, 63, 13);
 		pnlDetailSalary.add(lblAddressEmployee);
@@ -300,6 +350,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(dateBirthDayEmployee);
 
 		JLabel lblNumberOfWorkDay = new JLabel("Số ngày làm :");
+		lblNumberOfWorkDay.setForeground(Color.WHITE);
 		lblNumberOfWorkDay.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNumberOfWorkDay.setBounds(10, 265, 86, 13);
 		pnlDetailSalary.add(lblNumberOfWorkDay);
@@ -311,6 +362,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtNumberOfWorkDay);
 
 		JLabel lblNumberOfDayOff = new JLabel("Số ngày nghỉ :");
+		lblNumberOfDayOff.setForeground(Color.WHITE);
 		lblNumberOfDayOff.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNumberOfDayOff.setBounds(288, 265, 102, 13);
 		pnlDetailSalary.add(lblNumberOfDayOff);
@@ -322,6 +374,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtNumberOfDayOff);
 
 		JLabel lblTargets = new JLabel("Chỉ tiêu :");
+		lblTargets.setForeground(Color.WHITE);
 		lblTargets.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTargets.setBounds(10, 305, 86, 13);
 		pnlDetailSalary.add(lblTargets);
@@ -333,6 +386,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtTargets);
 
 		JLabel lblReason = new JLabel("Lý do :");
+		lblReason.setForeground(Color.WHITE);
 		lblReason.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblReason.setBounds(288, 305, 46, 13);
 		pnlDetailSalary.add(lblReason);
@@ -344,6 +398,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtReason);
 
 		JLabel lblBonus = new JLabel("Tiền thưởng :");
+		lblBonus.setForeground(Color.WHITE);
 		lblBonus.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblBonus.setBounds(10, 345, 86, 13);
 		pnlDetailSalary.add(lblBonus);
@@ -355,6 +410,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtBonus);
 
 		JLabel lblFine = new JLabel("Tiền phạt :");
+		lblFine.setForeground(Color.WHITE);
 		lblFine.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblFine.setBounds(288, 345, 102, 13);
 		pnlDetailSalary.add(lblFine);
@@ -366,6 +422,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlDetailSalary.add(txtFine);
 
 		JLabel lblTotalSalary = new JLabel("Tổng lương :");
+		lblTotalSalary.setForeground(Color.WHITE);
 		lblTotalSalary.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTotalSalary.setBounds(10, 385, 102, 13);
 		pnlDetailSalary.add(lblTotalSalary);
@@ -381,7 +438,27 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		btnExportSalary.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnExportSalary.setBounds(977, 68, 147, 41);
 		getContentPane().add(btnExportSalary);
-
+		
+		txtIdEmployee.setEditable(false);
+		txtNameEmployee.setEditable(false);
+		txtGenderEmployee.setEditable(false);
+		JTextFieldDateEditor birthDay = (JTextFieldDateEditor) dateBirthDayEmployee.getDateEditor();
+		birthDay.setEditable(false);
+		txtPhonenumberEmployee.setEditable(false);
+		txtAddressEmployee.setEditable(false);
+		txtNameBank.setEditable(false);
+		txtNameOwnerBank.setEditable(false);
+		txtNumberOfDayOff.setEditable(false);
+		txtNumberOfWorkDay.setEditable(false);
+		txtSTKBank.setEditable(false);
+		txtIdTeamIdDeparment.setEditable(false);
+		txtSpecializePosition.setEditable(false);
+		txtReason.setEditable(false);
+		txtBonus.setEditable(false);
+		txtFine.setEditable(false);
+		txtTotalSalary.setEditable(false);
+		txtTargets.setEditable(false);
+		
 		tblListEmployee.addMouseListener(this);
 		btnSearchIdEmployee.addActionListener(this);
 		btnExportSalary.addActionListener(this);
@@ -521,7 +598,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		});
 
 		loadListEmployee();
-		return getContentPane();
+//		return getContentPane();
 	}
 
 	public static void main(String[] args) {
@@ -547,8 +624,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	}
 
 	public void formSalaryEmployeeProductive(Worker eProductive) {
-		List<TimesheetsFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(eProductive.getEmployeeID());
-		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(eProductive.getEmployeeID());
+		List<TimesheetsFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		int targets = 0;
 		int numberDayOfMonth = 0;
 		double bonus = 0;
@@ -590,7 +667,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtReason.setText(txtTargets.getText().equals("Không đạt") ? "Số lượng không đạt yêu cầu" : "");
 		txtBonus.setText(bonus + "");
 		txtFine.setText(fine + "");
-		txtTotalSalary.setText(Dao_Salary.totalSalaryOfE(eProductive.getEmployeeID()) + bonus + fine + "");
+		
+		double salary = Double.parseDouble(Dao_Salary.totalSalaryOfE(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear())+ bonus + fine + "");
+		NumberFormat formatter = new DecimalFormat("###.#####");
+		String totalSalary = formatter.format(salary);
+		txtTotalSalary.setText(totalSalary);
 	}
 
 	public void deleteDataOnTableModel() {
@@ -599,9 +680,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 
 	@SuppressWarnings("deprecation")
 	public void FormSalaryEmployeeAdministrative(EmployeeOffice eAdministrative) {
-		List<TimesheetsOffice> listTimeKeep = Dao_Salary
-				.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID());
-		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID());
+		List<TimesheetsOffice> listTimeKeep = Dao_Salary.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		int timeWorkOfMonth = 0;
 		int numberDayOfMonth = 0;
 		double bonus = 0;
@@ -640,7 +720,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtIdTeamIdDeparment.setText(eAdministrative.getDepartmentID().trim());
 		txtNumberOfWorkDay.setText(listTimeKeep.size() + "");
 		txtNumberOfDayOff.setText(numberDayOfMonth - listTimeKeep.size() + "");
-		txtTargets.setText(timeWorkOfMonth >= 210 ? "Đạt" : "Không đạt");
+		txtTargets.setText(timeWorkOfMonth >= 280 ? "Đạt" : "Không đạt");
 		txtReason.setText(txtTargets.getText().equals("Không đạt") ? "Số giờ làm không đạt yêu cầu" : "");
 		txtBonus.setText(bonus + "");
 		txtFine.setText(fine + "");
