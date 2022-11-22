@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -43,7 +42,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 	private DefaultTableModel tblModel;
 	private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
 	private DepartmentDAO depDAO;
-	private JTextField txtID, txtName;
+	private JTextField txtName;
 	private int index, num;
 	private List<Department> newList;
 	private List<Department> listDep;
@@ -53,13 +52,9 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		depDAO = new DepartmentDAO();
 		listDep = new ArrayList<>();
 		listDep = depDAO.getAllDepartments();
-		num = 29;
+		num = 30;
 		index = 0;
 		getContentPane().add(tabDepartment());
-		
-		
-//        System.out.print(depDAO.getNewDeparmentID());
-
 	}
 
 	public Component tabDepartment() {
@@ -68,32 +63,31 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		pnDepartment.setSize(1200, 690);
 
 		JPanel pnInformation = new JPanel();
+		pnInformation.setSize(486, 63);
+		pnInformation.setLocation(10, 11);
 		System.setProperty("Color", "0X000099");
 		pnInformation.setBorder(
 				new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Nhập thông tin phòng ban"));
 		pnInformation.setLayout(new MigLayout());
-
-		pnInformation.add(Box.createHorizontalStrut(20));
-		pnInformation.add(new JLabel("Mã phòng ban:    "));
-		txtID = new JTextField();
-		txtID.setEditable(false);
-		pnInformation.add(txtID);
-		txtID.setColumns(20);
-		pnInformation.add(Box.createHorizontalStrut(100));
-
 		pnInformation.add(new JLabel("Tên phòng ban:   "));
 		txtName = new JTextField();
 		pnInformation.add(txtName);
 		txtName.setColumns(50);
-		pnInformation.add(Box.createHorizontalStrut(20));
 
 		JPanel pnButton = new JPanel();
+		pnButton.setSize(537, 42);
+		pnButton.setLocation(564, 21);
 		FlowLayout fl_pnButton = new FlowLayout();
 		fl_pnButton.setHgap(20);
 		pnButton.setLayout(fl_pnButton);
+
 		btnCreate = new JButton("Thêm");
 		btnCreate.setFocusable(false);
 		pnButton.add(btnCreate);
+
+		pnDepartment.setLayout(null);
+		pnDepartment.add(pnInformation);
+		pnDepartment.add(pnButton);
 
 		Image imgAdd = new ImageIcon("images\\operations\\new.png").getImage().getScaledInstance(20, 20,
 				Image.SCALE_DEFAULT);
@@ -112,6 +106,8 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		btnDelete.setFocusable(false);
 
 		JPanel pnTable = new JPanel();
+		pnTable.setSize(1184, 569);
+		pnTable.setLocation(0, 82);
 		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách phòng ban"));
 		tblDepartment = new JTable();
 		String[] row0 = { "Mã phòng ban", "Tên phòng ban", "Tên trưởng phòng", "Số lượng nhân viên" };
@@ -142,13 +138,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		Image imgLast = new ImageIcon("images\\jump page\\last.png").getImage().getScaledInstance(20, 20,
 				Image.SCALE_DEFAULT);
 		btnGoLastPage.setIcon(new ImageIcon(imgLast));
-		pnDepartment.setLayout(new BorderLayout(0, 0));
 
-		JPanel pnNorth = new JPanel();
-		pnNorth.setLayout(new BorderLayout(0, 0));
-		pnNorth.add(pnInformation, BorderLayout.NORTH);
-		pnNorth.add(pnButton);
-		pnDepartment.add(pnNorth, BorderLayout.NORTH);
 		pnDepartment.add(pnTable);
 		pnTable.add(pnChangePage, BorderLayout.SOUTH);
 		btnGoFirstPage.setFocusable(false);
@@ -178,17 +168,20 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 				JOptionPane.showMessageDialog(this, "Hãy nhấn nút 'Làm mới' rồi thêm phòng ban mới");
 				return;
 			}
-			Department newDep = getDepartment();
-			if (newDep == null) {
+			if (checkName() == false) {
 				JOptionPane.showMessageDialog(this, "Tên phòng ban không thể để trống hoặc chứa kí tự đặc biệt");
 				return;
 			}
+			Department newDep = new Department(depDAO.getNewDeparmentID(), txtName.getText());
 			if (newDep.getDepartmentID().equals("PB00")) {
 				JOptionPane.showMessageDialog(this, "Phòng ban đã đầy, hãy bảo trì hệ thống");
 				return;
 			}
+			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phòng ban này không?", "Thông báo",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION)
+				return;
 			if (depDAO.addDepartment(newDep) == false) {
-				JOptionPane.showMessageDialog(this, "Xóa phòng ban thất bại, vui lòng thử lại sau");
+				JOptionPane.showMessageDialog(this, "Thêm phòng ban thất bại, vui lòng thử lại sau");
 				return;
 			}
 			while (index + num <= listDep.size()) {
@@ -200,6 +193,14 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		if (o.equals(btnRefresh))
 			refresh();
 		if (o.equals(btnDelete)) {
+//			int[] rows = tblDepartment.getSelectedRows();
+//			if (rows.length>1) {
+//				for (int i = 0; i < rows.length; i++) 
+//					depDAO.deleteDepartment((String) tblDepartment.getValueAt(rows[i], 0));
+//				refresh();
+//				JOptionPane.showMessageDialog(this, "Xóa phòng ban thành công");
+//				return;
+//			} 
 			int row = tblDepartment.getSelectedRow();
 			if (row == -1) {
 				JOptionPane.showMessageDialog(this, "Chưa chọn phòng ban để xóa");
@@ -210,6 +211,9 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 				JOptionPane.showMessageDialog(this, "Phòng ban này vẫn còn nhân viên, không thể xóa");
 				return;
 			}
+			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn xóa phòng ban này không?", "Thông báo",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION)
+				return;
 			if (depDAO.deleteDepartment(id) == false) {
 				JOptionPane.showMessageDialog(this, "Xóa phòng ban thất bại, vui lòng thử lại sau");
 				return;
@@ -225,11 +229,15 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 				JOptionPane.showMessageDialog(this, "Chưa chọn phòng ban để cập nhật");
 				return;
 			}
-			Department newDep = getDepartment();
-			if (newDep == null) {
+			if (checkName() == false) {
 				JOptionPane.showMessageDialog(this, "Tên phòng ban không thể để trống hoặc chứa kí tự đặc biệt");
 				return;
 			}
+			Department newDep = new Department(tblDepartment.getValueAt(tblDepartment.getSelectedRow(), 0).toString(),
+					txtName.getText());
+			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn cập nhật tên phòng ban này không?",
+					"Thông báo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION)
+				return;
 			if (depDAO.updateDepartment(newDep.getDepartmentID(), newDep.getName()) == false) {
 				JOptionPane.showMessageDialog(this, "Cập nhật phòng ban thất bại, vui lòng thử lại sau");
 				return;
@@ -262,7 +270,6 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 	}
 
 	public void refresh() {
-		txtID.setText(depDAO.getNewDeparmentID());
 		txtName.setText("");
 		tblDepartment.clearSelection();
 		loadTable();
@@ -281,26 +288,23 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		}
 	}
 
-	public Department getDepartment() {
+	public boolean checkName() {
 		String name = txtName.getText();
-		if (name == null || name.trim().isEmpty() || !Pattern.matches("[a-zA-Z0-9\s]+", name))
-			return null;
-		Department newDep = new Department();
-		newDep.setDepartmentID(txtID.getText());
-		newDep.setName(txtName.getText());
-		return newDep;
+		if (name == null || name.trim().isEmpty() || !Pattern.matches(
+				"[a-zA-Z0-9\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+",
+				name))
+			return false;
+		return true;
 	}
 
 	public static void main(String[] args) {
 		new DepartmentGUI().setVisible(true);
-
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		int row = tblDepartment.getSelectedRow();
-		txtID.setText((String) tblDepartment.getValueAt(row, 0));
 		txtName.setText((String) tblDepartment.getValueAt(row, 1));
 	}
 
