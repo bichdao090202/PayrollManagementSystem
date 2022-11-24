@@ -195,7 +195,7 @@ public class SalaryDAO {
 			prstm.setString(1, idAssignment);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				time = new TimesheetsFactory(rs.getString("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getString("MaPhanCong"));
+				time = new TimesheetsFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -204,12 +204,12 @@ public class SalaryDAO {
 		return time;
 	}
 	
-	public Assignment searchAssignmentById(String idAssignment) {
+	public Assignment searchAssignmentById(int assignmentID) {
 		String sql = "select * from PhanCong where MaPhanCong = ?";
 		Assignment assignment = null;
 		try {
 			prstm = con.prepareStatement(sql);
-			prstm.setString(1, idAssignment);
+			prstm.setInt(1, assignmentID);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
 				assignment = new Assignment(rs.getString("MaPhanCong"), rs.getString("MaQuyTrinh"), rs.getString("MaNhanVien"));
@@ -299,7 +299,7 @@ public class SalaryDAO {
 			listTime.add(searchTimeSheetsFactoryById(a.getAssignmentID()));
 		}
 		for(TimesheetsFactory time : listTime) {
-			Assignment assignment = searchAssignmentById(time.getassignmentID());
+			Assignment assignment = searchAssignmentById(time.getAssignmentID());
 			Produre produre = productDao.searchProcedureByIdProcedure(assignment.getProdureID());
 			totalSalary += time.getQuantity() * produre.getPrice();
 		}

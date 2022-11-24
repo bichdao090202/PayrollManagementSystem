@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,19 +19,23 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import entity.Employee;
+import entity.PasswordBasedEncryption;
 import imgavt.ImageAvatar;
+import model.AccountDAO;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.border.LineBorder;
 
 public class UserProfileGUI extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
-	private JPasswordField currentPassword;
-	private JPasswordField newPassword;
-	private JPasswordField confirmPassword;
+	private JPasswordField txtCurrentPassword;
+	private JPasswordField txtNewPassword;
+	private JPasswordField txtConfirmPassword;
 	private final JPanel contentPane = new JPanel();
 	private JButton btnChangePwd;
 	private JButton btnOk;
+	private AccountDAO accountDAO;
+	private Employee employee;
 
 	public static void main(String[] args) {
 		try {
@@ -44,9 +48,14 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 	}
 
 	public UserProfileGUI(Employee employee) {
-		setLocationRelativeTo(null);
-		setAlwaysOnTop(true);
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		
+		this.employee = employee;
+		accountDAO = new AccountDAO();
+		setIconImage(new ImageIcon("images\\login\\user_profile.png").getImage());
+		setTitle("Thông tin tài khoản");
+//		this.setLocationRelativeTo(null);
+//		setAlwaysOnTop(true);
+//		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 791, 342);
 		contentPane.setBackground(new Color(255, 255, 255));
 		getContentPane().setLayout(new BorderLayout());
@@ -137,29 +146,32 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		contentPane.add(btnOk);
 	}
 	
-	public boolean checkResetPassword(String strCurrentPassword, String strNewPassword, String strConfirmPassword) {
-		if (strCurrentPassword.equals(strNewPassword)) {
+	public boolean checkResetPassword(String currentPassword, String newPassword, String confirmPassword) {
+		if (currentPassword.isBlank() || newPassword.isBlank() || confirmPassword.isBlank()) {
+			JOptionPane.showMessageDialog(this, "Hãy nhập đầy đủ thông tin trước");
+			return false;
+		}
+		if (!newPassword.matches("^[^\s]{12,}$")) {
+			JOptionPane.showMessageDialog(this, "Mật khẩu ít nhất 12 ký tự và không chứa khoảng trắng");
+			return false;
+		}
+		if (currentPassword.equals(newPassword)) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu mới không được trùng mật khẩu cũ");
 			return false;
 		}
-		if (!strNewPassword.equals(strConfirmPassword)) {
+		if (!newPassword.equals(confirmPassword)) {
 			JOptionPane.showMessageDialog(this, "Nhập lại mật khẩu không khớp");
 			return false;
 		}
-		if (!strCurrentPassword.equals("")) {
+		HashMap<String, String> account = accountDAO.getPasswordEncryption(employee.getEmployeeID());
+		if (!PasswordBasedEncryption.verifyUserPassword(currentPassword, account.get("password hash"), account.get("salt"))) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu cũ không khớp");
-			return false;
-		}
-		if (!strNewPassword.matches("^[^\s]{6,}$")) {
-			JOptionPane.showMessageDialog(this, "Mật khẩu ít nhất 6 ký tự và không chứa khoảng trắng");
 			return false;
 		}
 		return true;
 	}
 	
-	public Hashtable<String, String> login(JDialog dialog) {
-		Hashtable<String, String> password = new Hashtable<String, String>();
-
+	public String dialogChangePassword(JDialog dialog) {
 		JPanel pnChangePassword = new JPanel(new BorderLayout(5, 5));
 		JPanel pnLabel = new JPanel(new GridLayout(0, 1, 2, 2));
 		pnLabel.add(new JLabel("Mật khẩu cũ", SwingConstants.RIGHT));
@@ -168,38 +180,38 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		pnChangePassword.add(pnLabel, BorderLayout.WEST);
 
 		JPanel pnControls = new JPanel(new GridLayout(0, 1, 2, 2));
-		currentPassword = new JPasswordField(15);
-		pnControls.add(currentPassword);
-		newPassword = new JPasswordField(15);
-		pnControls.add(newPassword);
-		confirmPassword = new JPasswordField(15);
-		pnControls.add(confirmPassword);
+		txtCurrentPassword = new JPasswordField(15);
+		pnControls.add(txtCurrentPassword);
+		txtNewPassword = new JPasswordField(15);
+		pnControls.add(txtNewPassword);
+		txtConfirmPassword = new JPasswordField(15);
+		pnControls.add(txtConfirmPassword);
 		pnChangePassword.add(pnControls, BorderLayout.CENTER);
 		int response;
-		String strCurrentPassword, strNewPassword, strConfirmPassword;
+		String currentPassword, newPassword, confirmPassword;
 		do {
-			System.out.println("a");
 			response = JOptionPane.showConfirmDialog(dialog, pnChangePassword, "Đổi mật khẩu", JOptionPane.OK_CANCEL_OPTION);
-			strCurrentPassword = new String(currentPassword.getPassword());
-			strNewPassword = new String(newPassword.getPassword());
-			strConfirmPassword = new String(confirmPassword.getPassword());
+			currentPassword = new String(txtCurrentPassword.getPassword());
+			newPassword = new String(txtNewPassword.getPassword());
+			confirmPassword = new String(txtConfirmPassword.getPassword());
 		} while (response == JOptionPane.OK_OPTION
-				&& !checkResetPassword(strCurrentPassword, strNewPassword, strConfirmPassword));
-
-		if (response == JOptionPane.OK_OPTION) {
-			password.put("Current Password", new String(currentPassword.getPassword()));
-			password.put("New Password", new String(newPassword.getPassword()));
-			password.put("Confirm Password", new String(confirmPassword.getPassword()));
-			return password;
-		} else {
-			return null;
-		}
+				&& !checkResetPassword(currentPassword, newPassword, confirmPassword));
+		
+		return (response == JOptionPane.OK_OPTION) ? newPassword : null;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnChangePwd) {
-			login(this);
+			String password = dialogChangePassword(this);
+			if (password != null) {
+				String salt = PasswordBasedEncryption.getSaltValue(30);
+				if (accountDAO.updatePasword(PasswordBasedEncryption.generateSecurePassword(password, salt), salt, employee.getEmployeeID())) {
+					JOptionPane.showMessageDialog(this, "Cập nhật mật khẩu thành công");
+				}else {
+					JOptionPane.showMessageDialog(this, "Cập nhật mật khẩu không thành công");
+				}
+			}
 		}
 		if (e.getSource() == btnOk) {
 			dispose();

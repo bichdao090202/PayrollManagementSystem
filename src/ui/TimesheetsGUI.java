@@ -14,9 +14,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import net.miginfocom.swing.MigLayout;
 import com.toedter.calendar.JDateChooser;
+
 import javax.swing.table.DefaultTableModel;
 import com.toedter.components.JSpinField;
 
+import entity.TimesheetsFactory;
 import entity.TimesheetsOffice;
 import model.EmployeeOfficeDAO;
 import model.TimesheetsDAO;
@@ -57,16 +59,18 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private SimpleDateFormat sdfDate;
 	private SimpleDateFormat sdfTime;
+	private static final Date CURRENT_DATE = new Date();
 	private JPanel contentPane;
 	private JTable tblEmpOffice;
 	private String[] headerTableEmpOffice = new String[] { "Nhân viên", "Ngày chấm", "Vào sáng", "Ra sáng", "Vào chiều",
 			"Ra chiều" };
-	private String[] headerTableTimesheetsWorker = new String[] { "Mã nhân viên", "Tên nhân viên", "Mã sản phẩm",
-			"Tên sản phẩm", "Mã quy trình", "Tên quy trình", "Số lượng thành phẩm" };
-	private String[] headerTableAssignmentWorker = new String[] { "Mã nhân viên", "Tên nhân viên", "Mã quy trình",
-			"Tên quy trình", "Ngày tham gia" };
+	private String[] headerTableTimesheetsWorker = new String[] { "Mã chấm công", "Nhân viên", "Sản phẩm", "Quy trình",
+			"Ngày chấm công", "Số lượng thành phẩm" };
+	private String[] headerTableAssignmentWorker = new String[] { "Mã phân công", "Nhân viên", "Sản phẩm", "Quy trình",
+			"Ngày tham gia" };
 	private DefaultTableModel dtmEmpOffice;
 	private DefaultTableModel dtmAssignment;
+	private DefaultTableModel dtmWorker;
 	private TimesheetsDAO timesheetsDAO;
 	private TimesheetsFactoryDAO timesheetsFactoryDAO;
 	private EmployeeOfficeDAO employeeOfficeDAO;
@@ -74,9 +78,6 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 	private JButton btnAddOfEmpOffice;
 	private JButton btnDeleteOfEmpOffice;
 	private JButton btnSearch;
-	private JTextField txtNameWorker;
-	private JTextField txtProductName;
-	private JTextField txtProduceName;
 	private JTable tblAssignmentWorker;
 	private JTable tblTimesheetsWorker;
 	private JButton btnSearchOfWorker;
@@ -93,14 +94,16 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 	private JSpinField spinMinuteCheckOutPM;
 	private JSpinField spinMinuteCheckInPM;
 	private JSpinField spinHourCheckInPM;
-	private JComboBox<String> cboIDWorker;
-	private JComboBox<String> cboProductID;
-	private JComboBox<String> cboProduceID;
+	private JSpinField spinAmountCompleted;
 	private JCheckBox chkAbsentPM;
 	private JPanel pnInputEmpOffice;
 	private JCheckBox chkAbsentAM;
 	private JDateChooser dateSearchEmpOffice;
 	private JComboBox<String> cboSearchEmpOffice;
+	private JTextField txtWorker;
+	private JTextField txtProduct;
+	private JTextField txtProduce;
+	private JDateChooser dateJoin;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -145,76 +148,59 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		panel.setLayout(new BorderLayout(0, 0));
 
 		JPanel panel_2 = new JPanel();
-		panel.add(panel_2);
-		panel_2.setLayout(new MigLayout("", "[][150px:n,grow][][150px:n,grow]", "[][][][][]"));
+		panel.add(panel_2, BorderLayout.EAST);
+		panel_2.setLayout(new MigLayout("", "[][100px:n:110px,grow][][:50px:50px]", "[][][][][][]"));
 
-		JLabel lblIDWorker = new JLabel("Mã nhân viên");
+		JLabel lblIDWorker = new JLabel("Nhân viên");
 		panel_2.add(lblIDWorker, "cell 0 0,alignx left");
 
-		cboIDWorker = new JComboBox<String>();
-		panel_2.add(cboIDWorker, "cell 1 0,growx");
+		txtWorker = new JTextField();
+		txtWorker.setEditable(false);
+		panel_2.add(txtWorker, "cell 1 0,growx, span 3");
+		txtWorker.setColumns(10);
 
-		JLabel lblNameWorker = new JLabel("Tên nhân viên");
-		panel_2.add(lblNameWorker, "cell 2 0,alignx left");
-
-		txtNameWorker = new JTextField();
-		panel_2.add(txtNameWorker, "cell 3 0,growx");
-		txtNameWorker.setColumns(10);
-
-		JLabel lblProductID = new JLabel("Mã sản phẩm");
+		JLabel lblProductID = new JLabel("Sản phẩm");
 		panel_2.add(lblProductID, "cell 0 1,alignx left");
 
-		cboProductID = new JComboBox<String>();
-		panel_2.add(cboProductID, "cell 1 1,growx");
+		txtProduct = new JTextField();
+		txtProduct.setEditable(false);
+		panel_2.add(txtProduct, "cell 1 1,growx, span 3");
+		txtProduct.setColumns(10);
 
-		JLabel lblProductName = new JLabel("Tên sản phẩm:");
-		panel_2.add(lblProductName, "cell 2 1,alignx left");
-
-		txtProductName = new JTextField();
-		panel_2.add(txtProductName, "cell 3 1,growx");
-		txtProductName.setColumns(10);
-
-		JLabel lblProduceID = new JLabel("Mã quy trình");
+		JLabel lblProduceID = new JLabel("Quy trình");
 		panel_2.add(lblProduceID, "cell 0 2,alignx left");
 
-		cboProduceID = new JComboBox<String>();
-		panel_2.add(cboProduceID, "cell 1 2,growx");
-
-		JLabel lblProduceName = new JLabel("Tên quy trình");
-		panel_2.add(lblProduceName, "cell 2 2,alignx left");
-
-		txtProduceName = new JTextField();
-		panel_2.add(txtProduceName, "cell 3 2,growx");
-		txtProduceName.setColumns(10);
+		txtProduce = new JTextField();
+		txtProduce.setEditable(false);
+		panel_2.add(txtProduce, "cell 1 2,growx, span 3");
+		txtProduce.setColumns(10);
 
 		JLabel lblNewLabel_17 = new JLabel("Ngày chấm công:");
 		panel_2.add(lblNewLabel_17, "cell 0 3,alignx left,aligny top");
 
-		JDateChooser dateJoin = new JDateChooser();
-		dateJoin.setMaxSelectableDate(new Date());
+		dateJoin = new JDateChooser();
+		dateJoin.setMaxSelectableDate(CURRENT_DATE);
+		dateJoin.setDate(CURRENT_DATE);
 		dateJoin.setDateFormatString("yyyy-MM-dd");
 		panel_2.add(dateJoin, "cell 1 3,growx,aligny top");
 
 		JLabel lblNewLabel_18 = new JLabel("Số lượng thành phẩm:");
 		panel_2.add(lblNewLabel_18, "cell 2 3,alignx left,aligny top");
 
-		JSpinField spinField = new JSpinField();
-		spinField.setMinimum(0);
-		panel_2.add(spinField, "cell 3 3,growx,aligny top");
+		spinAmountCompleted = new JSpinField();
+		spinAmountCompleted.setValue(1);
+		spinAmountCompleted.setMinimum(1);
+		panel_2.add(spinAmountCompleted, "cell 3 3,growx,aligny top");
 
 		JPanel pnOperationOfWorker = new JPanel();
-		panel_2.add(pnOperationOfWorker, "flowx,cell 0 4 2097051 1,alignx center");
+		panel_2.add(pnOperationOfWorker, "flowx,cell 0 4 4 1,alignx center");
 		pnOperationOfWorker.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		btnAddOfWorker = new JButton("Thêm chấm công");
+		btnAddOfWorker.addActionListener(this);
 		btnAddOfWorker.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAddOfWorker.setFocusable(false);
 		pnOperationOfWorker.add(btnAddOfWorker);
-
-		btnUpdateOfWorker = new JButton("Cập nhật chấm công");
-		btnUpdateOfWorker.setIcon(new ImageIcon("images\\operations\\update.png"));
-		btnUpdateOfWorker.setFocusable(false);
-		pnOperationOfWorker.add(btnUpdateOfWorker);
 
 		btnDeleteOfWorker = new JButton("Xóa chấm công");
 		btnDeleteOfWorker.setIcon(new ImageIcon("images\\operations\\delete.png"));
@@ -222,11 +208,17 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		btnDeleteOfWorker.setFocusable(false);
 		pnOperationOfWorker.add(btnDeleteOfWorker);
 
+		btnUpdateOfWorker = new JButton("Cập nhật chấm công");
+		btnUpdateOfWorker.setIcon(new ImageIcon("images\\operations\\update.png"));
+		btnUpdateOfWorker.setFocusable(false);
+		btnUpdateOfWorker.addActionListener(this);
+		panel_2.add(btnUpdateOfWorker, "cell 1 5");
+		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2, true), "Bảng phân công"));
 		scrollPane_2.setPreferredSize(new Dimension(600, 200));
 		scrollPane_2.setMaximumSize(new Dimension(32767, 167));
-		panel.add(scrollPane_2, BorderLayout.WEST);
+		panel.add(scrollPane_2, BorderLayout.CENTER);
 
 		tblAssignmentWorker = new JTable(dtmAssignment = new DefaultTableModel(headerTableAssignmentWorker, 0)) {
 			private static final long serialVersionUID = 1L;
@@ -236,6 +228,19 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 				return false;
 			}
 		};
+		tblAssignmentWorker.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int rowSelected = tblAssignmentWorker.getSelectedRow();
+				if (rowSelected >= 0) {
+					txtWorker.setText(tblAssignmentWorker.getValueAt(rowSelected, 1).toString());
+					txtProduct.setText(tblAssignmentWorker.getValueAt(rowSelected, 2).toString());
+					txtProduce.setText(tblAssignmentWorker.getValueAt(rowSelected, 3).toString());
+					dateJoin.setDate(CURRENT_DATE);
+					spinAmountCompleted.setValue(1);
+				}
+			}
+		});
 		tblAssignmentWorker.setPreferredSize(new Dimension(0, 300));
 		scrollPane_2.setViewportView(tblAssignmentWorker);
 
@@ -253,7 +258,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_5.add(scrollPane_1);
 
-		tblTimesheetsWorker = new JTable(new DefaultTableModel(headerTableTimesheetsWorker, 0)) {
+		tblTimesheetsWorker = new JTable(dtmWorker = new DefaultTableModel(headerTableTimesheetsWorker, 0)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -261,6 +266,25 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 				return false;
 			}
 		};
+		tblTimesheetsWorker.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int rowSelected = tblTimesheetsWorker.getSelectedRow();
+				if (rowSelected >= 0) {
+					txtWorker.setText(tblTimesheetsWorker.getValueAt(rowSelected, 1).toString());
+					txtProduct.setText(tblTimesheetsWorker.getValueAt(rowSelected, 2).toString());
+					txtProduce.setText(tblTimesheetsWorker.getValueAt(rowSelected, 3).toString());
+					try {
+						Date date = sdfDate.parse(tblTimesheetsWorker.getValueAt(rowSelected, 4).toString());
+						dateJoin.setDate(date);
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					}
+					spinAmountCompleted
+							.setValue(Integer.parseInt(tblTimesheetsWorker.getValueAt(rowSelected, 5).toString()));
+				}
+			}
+		});
 		scrollPane_1.setViewportView(tblTimesheetsWorker);
 
 		JPanel panel_4 = new JPanel();
@@ -341,9 +365,9 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 
 		dateTimesheetOffice = new JDateChooser();
 		dateTimesheetOffice.getCalendarButton().setBackground(new Color(255, 255, 255));
-		dateTimesheetOffice.setDate(new Date());
+		dateTimesheetOffice.setDate(CURRENT_DATE);
 		dateTimesheetOffice.setDateFormatString("yyyy-MM-dd");
-		dateTimesheetOffice.setMaxSelectableDate(new Date());
+		dateTimesheetOffice.setMaxSelectableDate(CURRENT_DATE);
 		pnInputEmpOffice.add(dateTimesheetOffice, "cell 1 1,grow");
 
 		JLabel lblNewLabel_8 = new JLabel("giờ");
@@ -482,8 +506,8 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		pnSearchEmpOffice.add(lblNewLabel_1, "cell 3 0,alignx left,aligny center");
 
 		dateSearchEmpOffice = new JDateChooser();
-		dateSearchEmpOffice.setMaxSelectableDate(new Date());
-		dateSearchEmpOffice.setDate(new Date());
+		dateSearchEmpOffice.setMaxSelectableDate(CURRENT_DATE);
+		dateSearchEmpOffice.setDate(CURRENT_DATE);
 		dateSearchEmpOffice.setDateFormatString("yyyy-MM-dd");
 		pnSearchEmpOffice.add(dateSearchEmpOffice, "cell 4 0,growx,aligny center");
 
@@ -550,9 +574,10 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 
 		loadDataToTable(timesheetsDAO.getAllTimesheetsOffices());
 		loadDateToTableAssignment();
+		loadDateToTableTimesheetsWorker();
 		return contentPane;
 	}
-	
+
 	public void loadDateToTableAssignment() {
 		dtmAssignment = new DefaultTableModel(headerTableAssignmentWorker, 0) {
 			private static final long serialVersionUID = 1L;
@@ -566,6 +591,22 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		List<String> listAssignment = timesheetsFactoryDAO.getAllAssignment();
 		for (String assignment : listAssignment) {
 			dtmAssignment.addRow(assignment.split(";"));
+		}
+	}
+
+	public void loadDateToTableTimesheetsWorker() {
+		dtmWorker = new DefaultTableModel(headerTableTimesheetsWorker, 0) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		tblTimesheetsWorker.setModel(dtmWorker);
+		List<String> listTimesheets = timesheetsFactoryDAO.getAllTimesheetFactory();
+		for (String timesheet : listTimesheets) {
+			dtmWorker.addRow(timesheet.split(";"));
 		}
 	}
 
@@ -670,6 +711,46 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 				}
 			} else {
 				loadDataToTable(timesheetsDAO.searchByDateAndEmp(emp, date));
+			}
+		}
+		if (e.getSource() == btnAddOfWorker) {
+			int rowSelected = tblAssignmentWorker.getSelectedRow();
+			int assignmentID = Integer.parseInt(tblAssignmentWorker.getValueAt(rowSelected, 0).toString());
+			int quantity = spinAmountCompleted.getValue();
+			String emp = txtWorker.getText();
+			Date date = dateJoin.getDate();
+			TimesheetsFactory timesheetsFactory = new TimesheetsFactory(date, quantity, assignmentID);
+			if (JOptionPane.showConfirmDialog(this,
+					"Bạn có chắn chắn muốn thêm chấm công cho nhân viên " + emp + " không?", "Thông báo",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				if (timesheetsFactoryDAO.addTimesheetsFactory(timesheetsFactory)) {
+					loadDateToTableTimesheetsWorker();
+					JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo",
+							JOptionPane.NO_OPTION, null);
+				} else {
+					JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
+							JOptionPane.NO_OPTION, null);
+				}
+			}
+		}
+		if (e.getSource() == btnUpdateOfWorker) {
+			int rowSelected = tblTimesheetsWorker.getSelectedRow();
+			int timesheetID = Integer.parseInt(tblTimesheetsWorker.getValueAt(rowSelected, 0).toString());
+			int quantity = spinAmountCompleted.getValue();
+			String emp = txtWorker.getText();
+			Date date = dateJoin.getDate();
+			TimesheetsFactory timesheetsFactory = new TimesheetsFactory(timesheetID, date, quantity);
+			if (JOptionPane.showConfirmDialog(this,
+					"Bạn có chắn chắn muốn cập nhật chấm công cho nhân viên " + emp + " không?", "Thông báo",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				if (timesheetsFactoryDAO.updateTimesheetsFactory(timesheetsFactory)) {
+					loadDateToTableTimesheetsWorker();
+					JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",
+							JOptionPane.NO_OPTION, null);
+				} else {
+					JOptionPane.showMessageDialog(this, "Cập nhật chấm công không thành công.", "Thông báo",
+							JOptionPane.NO_OPTION, null);
+				}
 			}
 		}
 	}

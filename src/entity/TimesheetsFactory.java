@@ -4,34 +4,48 @@ import java.util.Date;
 import java.util.Objects;
 //chấm công sản xuất
 public class TimesheetsFactory {
-	private String timesheetID;
+	private int timesheetID;
 	private Date date;
 	private int quantity; // số lượng
-	private String assignmentID;
+	private int assignmentID;
 
 	public TimesheetsFactory() {
 		super();
 
 	}
 
-	public TimesheetsFactory(String timesheetID) {
+	public TimesheetsFactory(int timesheetID) {
 		super();
 		this.timesheetID = timesheetID;
 	}
 
-	public TimesheetsFactory(String timesheetID, Date date, int quantity, String assignmentID) {
+	public TimesheetsFactory(int timesheetID, Date date, int quantity, int assignmentID) {
 		super();
 		this.timesheetID = timesheetID;
 		this.date = date;
 		this.quantity = quantity;
 		this.assignmentID = assignmentID;
 	}
+	
+	public TimesheetsFactory(int timesheetID, Date date, int quantity) {
+		super();
+		this.timesheetID = timesheetID;
+		this.date = date;
+		this.quantity = quantity;
+	}
+	
+	public TimesheetsFactory(Date date, int quantity, int assignmentID) {
+		super();
+		this.date = date;
+		this.quantity = quantity;
+		this.assignmentID = assignmentID;
+	}
 
-	public String getTimesheetID() {
+	public int getTimesheetID() {
 		return timesheetID;
 	}
 
-	public void setTimesheetID(String timesheetID) {
+	public void setTimesheetID(int timesheetID) {
 		this.timesheetID = timesheetID;
 	}
 
@@ -51,11 +65,11 @@ public class TimesheetsFactory {
 		this.quantity = quantity;
 	}
 
-	public String getassignmentID() {
+	public int getAssignmentID() {
 		return assignmentID;
 	}
 
-	public void setassignmentID(String assignmentID) {
+	public void setAssignmentID(int assignmentID) {
 		this.assignmentID = assignmentID;
 	}
 

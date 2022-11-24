@@ -60,6 +60,23 @@ public class AccountDAO {
 		return n>0;
 	}
 	
+	public boolean updatePasword(String password, String salt, String empID) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement(
+					"UPDATE TAIKHOAN SET MatKhau = ?, GiaTriSalt = ? WHERE TenDangNhap = ?");
+			stmt.setString(1, password);
+			stmt.setString(2, salt);
+			stmt.setString(3, empID);
+			int insertResult = stmt.executeUpdate();
+			if (insertResult > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public boolean setDefaultPassword (String id) {
 		int n = 0;
 		try {

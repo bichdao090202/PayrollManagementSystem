@@ -23,12 +23,14 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
 
 public class MenuGUI extends JFrame {
-	private final Color colorHover = Color.CYAN;
-	private final Color color = new Color(16, 84, 129);
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(0, 140, 140);
 	private static final long serialVersionUID = 1L;
 	private static final Image ICON_APPLICATION = new ImageIcon("images\\icon_application.png").getImage();
+	private JPanel[] menu;
 	private JPanel contentPane;
 	private SideMenuPanel side;
 	private JLabel lblName;
@@ -89,6 +91,9 @@ public class MenuGUI extends JFrame {
 		factoryGUI = new FactoryGUI();
 		pnContentFactory = factoryGUI.getView();
 		
+		menu = new JPanel[8];
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 730);
 		contentPane = new JPanel();
@@ -107,7 +112,7 @@ public class MenuGUI extends JFrame {
 		JPanel pnSideMenu = new JPanel();
 		pnSideMenu.setBounds(0, 0, 65, 691);
 		pnSideMenu.setBorder(new EmptyBorder(0, 10, 0, 0));
-		pnSideMenu.setBackground(new Color(16, 84, 129));
+		pnSideMenu.setBackground(COLOR);
 
 		imageAvatar = new ImageAvatar();
 		imageAvatar.addMouseListener(new MouseAdapter() {
@@ -115,9 +120,10 @@ public class MenuGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					UserProfileGUI dialog = new UserProfileGUI(employee);
+					dialog.setLocationRelativeTo(null);
+					dialog.setAlwaysOnTop(true);
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
-					dialog.setLocationRelativeTo(null);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -138,20 +144,20 @@ public class MenuGUI extends JFrame {
 
 		pnMenu = new JPanel();
 		pnMenu.setBounds(0, 180, 190, 465);
-		pnMenu.setBackground(new Color(16, 84, 129));
+		pnMenu.setBackground(COLOR);
 		pnMenu.setLayout(new GridLayout(8, 1, 0, 10));
 
 		pnNhanSu = new JPanel();
 		pnNhanSu.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnNhanSu.setBackground(colorHover);
+				pnNhanSu.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnNhanSuClicked) {
-					pnNhanSu.setBackground(new Color(16, 84, 129));
+					pnNhanSu.setBackground(COLOR);
 				}
 			}
 			@Override
@@ -164,14 +170,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = false;
 				pnThongKeClicked = false;
 				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(colorHover);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(color);
-				pnPhanXuong.setBackground(color);
-				pnTaiKhoan.setBackground(color);
+				pnNhanSu.setBackground(COLOR_HOVER);
+				pnPhongBan.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR);
+				pnChamCong.setBackground(COLOR);
+				pnSanPham.setBackground(COLOR);
+				pnLuong.setBackground(COLOR);
+				pnPhanXuong.setBackground(COLOR);
+				pnTaiKhoan.setBackground(COLOR);
 				
 				pnContent.removeAll();
 				pnContent.add(pnContentNhanSu);
@@ -181,8 +187,8 @@ public class MenuGUI extends JFrame {
 				clickMenu();
 			}
 		});
-		pnNhanSu.setBackground(new Color(16, 84, 129));
-		pnNhanSu.setBackground(colorHover);
+		pnNhanSu.setBackground(COLOR);
+		pnNhanSu.setBackground(COLOR_HOVER);
 		pnNhanSu.setSize(new Dimension(100, 100));
 		pnMenu.add(pnNhanSu);
 		pnNhanSu.setLayout(new BorderLayout(0, 0));
@@ -202,13 +208,13 @@ public class MenuGUI extends JFrame {
 		pnPhongBan.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnPhongBan.setBackground(colorHover);
+				pnPhongBan.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnPhongBanClicked) {
-					pnPhongBan.setBackground(new Color(16, 84, 129));
+					pnPhongBan.setBackground(COLOR);
 				}
 			}
 			
@@ -222,14 +228,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = false;
 				pnThongKeClicked = false;
 				pnTaiKhoanClicked = false;
-				pnPhongBan.setBackground(colorHover);
-				pnNhanSu.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(color);
-				pnPhanXuong.setBackground(color);
-				pnTaiKhoan.setBackground(color);
+				pnPhongBan.setBackground(COLOR_HOVER);
+				pnNhanSu.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR);
+				pnChamCong.setBackground(COLOR);
+				pnSanPham.setBackground(COLOR);
+				pnLuong.setBackground(COLOR);
+				pnPhanXuong.setBackground(COLOR);
+				pnTaiKhoan.setBackground(COLOR);
 				
 				pnContent.removeAll();
 				pnContent.add(pnContentPhongBan);
@@ -240,7 +246,7 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		pnPhongBan.setBorder(null);
-		pnPhongBan.setBackground(new Color(16, 84, 129));
+		pnPhongBan.setBackground(COLOR);
 		pnMenu.add(pnPhongBan);
 		pnPhongBan.setLayout(new BorderLayout(0, 0));
 
@@ -259,13 +265,13 @@ public class MenuGUI extends JFrame {
 		pnPhanXuong.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnPhanXuong.setBackground(colorHover);
+				pnPhanXuong.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnThongKeClicked) {
-					pnPhanXuong.setBackground(color);
+					pnPhanXuong.setBackground(COLOR);
 				}
 			}
 			
@@ -278,14 +284,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = false;
 				pnThongKeClicked = true;
 				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(color);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(color);
-				pnPhanXuong.setBackground(colorHover);
-				pnTaiKhoan.setBackground(color);
+				pnNhanSu.setBackground(COLOR);
+				pnPhongBan.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR);
+				pnChamCong.setBackground(COLOR);
+				pnSanPham.setBackground(COLOR);
+				pnLuong.setBackground(COLOR);
+				pnPhanXuong.setBackground(COLOR_HOVER);
+				pnTaiKhoan.setBackground(COLOR);
 				
 				pnContent.removeAll();
 				pnContent.add(pnContentFactory);
@@ -296,7 +302,7 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		pnPhanXuong.setBorder(null);
-		pnPhanXuong.setBackground(new Color(16, 84, 129));
+		pnPhanXuong.setBackground(COLOR);
 		pnMenu.add(pnPhanXuong);
 		pnPhanXuong.setLayout(new BorderLayout(0, 0));
 
@@ -315,13 +321,13 @@ public class MenuGUI extends JFrame {
 		pnPhanCong.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnPhanCong.setBackground(colorHover);
+				pnPhanCong.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnPhanCongClicked) {
-					pnPhanCong.setBackground(color);
+					pnPhanCong.setBackground(COLOR);
 				}
 			}
 			
@@ -334,14 +340,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = false;
 				pnThongKeClicked = false;
 				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(color);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(colorHover);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(color);
-				pnPhanXuong.setBackground(color);
-				pnTaiKhoan.setBackground(color);
+				pnNhanSu.setBackground(COLOR);
+				pnPhongBan.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR_HOVER);
+				pnChamCong.setBackground(COLOR);
+				pnSanPham.setBackground(COLOR);
+				pnLuong.setBackground(COLOR);
+				pnPhanXuong.setBackground(COLOR);
+				pnTaiKhoan.setBackground(COLOR);
 				
 				pnContent.removeAll();
 				pnContent.add(pnContentPhanCong);
@@ -352,7 +358,7 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		pnPhanCong.setBorder(null);
-		pnPhanCong.setBackground(new Color(16, 84, 129));
+		pnPhanCong.setBackground(COLOR);
 		pnMenu.add(pnPhanCong);
 		pnPhanCong.setLayout(new BorderLayout(0, 0));
 
@@ -371,13 +377,13 @@ public class MenuGUI extends JFrame {
 		pnChamCong.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnChamCong.setBackground(colorHover);
+				pnChamCong.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnChamCongClicked) {
-					pnChamCong.setBackground(color);
+					pnChamCong.setBackground(COLOR);
 				}
 			}
 			
@@ -390,14 +396,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = false;
 				pnThongKeClicked = false;
 				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(color);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(colorHover);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(color);
-				pnPhanXuong.setBackground(color);
-				pnTaiKhoan.setBackground(color);
+				pnNhanSu.setBackground(COLOR);
+				pnPhongBan.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR);
+				pnChamCong.setBackground(COLOR_HOVER);
+				pnSanPham.setBackground(COLOR);
+				pnLuong.setBackground(COLOR);
+				pnPhanXuong.setBackground(COLOR);
+				pnTaiKhoan.setBackground(COLOR);
 				
 				pnContent.removeAll();
 				pnContent.add(pnContentChamCong);
@@ -408,7 +414,7 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		pnChamCong.setBorder(null);
-		pnChamCong.setBackground(new Color(16, 84, 129));
+		pnChamCong.setBackground(COLOR);
 		pnMenu.add(pnChamCong);
 		pnChamCong.setLayout(new BorderLayout(0, 0));
 
@@ -427,13 +433,13 @@ public class MenuGUI extends JFrame {
 		pnSanPham.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnSanPham.setBackground(colorHover);
+				pnSanPham.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnSanPhamClicked) {
-					pnSanPham.setBackground(color);
+					pnSanPham.setBackground(COLOR);
 				}
 			}
 			
@@ -446,14 +452,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = false;
 				pnThongKeClicked = false;
 				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(color);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(colorHover);
-				pnLuong.setBackground(color);
-				pnPhanXuong.setBackground(color);
-				pnTaiKhoan.setBackground(color);
+				pnNhanSu.setBackground(COLOR);
+				pnPhongBan.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR);
+				pnChamCong.setBackground(COLOR);
+				pnSanPham.setBackground(COLOR_HOVER);
+				pnLuong.setBackground(COLOR);
+				pnPhanXuong.setBackground(COLOR);
+				pnTaiKhoan.setBackground(COLOR);
 				pnContent.removeAll();
 				pnContent.add(pnContentSanPham);
 				pnContentSanPham.setVisible(true);
@@ -463,7 +469,7 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		pnSanPham.setBorder(null);
-		pnSanPham.setBackground(new Color(16, 84, 129));
+		pnSanPham.setBackground(COLOR);
 		pnMenu.add(pnSanPham);
 		pnSanPham.setLayout(new BorderLayout(0, 0));
 
@@ -482,13 +488,13 @@ public class MenuGUI extends JFrame {
 		pnLuong.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnLuong.setBackground(colorHover);
+				pnLuong.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnLuongClicked) {
-					pnLuong.setBackground(color);
+					pnLuong.setBackground(COLOR);
 				}
 			}
 			
@@ -501,14 +507,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = true;
 				pnThongKeClicked = false;
 				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(color);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(colorHover);
-				pnPhanXuong.setBackground(color);
-				pnTaiKhoan.setBackground(color);
+				pnNhanSu.setBackground(COLOR);
+				pnPhongBan.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR);
+				pnChamCong.setBackground(COLOR);
+				pnSanPham.setBackground(COLOR);
+				pnLuong.setBackground(COLOR_HOVER);
+				pnPhanXuong.setBackground(COLOR);
+				pnTaiKhoan.setBackground(COLOR);
 				
 				pnContent.removeAll();
 				pnContent.add(pnContentSalary);
@@ -519,7 +525,7 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		pnLuong.setBorder(null);
-		pnLuong.setBackground(new Color(16, 84, 129));
+		pnLuong.setBackground(COLOR);
 		pnMenu.add(pnLuong);
 		pnLuong.setLayout(new BorderLayout(0, 0));
 
@@ -538,13 +544,13 @@ public class MenuGUI extends JFrame {
 		pnTaiKhoan.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnTaiKhoan.setBackground(colorHover);
+				pnTaiKhoan.setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if (!pnTaiKhoanClicked) {
-					pnTaiKhoan.setBackground(color);
+					pnTaiKhoan.setBackground(COLOR);
 				}
 			}
 			
@@ -557,14 +563,14 @@ public class MenuGUI extends JFrame {
 				pnLuongClicked = false;
 				pnThongKeClicked = false;
 				pnTaiKhoanClicked = true;
-				pnNhanSu.setBackground(color);
-				pnPhongBan.setBackground(color);
-				pnPhanCong.setBackground(color);
-				pnChamCong.setBackground(color);
-				pnSanPham.setBackground(color);
-				pnLuong.setBackground(color);
-				pnPhanXuong.setBackground(color);
-				pnTaiKhoan.setBackground(colorHover);
+				pnNhanSu.setBackground(COLOR);
+				pnPhongBan.setBackground(COLOR);
+				pnPhanCong.setBackground(COLOR);
+				pnChamCong.setBackground(COLOR);
+				pnSanPham.setBackground(COLOR);
+				pnLuong.setBackground(COLOR);
+				pnPhanXuong.setBackground(COLOR);
+				pnTaiKhoan.setBackground(COLOR_HOVER);
 				
 				pnContent.removeAll();
 				pnContent.add(pnContentAccount);
@@ -575,7 +581,7 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		pnTaiKhoan.setBorder(null);
-		pnTaiKhoan.setBackground(new Color(16, 84, 129));
+		pnTaiKhoan.setBackground(COLOR);
 		pnMenu.add(pnTaiKhoan);
 		pnTaiKhoan.setLayout(new BorderLayout(0, 0));
 

@@ -145,7 +145,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 
 		txtPassword = new JPasswordFieldHint("Password");
 		lblIconPassword.setLabelFor(txtPassword);
-		txtPassword.setText("1111");
+		txtPassword.setText("111111111111");
 		txtPassword.setLocation(55, 0);
 		txtPassword.setBorder(null);
 		txtPassword.setFont(new Font("Tahoma", Font.PLAIN, 16));
