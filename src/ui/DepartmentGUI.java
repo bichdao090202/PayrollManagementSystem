@@ -28,6 +28,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import entity.Department;
+import entity.Worker;
 import model.DepartmentDAO;
 import net.miginfocom.swing.MigLayout;
 
@@ -164,10 +165,6 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnCreate)) {
-			if (tblDepartment.getSelectedRow() != -1) {
-				JOptionPane.showMessageDialog(this, "Hãy nhấn nút 'Làm mới' rồi thêm phòng ban mới");
-				return;
-			}
 			if (checkName() == false) {
 				JOptionPane.showMessageDialog(this, "Tên phòng ban không thể để trống hoặc chứa kí tự đặc biệt");
 				return;
@@ -193,14 +190,6 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		if (o.equals(btnRefresh))
 			refresh();
 		if (o.equals(btnDelete)) {
-//			int[] rows = tblDepartment.getSelectedRows();
-//			if (rows.length>1) {
-//				for (int i = 0; i < rows.length; i++) 
-//					depDAO.deleteDepartment((String) tblDepartment.getValueAt(rows[i], 0));
-//				refresh();
-//				JOptionPane.showMessageDialog(this, "Xóa phòng ban thành công");
-//				return;
-//			} 
 			int row = tblDepartment.getSelectedRow();
 			if (row == -1) {
 				JOptionPane.showMessageDialog(this, "Chưa chọn phòng ban để xóa");
@@ -270,6 +259,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 	}
 
 	public void refresh() {
+		index = 0;
 		txtName.setText("");
 		tblDepartment.clearSelection();
 		loadTable();
