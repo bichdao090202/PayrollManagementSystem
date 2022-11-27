@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.Assignment;
 import entity.Employee;
 import entity.EmployeeOffice;
 import entity.Worker;
@@ -167,5 +168,23 @@ public class WorkerDAO {
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public Worker getWorkerByID(String empID) {		
+		Worker emp = null;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENSANXUAT WHERE MaNhanVien = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
+						rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
+						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"),
+						rs.getString("ChuyenMon"), rs.getString("MaTo"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return emp;
 	}
 }
