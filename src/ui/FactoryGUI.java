@@ -63,8 +63,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	private JButton btnChange;
 	private JButton btnClean;
 
-//	public Component getView() {
-	public FactoryGUI() {
+	public Component getUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(new Color(0,140,140));
@@ -463,7 +462,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtIdFactory.setEditable(false);
 		txtIdTeam.setEditable(false);
 
-//		return getContentPane();
+		return getContentPane();
 	}
 
 	public void loadListFactory() {

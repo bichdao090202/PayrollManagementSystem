@@ -80,12 +80,12 @@ public class AccountGUI extends JFrame implements ActionListener {
         index = 0;
         num = 3;
         newList = ds.subList(0, num);
-		add(tabAccount());
+		add(getUI());
 		loadTable();
 //		System.out.print(listEmpOff);
 	}
 
-	public Component tabAccount() {
+	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pnAccount = new JPanel();
 		pnAccount.setSize(1200, 690);

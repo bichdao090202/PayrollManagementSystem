@@ -1,0 +1,38 @@
+Bảng lương 11/2022
+
+Mã nhân viên : NVSX00005
+
+Tên nhân viên : Nguyễn Diệp Anh
+
+Giới tính : Nữ
+
+Ngày sinh : 25/12/2001
+
+Số điện thoại : 0984476509
+
+Địa chỉ : Thường Tín, Hà Nội
+
+Tên ngân hàng : Agribank
+
+Số tài khoản : 12305062000
+
+Người hưởng thụ : Nguyễn Diệp Anh
+
+Chuyên môn/Chức vụ : May cổ áo thun
+
+Mã tổ/Mã phòng ban : PX0102
+
+Số ngày làm việc : 0
+
+Số ngày nghỉ : 30
+
+Chỉ tiêu : Không đạt
+
+Lý do : Số lượng không đạt yêu cầu
+
+Tiền thưởng : 0.0
+
+Tiền phạt : 0.0
+
+Tổng lương : 0
+
