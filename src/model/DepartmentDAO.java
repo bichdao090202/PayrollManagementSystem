@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Department;
+import entity.Employee;
 
 public class DepartmentDAO {
     private Connection connection;
@@ -179,6 +180,24 @@ public class DepartmentDAO {
             e.printStackTrace();
         }
         return listName;
+    }
+    
+    public List<Employee> getEmployeeByDepartmentID(String depID) {
+        List<Employee> listEmp = new ArrayList<Employee>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT MaNhanVien, TenNhanVien FROM NhanVienHanhChinh where MaPhongBan = ?");
+            stmt.setString(1, depID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+            	Employee emp = new Employee();
+            	emp.setEmployeeID(rs.getString("MaNhanVien"));
+            	emp.setName(rs.getString("TenNhanVien"));            	
+            	listEmp.add(emp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listEmp;
     }
     
 }

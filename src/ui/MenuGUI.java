@@ -84,7 +84,7 @@ public class MenuGUI extends JFrame {
 		pnContentSanPham = productGUI.getView();
 		accountGUI = new AccountGUI();
 		pnContentAccount = accountGUI.tabAccount();
-		assignmentGUI = new AssignmentGUI();
+		assignmentGUI = new AssignmentGUI(employee);
 		pnContentPhanCong = assignmentGUI.tabAssignment();
 		salaryGUI = new SalaryGUI();
 		pnContentSalary = salaryGUI.getView();

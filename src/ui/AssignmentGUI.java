@@ -32,12 +32,14 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 
 import entity.Assignment;
+import entity.Employee;
 import entity.Product;
 import entity.Produre;
 import entity.Worker;
 import model.AssignmentDAO;
 import model.ProductDAO;
 import model.ProdureDAO;
+import model.TeamDAO;
 import model.WorkerDAO;
 
 public class AssignmentGUI extends JFrame implements ActionListener, MouseListener {
@@ -62,10 +64,10 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 	private List<Worker> subListWorker;
 	private JDateChooser calendar;
 	private JLabel lbDate;
-
+	private Worker worker;
 	private JButton btnCreate, btnUpdate, btnDelete, btnRefresh;
 
-	public AssignmentGUI() {
+	public AssignmentGUI(Employee worker) {
 		setSize(1200, 690);
 		daoAssignment = new AssignmentDAO();
 		listAssignment = new ArrayList<>();
@@ -78,10 +80,8 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		num = 29;
 		index = indexProduct = indexWorker = indexProdure = 0;
 		numWorker = numProduct = numProdure = 13;
-
+		this.worker = daoWorker.getWorkerByID(worker.getEmployeeID());
 		getContentPane().add(tabAssignment());
-		
-
 	}
 
 	public Component tabAssignment() {
@@ -241,7 +241,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		btnPreviousPage.setFocusable(false);
 
 		JPanel pnButton = new JPanel();
-		pnButton.setBounds(1035, 299, 149, 294);
+		pnButton.setBounds(1035, 299, 149, 348);
 		pn1.add(pnButton);
 		pnButton.setLayout(null);
 
@@ -257,16 +257,22 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 		pnButton.add(btnCreate = new JButton("Phân công"));
 		btnCreate.setSize(129, 36);
-		btnCreate.setLocation(10, 90);
+		btnCreate.setLocation(10, 54);
 		pnButton.add(btnUpdate = new JButton("Phân công lại"));
-		btnUpdate.setLocation(10, 140);
+		btnUpdate.setLocation(10, 104);
 		btnUpdate.setSize(129, 36);
 		pnButton.add(btnDelete = new JButton("Xóa phân công"));
-		btnDelete.setLocation(10, 190);
+		btnDelete.setLocation(10, 154);
 		btnDelete.setSize(129, 36);
 		pnButton.add(btnRefresh = new JButton("Làm mới"));
-		btnRefresh.setLocation(10, 240);
+		btnRefresh.setLocation(10, 204);
 		btnRefresh.setSize(129, 36);
+		JLabel lblTeam = new JLabel(worker.getTeamID());
+		lblTeam.setLocation(53, 320);
+		lblTeam.setSize(86, 28);
+		pnButton.add(lblTeam);
+		
+		
 		btnCreate.setFocusable(false);
 		btnUpdate.setFocusable(false);
 		btnDelete.setFocusable(false);
@@ -283,6 +289,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		btnGoLastPage3.setFocusable(false);
 		btnNextPage3.setFocusable(false);
 		btnPreviousPage3.setFocusable(false);
+		
 		tblAssignment.addMouseListener(this);
 		tblProduct.addMouseListener(this);
 		tblWorker.addMouseListener(this);
@@ -318,17 +325,17 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			refresh();
 		}
 		if (o.equals(btnDelete)) {
-			if (rowAssignment == -1) {
+			int[] rowsAssignment = tblAssignment.getSelectedRows();
+			if (rowsAssignment.length == 0) {
 				JOptionPane.showMessageDialog(this, "Chưa chọn phân công để xóa");
 				return;
 			}
-			String id = (String) tblAssignment.getValueAt(rowAssignment, 0);
-			if (daoAssignment.deleteAssignment(id) == false) {
-				JOptionPane.showMessageDialog(this, "Xóa phân công thất bại, vui lòng thử lại sau");
-				return;
-			}
-			loadTable4();
+			for (int i = 0; i < rowsAssignment.length; i++)
+				daoAssignment.deleteAssignment((String) tblAssignment.getValueAt(rowsAssignment[i], 0));
+			refresh();
 			JOptionPane.showMessageDialog(this, "Xóa phân công thành công");
+			loadTable4();
+			
 		}
 		if (o.equals(btnUpdate)) {
 			if (rowAssignment == -1) {
@@ -344,7 +351,6 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		}
 		if (o.equals(btnRefresh))
 			refresh();
-
 	}
 
 	public void loadTable1() {
@@ -442,7 +448,9 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 	}
 
 	public static void main(String[] args) {
-		new AssignmentGUI().setVisible(true);
+		Employee worker = new Worker();
+		worker.setEmployeeID("NVSX00002");
+		new AssignmentGUI(worker).setVisible(true);
 	}
 
 	@Override

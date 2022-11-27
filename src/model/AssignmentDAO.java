@@ -55,7 +55,7 @@ public class AssignmentDAO {
 		int id = 0;
 		try {
 			PreparedStatement stmt = connection
-					.prepareStatement("SELECT TOP 1 MaPhanCong FROM PhanCong ORDER BY MaPhanCong DESC");
+					.prepareStatement("SELECT TOP 1 MaPhanCong FROM PhanCong ORDER BY cast(MaPhanCong as int) DESC");
 			ResultSet rs = stmt.executeQuery();
 			if (!rs.next())
 				return 1;
