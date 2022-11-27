@@ -80,11 +80,11 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		num = 29;
 		index = indexProduct = indexWorker = indexProdure = 0;
 		numWorker = numProduct = numProdure = 13;
+		getContentPane().add(getUI());
 		this.worker = daoWorker.getWorkerByID(worker.getEmployeeID());
-		getContentPane().add(tabAssignment());
 	}
 
-	public Component tabAssignment() {
+	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pnAssignment = new JPanel();
 		pnAssignment.setSize(1200, 690);

@@ -62,14 +62,15 @@ public class AccountGUI extends JFrame implements ActionListener {
 		workerDAO = new WorkerDAO();
 		listWorker = new ArrayList<>();
 		accDAO = new AccountDAO();
+		add(getUI());
+
 		index = 0;
 		num = 30;
 		flag = false;
-		getContentPane().add(tabAccount());
 		loadTable();
 	}
 
-	public Component tabAccount() {
+	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pnAccount = new JPanel();
 		pnAccount.setSize(1200, 690);

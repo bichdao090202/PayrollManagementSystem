@@ -84,9 +84,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	private String prevState;
 	private JComboBox cmbFilterState;
 
-//	public Component getView() {
-		public ProductGUI() {
-//		}
+	public Component getUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(new Color(0,140,140));
@@ -495,10 +493,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		txtSearchProcedure.setText("ALL");
 		randomIdProduct();
 		txtIdProduct.setEditable(false);
-		
-		
-		
-//		return getContentPane();
+		return getContentPane();
 	}
 	
 

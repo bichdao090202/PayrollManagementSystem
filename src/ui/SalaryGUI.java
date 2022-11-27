@@ -88,8 +88,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private JMonthChooser mChMonth;
 	private JYearChooser yChYear;
 
-//	public Component getView() {
-	public SalaryGUI() {
+	public Component getUI() {
+//	public SalaryGUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
 		getContentPane().setBackground(new Color(0,140,140));
@@ -598,7 +598,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		});
 
 		loadListEmployee();
-//		return getContentPane();
+		return getContentPane();
 	}
 
 	public static void main(String[] args) {

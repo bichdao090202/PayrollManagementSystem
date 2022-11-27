@@ -365,7 +365,6 @@ public class ProductDAO {
 				procedure = new Produre(rs.getString("MaQuyTrinh"), rs.getString("TenQuyTrinh"), rs.getDouble("GiaQuyTrinh"),rs.getInt("ThuTuSanXuat"), rs.getString("MaSanPham"));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return procedure;
@@ -380,11 +379,10 @@ public class ProductDAO {
 			prstm.setString(1, assignmentID);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				timesheet = new TimesheetsFactory(rs.getString("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getString("MaPhanCong"));
+				timesheet = new TimesheetsFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
 				listTimesheet.add(timesheet);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return listTimesheet;

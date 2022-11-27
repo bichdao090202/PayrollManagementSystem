@@ -2,9 +2,12 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -15,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
@@ -28,6 +32,7 @@ import javax.swing.border.LineBorder;
 public class UserProfileGUI extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
+	private static final Color COLOR_HOVER = new Color(173, 217, 245);
 	private JPasswordField txtCurrentPassword;
 	private JPasswordField txtNewPassword;
 	private JPasswordField txtConfirmPassword;
@@ -36,28 +41,17 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 	private JButton btnOk;
 	private AccountDAO accountDAO;
 	private Employee employee;
+	private JButton btnLogOut;
+	private MenuGUI frame;
 
-	public static void main(String[] args) {
-		try {
-			UserProfileGUI dialog = new UserProfileGUI(new Employee());
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public UserProfileGUI(Employee employee) {
-		
+	public UserProfileGUI(Employee employee, MenuGUI frame) {
+		this.frame = frame;
 		this.employee = employee;
 		accountDAO = new AccountDAO();
 		setIconImage(new ImageIcon("images\\login\\user_profile.png").getImage());
 		setTitle("Thông tin tài khoản");
-//		this.setLocationRelativeTo(null);
-//		setAlwaysOnTop(true);
-//		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 791, 342);
-		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBackground(Color.WHITE);
 		getContentPane().setLayout(new BorderLayout());
 		contentPane.setLayout(null);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -70,7 +64,7 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		
 		JPanel panel = new JPanel();
 		panel.setForeground(new Color(102, 102, 102));
-		panel.setBackground(new Color(255, 255, 255));
+		panel.setBackground(Color.WHITE);
 		panel.setBounds(183, 11, 592, 210);
 		contentPane.add(panel);
 		panel.setLayout(new MigLayout("", "[grow][30px][grow]", "[][30px][10px][][30px][10px][][30px]"));
@@ -132,18 +126,56 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		btnChangePwd = new JButton("Đổi mật khẩu");
 		btnChangePwd.addActionListener(this);
 		btnChangePwd.setBorder(new LineBorder(new Color(0, 0, 255), 2));
-		btnChangePwd.setBackground(new Color(255, 255, 255));
+		btnChangePwd.setBackground(Color.WHITE);
 		btnChangePwd.setFocusable(false);
 		btnChangePwd.setBounds(29, 146, 126, 23);
+		btnChangePwd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnChangePwd.setBackground(COLOR_HOVER);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnChangePwd.setBackground(Color.WHITE);
+			}
+		});
 		contentPane.add(btnChangePwd);
 		
 		btnOk = new JButton("Ok");
 		btnOk.setBorder(new LineBorder(new Color(0, 0, 255), 2));
-		btnOk.setBackground(new Color(255, 255, 255));
+		btnOk.setBackground(Color.WHITE);
 		btnOk.setFocusable(false);
 		btnOk.setBounds(343, 265, 89, 23);
 		btnOk.addActionListener(this);
+		btnOk.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnOk.setBackground(COLOR_HOVER);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnOk.setBackground(Color.WHITE);
+			}
+		});
 		contentPane.add(btnOk);
+		
+		btnLogOut = new JButton("Đăng xuất");
+		btnLogOut.addActionListener(this);
+		btnLogOut.setFocusable(false);
+		btnLogOut.setBounds(29, 180, 126, 23);
+		btnLogOut.setBackground(Color.WHITE);
+		btnLogOut.setBorder(new LineBorder(new Color(0, 0, 255), 2));
+		btnLogOut.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnLogOut.setBackground(COLOR_HOVER);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnLogOut.setBackground(Color.WHITE);
+			}
+		});
+		contentPane.add(btnLogOut);
 	}
 	
 	public boolean checkResetPassword(String currentPassword, String newPassword, String confirmPassword) {
@@ -216,6 +248,21 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		if (e.getSource() == btnOk) {
 			dispose();
 		}
+		if (e.getSource() == btnLogOut) {
+			dispose();
+			frame.dispose();
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+						LoginGUI frame = new LoginGUI();
+						frame.setLocationRelativeTo(null);
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
 	}
-
 }

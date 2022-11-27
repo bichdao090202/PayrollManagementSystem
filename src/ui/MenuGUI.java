@@ -1,6 +1,5 @@
 package ui;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -20,80 +19,58 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 
 public class MenuGUI extends JFrame {
 	private static final Color COLOR = new Color(14, 85, 78);
 	private static final Color COLOR_HOVER = new Color(0, 140, 140);
 	private static final long serialVersionUID = 1L;
-	private static final Image ICON_APPLICATION = new ImageIcon("images\\icon_application.png").getImage();
 	private JPanel[] menu;
+	private Component[] content;
 	private JPanel contentPane;
 	private SideMenuPanel side;
 	private JLabel lblName;
-	private boolean click = true;
-	private JPanel pnNhanSu;
-	private JPanel pnPhongBan;
-	private JPanel pnPhanCong;
-	private JPanel pnChamCong;
-	private JPanel pnSanPham;
-	private JPanel pnLuong;
-	private JPanel pnPhanXuong;
-	private JPanel pnTaiKhoan;
-	private boolean pnNhanSuClicked = true;
-	private boolean pnPhongBanClicked = false;
-	private boolean pnPhanCongClicked = false;
-	private boolean pnChamCongClicked = false;
-	private boolean pnSanPhamClicked = false;
-	private boolean pnLuongClicked = false;
-	private boolean pnThongKeClicked = false;
-	private boolean pnTaiKhoanClicked = false;
+	private boolean showMenu = false;
+	private boolean[] arraySelectedItem;
 	private EmployeeGUI employeeGUI;
-	private Component pnContentNhanSu;
 	private TimesheetsGUI timesheetsGUI;
-	private Component pnContentChamCong;
 	private DepartmentGUI departmentGUI;
-	private Component pnContentPhongBan;
 	private ProductGUI productGUI;
-	private Component pnContentSanPham;
 	private AccountGUI accountGUI;
-	private Component pnContentAccount;
 	private AssignmentGUI assignmentGUI;
-	private Component pnContentPhanCong;
 	private SalaryGUI salaryGUI;
-	private Component pnContentSalary;
 	private FactoryGUI factoryGUI;
-	private Component pnContentFactory;
 	private JLabel lblPhanCong;
 	private JPanel pnMenu;
 	private ImageAvatar imageAvatar;
-	private Employee employee;
-	
+	private JPanel pnContent;
+
 	public MenuGUI(Employee employee) {
-		this.employee = employee;
 		timesheetsGUI = new TimesheetsGUI();
-		pnContentChamCong = timesheetsGUI.tabTimesheet();
 		employeeGUI = new EmployeeGUI();
-		pnContentNhanSu = employeeGUI.tabEmployee();
 		departmentGUI = new DepartmentGUI();
-		pnContentPhongBan = departmentGUI.tabDepartment();
 		productGUI = new ProductGUI();
-		pnContentSanPham = productGUI.getView();
 		accountGUI = new AccountGUI();
-		pnContentAccount = accountGUI.tabAccount();
-		assignmentGUI = new AssignmentGUI(employee);
-		pnContentPhanCong = assignmentGUI.tabAssignment();
+		assignmentGUI = new AssignmentGUI();
 		salaryGUI = new SalaryGUI();
-		pnContentSalary = salaryGUI.getView();
 		factoryGUI = new FactoryGUI();
-		pnContentFactory = factoryGUI.getView();
-		
+
 		menu = new JPanel[8];
-		
-		
+
+		content = new Component[8];
+		content[0] = employeeGUI.getUI();
+		content[1] = departmentGUI.getUI();
+		content[2] = factoryGUI.getUI();
+		content[3] = assignmentGUI.getUI();
+		content[4] = timesheetsGUI.getUI();
+		content[5] = productGUI.getUI();
+		content[6] = salaryGUI.getUI();
+		content[7] = accountGUI.getUI();
+
+		arraySelectedItem = new boolean[8];
+		arraySelectedItem[0] = true;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 730);
 		contentPane = new JPanel();
@@ -105,7 +82,7 @@ public class MenuGUI extends JFrame {
 		JPanel pnContainer = new JPanel();
 		contentPane.add(pnContainer);
 
-		JPanel pnContent = new JPanel();
+		pnContent = new JPanel();
 		pnContent.setBounds(64, 0, 1201, 690);
 		pnContent.setBackground(new Color(128, 128, 0));
 
@@ -119,7 +96,7 @@ public class MenuGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					UserProfileGUI dialog = new UserProfileGUI(employee);
+					UserProfileGUI dialog = new UserProfileGUI(employee, MenuGUI.this);
 					dialog.setLocationRelativeTo(null);
 					dialog.setAlwaysOnTop(true);
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -147,454 +124,264 @@ public class MenuGUI extends JFrame {
 		pnMenu.setBackground(COLOR);
 		pnMenu.setLayout(new GridLayout(8, 1, 0, 10));
 
-		pnNhanSu = new JPanel();
-		pnNhanSu.addMouseListener(new MouseAdapter() {
+		menu[0] = new JPanel();
+		menu[0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnNhanSu.setBackground(COLOR_HOVER);
+				menu[0].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnNhanSuClicked) {
-					pnNhanSu.setBackground(COLOR);
-				}
+				hoverOutItem(0);
 			}
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = true;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = false;
-				pnLuongClicked = false;
-				pnThongKeClicked = false;
-				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(COLOR_HOVER);
-				pnPhongBan.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR);
-				pnChamCong.setBackground(COLOR);
-				pnSanPham.setBackground(COLOR);
-				pnLuong.setBackground(COLOR);
-				pnPhanXuong.setBackground(COLOR);
-				pnTaiKhoan.setBackground(COLOR);
-				
-				pnContent.removeAll();
-				pnContent.add(pnContentNhanSu);
-				pnContentNhanSu.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(0);
 			}
 		});
-		pnNhanSu.setBackground(COLOR);
-		pnNhanSu.setBackground(COLOR_HOVER);
-		pnNhanSu.setSize(new Dimension(100, 100));
-		pnMenu.add(pnNhanSu);
-		pnNhanSu.setLayout(new BorderLayout(0, 0));
+		menu[0].setBackground(COLOR);
+		menu[0].setBackground(COLOR_HOVER);
+		menu[0].setSize(new Dimension(100, 100));
+		pnMenu.add(menu[0]);
+		menu[0].setLayout(new BorderLayout(0, 0));
 
 		JLabel lblNhanSu = new JLabel("NHÂN SỰ");
 		lblNhanSu.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNhanSu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNhanSu.setForeground(new Color(255, 255, 255));
-		pnNhanSu.add(lblNhanSu);
+		menu[0].add(lblNhanSu);
 
 		JLabel lblIconNhanSu = new JLabel();
 		lblIconNhanSu.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconNhanSu.setIcon(new ImageIcon("images\\side_menu\\businessman.png"));
-		pnNhanSu.add(lblIconNhanSu, BorderLayout.WEST);
+		menu[0].add(lblIconNhanSu, BorderLayout.WEST);
 
-		pnPhongBan = new JPanel();
-		pnPhongBan.addMouseListener(new MouseAdapter() {
+		menu[1] = new JPanel();
+		menu[1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnPhongBan.setBackground(COLOR_HOVER);
+				menu[1].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnPhongBanClicked) {
-					pnPhongBan.setBackground(COLOR);
-				}
+				hoverOutItem(1);
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = true;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = false;
-				pnLuongClicked = false;
-				pnThongKeClicked = false;
-				pnTaiKhoanClicked = false;
-				pnPhongBan.setBackground(COLOR_HOVER);
-				pnNhanSu.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR);
-				pnChamCong.setBackground(COLOR);
-				pnSanPham.setBackground(COLOR);
-				pnLuong.setBackground(COLOR);
-				pnPhanXuong.setBackground(COLOR);
-				pnTaiKhoan.setBackground(COLOR);
-				
-				pnContent.removeAll();
-				pnContent.add(pnContentPhongBan);
-				pnContentPhongBan.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(1);
 			}
 		});
-		pnPhongBan.setBorder(null);
-		pnPhongBan.setBackground(COLOR);
-		pnMenu.add(pnPhongBan);
-		pnPhongBan.setLayout(new BorderLayout(0, 0));
+		menu[1].setBorder(null);
+		menu[1].setBackground(COLOR);
+		pnMenu.add(menu[1]);
+		menu[1].setLayout(new BorderLayout(0, 0));
 
 		JLabel lblPhongBan = new JLabel("PHÒNG BAN");
 		lblPhongBan.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPhongBan.setForeground(new Color(255, 255, 255));
 		lblPhongBan.setHorizontalAlignment(SwingConstants.CENTER);
-		pnPhongBan.add(lblPhongBan, BorderLayout.CENTER);
+		menu[1].add(lblPhongBan, BorderLayout.CENTER);
 
 		JLabel lblIconPhongBan = new JLabel();
 		lblIconPhongBan.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconPhongBan.setIcon(new ImageIcon("images\\side_menu\\dept.png"));
-		pnPhongBan.add(lblIconPhongBan, BorderLayout.WEST);
-		
-		pnPhanXuong = new JPanel();
-		pnPhanXuong.addMouseListener(new MouseAdapter() {
+		menu[1].add(lblIconPhongBan, BorderLayout.WEST);
+
+		menu[2] = new JPanel();
+		menu[2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnPhanXuong.setBackground(COLOR_HOVER);
+				menu[2].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnThongKeClicked) {
-					pnPhanXuong.setBackground(COLOR);
-				}
+				hoverOutItem(2);
 			}
-			
+
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = false;
-				pnLuongClicked = false;
-				pnThongKeClicked = true;
-				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(COLOR);
-				pnPhongBan.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR);
-				pnChamCong.setBackground(COLOR);
-				pnSanPham.setBackground(COLOR);
-				pnLuong.setBackground(COLOR);
-				pnPhanXuong.setBackground(COLOR_HOVER);
-				pnTaiKhoan.setBackground(COLOR);
-				
-				pnContent.removeAll();
-				pnContent.add(pnContentFactory);
-				pnContentFactory.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(2);
 			}
 		});
-		pnPhanXuong.setBorder(null);
-		pnPhanXuong.setBackground(COLOR);
-		pnMenu.add(pnPhanXuong);
-		pnPhanXuong.setLayout(new BorderLayout(0, 0));
+		menu[2].setBorder(null);
+		menu[2].setBackground(COLOR);
+		pnMenu.add(menu[2]);
+		menu[2].setLayout(new BorderLayout(0, 0));
 
 		JLabel lblPhanXuong = new JLabel("PHÂN XƯỞNG");
 		lblPhanXuong.setForeground(new Color(255, 255, 255));
 		lblPhanXuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPhanXuong.setHorizontalAlignment(SwingConstants.CENTER);
-		pnPhanXuong.add(lblPhanXuong, BorderLayout.CENTER);
+		menu[2].add(lblPhanXuong, BorderLayout.CENTER);
 
 		JLabel lblIconPhanXuong = new JLabel();
 		lblIconPhanXuong.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconPhanXuong.setIcon(new ImageIcon("images\\side_menu\\factory.png"));
-		pnPhanXuong.add(lblIconPhanXuong, BorderLayout.WEST);
+		menu[2].add(lblIconPhanXuong, BorderLayout.WEST);
 
-		pnPhanCong = new JPanel();
-		pnPhanCong.addMouseListener(new MouseAdapter() {
+		menu[3] = new JPanel();
+		menu[3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnPhanCong.setBackground(COLOR_HOVER);
+				menu[3].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnPhanCongClicked) {
-					pnPhanCong.setBackground(COLOR);
-				}
+				hoverOutItem(3);
 			}
-			
+
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = true;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = false;
-				pnLuongClicked = false;
-				pnThongKeClicked = false;
-				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(COLOR);
-				pnPhongBan.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR_HOVER);
-				pnChamCong.setBackground(COLOR);
-				pnSanPham.setBackground(COLOR);
-				pnLuong.setBackground(COLOR);
-				pnPhanXuong.setBackground(COLOR);
-				pnTaiKhoan.setBackground(COLOR);
-				
-				pnContent.removeAll();
-				pnContent.add(pnContentPhanCong);
-				pnContentPhanCong.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(3);
 			}
 		});
-		pnPhanCong.setBorder(null);
-		pnPhanCong.setBackground(COLOR);
-		pnMenu.add(pnPhanCong);
-		pnPhanCong.setLayout(new BorderLayout(0, 0));
+		menu[3].setBorder(null);
+		menu[3].setBackground(COLOR);
+		pnMenu.add(menu[3]);
+		menu[3].setLayout(new BorderLayout(0, 0));
 
 		lblPhanCong = new JLabel("PHÂN CÔNG");
 		lblPhanCong.setForeground(new Color(255, 255, 255));
 		lblPhanCong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPhanCong.setHorizontalAlignment(SwingConstants.CENTER);
-		pnPhanCong.add(lblPhanCong, BorderLayout.CENTER);
+		menu[3].add(lblPhanCong, BorderLayout.CENTER);
 
 		JLabel lblIconPhanCong = new JLabel();
 		lblIconPhanCong.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconPhanCong.setIcon(new ImageIcon("images\\side_menu\\allotment.png"));
-		pnPhanCong.add(lblIconPhanCong, BorderLayout.WEST);
+		menu[3].add(lblIconPhanCong, BorderLayout.WEST);
 
-		pnChamCong = new JPanel();
-		pnChamCong.addMouseListener(new MouseAdapter() {
+		menu[4] = new JPanel();
+		menu[4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnChamCong.setBackground(COLOR_HOVER);
+				menu[4].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnChamCongClicked) {
-					pnChamCong.setBackground(COLOR);
-				}
+				hoverOutItem(4);
 			}
-			
+
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = true;
-				pnSanPhamClicked = false;
-				pnLuongClicked = false;
-				pnThongKeClicked = false;
-				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(COLOR);
-				pnPhongBan.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR);
-				pnChamCong.setBackground(COLOR_HOVER);
-				pnSanPham.setBackground(COLOR);
-				pnLuong.setBackground(COLOR);
-				pnPhanXuong.setBackground(COLOR);
-				pnTaiKhoan.setBackground(COLOR);
-				
-				pnContent.removeAll();
-				pnContent.add(pnContentChamCong);
-				pnContentChamCong.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(4);
 			}
 		});
-		pnChamCong.setBorder(null);
-		pnChamCong.setBackground(COLOR);
-		pnMenu.add(pnChamCong);
-		pnChamCong.setLayout(new BorderLayout(0, 0));
+		menu[4].setBorder(null);
+		menu[4].setBackground(COLOR);
+		pnMenu.add(menu[4]);
+		menu[4].setLayout(new BorderLayout(0, 0));
 
 		JLabel lblChamCong = new JLabel("CHẤM CÔNG");
 		lblChamCong.setForeground(new Color(255, 255, 255));
 		lblChamCong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblChamCong.setHorizontalAlignment(SwingConstants.CENTER);
-		pnChamCong.add(lblChamCong, BorderLayout.CENTER);
+		menu[4].add(lblChamCong, BorderLayout.CENTER);
 
 		JLabel lblIconChamCong = new JLabel();
 		lblIconChamCong.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconChamCong.setIcon(new ImageIcon("images\\side_menu\\timekeeping.png"));
-		pnChamCong.add(lblIconChamCong, BorderLayout.WEST);
+		menu[4].add(lblIconChamCong, BorderLayout.WEST);
 
-		pnSanPham = new JPanel();
-		pnSanPham.addMouseListener(new MouseAdapter() {
+		menu[5] = new JPanel();
+		menu[5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnSanPham.setBackground(COLOR_HOVER);
+				menu[5].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnSanPhamClicked) {
-					pnSanPham.setBackground(COLOR);
-				}
+				hoverOutItem(5);
 			}
-			
+
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = true;
-				pnLuongClicked = false;
-				pnThongKeClicked = false;
-				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(COLOR);
-				pnPhongBan.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR);
-				pnChamCong.setBackground(COLOR);
-				pnSanPham.setBackground(COLOR_HOVER);
-				pnLuong.setBackground(COLOR);
-				pnPhanXuong.setBackground(COLOR);
-				pnTaiKhoan.setBackground(COLOR);
-				pnContent.removeAll();
-				pnContent.add(pnContentSanPham);
-				pnContentSanPham.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(5);
 			}
 		});
-		pnSanPham.setBorder(null);
-		pnSanPham.setBackground(COLOR);
-		pnMenu.add(pnSanPham);
-		pnSanPham.setLayout(new BorderLayout(0, 0));
+		menu[5].setBorder(null);
+		menu[5].setBackground(COLOR);
+		pnMenu.add(menu[5]);
+		menu[5].setLayout(new BorderLayout(0, 0));
 
 		JLabel lblSanPham = new JLabel("SẢN PHẨM");
 		lblSanPham.setForeground(new Color(255, 255, 255));
 		lblSanPham.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblSanPham.setHorizontalAlignment(SwingConstants.CENTER);
-		pnSanPham.add(lblSanPham, BorderLayout.CENTER);
+		menu[5].add(lblSanPham, BorderLayout.CENTER);
 
 		JLabel lblIconSanPham = new JLabel();
 		lblIconSanPham.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconSanPham.setIcon(new ImageIcon("images\\side_menu\\product.png"));
-		pnSanPham.add(lblIconSanPham, BorderLayout.WEST);
+		menu[5].add(lblIconSanPham, BorderLayout.WEST);
 
-		pnLuong = new JPanel();
-		pnLuong.addMouseListener(new MouseAdapter() {
+		menu[6] = new JPanel();
+		menu[6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnLuong.setBackground(COLOR_HOVER);
+				menu[6].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnLuongClicked) {
-					pnLuong.setBackground(COLOR);
-				}
+				hoverOutItem(6);
 			}
-			
+
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = false;
-				pnLuongClicked = true;
-				pnThongKeClicked = false;
-				pnTaiKhoanClicked = false;
-				pnNhanSu.setBackground(COLOR);
-				pnPhongBan.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR);
-				pnChamCong.setBackground(COLOR);
-				pnSanPham.setBackground(COLOR);
-				pnLuong.setBackground(COLOR_HOVER);
-				pnPhanXuong.setBackground(COLOR);
-				pnTaiKhoan.setBackground(COLOR);
-				
-				pnContent.removeAll();
-				pnContent.add(pnContentSalary);
-				pnContentSalary.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(6);
 			}
 		});
-		pnLuong.setBorder(null);
-		pnLuong.setBackground(COLOR);
-		pnMenu.add(pnLuong);
-		pnLuong.setLayout(new BorderLayout(0, 0));
+		menu[6].setBorder(null);
+		menu[6].setBackground(COLOR);
+		pnMenu.add(menu[6]);
+		menu[6].setLayout(new BorderLayout(0, 0));
 
 		JLabel lblLuong = new JLabel("LƯƠNG");
 		lblLuong.setForeground(new Color(255, 255, 255));
 		lblLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblLuong.setHorizontalAlignment(SwingConstants.CENTER);
-		pnLuong.add(lblLuong, BorderLayout.CENTER);
+		menu[6].add(lblLuong, BorderLayout.CENTER);
 
 		JLabel lblIconLuong = new JLabel();
 		lblIconLuong.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconLuong.setIcon(new ImageIcon("images\\side_menu\\salary.png"));
-		pnLuong.add(lblIconLuong, BorderLayout.WEST);
+		menu[6].add(lblIconLuong, BorderLayout.WEST);
 
-		pnTaiKhoan = new JPanel();
-		pnTaiKhoan.addMouseListener(new MouseAdapter() {
+		menu[7] = new JPanel();
+		menu[7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pnTaiKhoan.setBackground(COLOR_HOVER);
+				menu[7].setBackground(COLOR_HOVER);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!pnTaiKhoanClicked) {
-					pnTaiKhoan.setBackground(COLOR);
-				}
+				hoverOutItem(7);
 			}
-			
+
 			public void mouseClicked(MouseEvent e) {
-				pnNhanSuClicked = false;
-				pnPhongBanClicked = false;
-				pnPhanCongClicked = false;
-				pnChamCongClicked = false;
-				pnSanPhamClicked = false;
-				pnLuongClicked = false;
-				pnThongKeClicked = false;
-				pnTaiKhoanClicked = true;
-				pnNhanSu.setBackground(COLOR);
-				pnPhongBan.setBackground(COLOR);
-				pnPhanCong.setBackground(COLOR);
-				pnChamCong.setBackground(COLOR);
-				pnSanPham.setBackground(COLOR);
-				pnLuong.setBackground(COLOR);
-				pnPhanXuong.setBackground(COLOR);
-				pnTaiKhoan.setBackground(COLOR_HOVER);
-				
-				pnContent.removeAll();
-				pnContent.add(pnContentAccount);
-				pnContentAccount.setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				clickMenu();
+				clickMenuItem(7);
 			}
 		});
-		pnTaiKhoan.setBorder(null);
-		pnTaiKhoan.setBackground(COLOR);
-		pnMenu.add(pnTaiKhoan);
-		pnTaiKhoan.setLayout(new BorderLayout(0, 0));
+		menu[7].setBorder(null);
+		menu[7].setBackground(COLOR);
+		pnMenu.add(menu[7]);
+		menu[7].setLayout(new BorderLayout(0, 0));
 
 		JLabel lblTaiKhoan = new JLabel("TÀI KHOẢN");
 		lblTaiKhoan.setForeground(new Color(255, 255, 255));
 		lblTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTaiKhoan.setHorizontalAlignment(SwingConstants.CENTER);
-		pnTaiKhoan.add(lblTaiKhoan, BorderLayout.CENTER);
+		menu[7].add(lblTaiKhoan, BorderLayout.CENTER);
 
 		JLabel lblIconTaiKhoan = new JLabel();
 		lblIconTaiKhoan.setBorder(new EmptyBorder(0, 10, 0, 0));
 		lblIconTaiKhoan.setIcon(new ImageIcon("images\\side_menu\\account.png"));
-		pnTaiKhoan.add(lblIconTaiKhoan, BorderLayout.WEST);
+		menu[7].add(lblIconTaiKhoan, BorderLayout.WEST);
 
 		JLabel lblVersion = new JLabel("Version 1.0.1");
 		lblVersion.setBounds(10, 666, 190, 14);
@@ -614,43 +401,64 @@ public class MenuGUI extends JFrame {
 		pnSideMenu.add(lblName);
 		pnSideMenu.add(lblVersion);
 		pnSideMenu.add(pnMenu);
-		
-		JLabel lblNewLabel = new JLabel();
-		lblNewLabel.setIcon(new ImageIcon("images\\side_menu\\menu.png"));
-		lblNewLabel.addMouseListener(new MouseAdapter()  { 
+
+		JLabel lblShowMenu = new JLabel();
+		lblShowMenu.setIcon(new ImageIcon("images\\side_menu\\menu.png"));
+		lblShowMenu.addMouseListener(new MouseAdapter() {
 			@Override
-		    public void mouseClicked(MouseEvent e)  {  
-				clickMenu();
-		    }  
-		}); 
-		lblNewLabel.setBounds(10, 11, 46, 14);
-		pnSideMenu.add(lblNewLabel);
+			public void mouseClicked(MouseEvent e) {
+				clickShowMenu();
+			}
+		});
+		lblShowMenu.setBounds(10, 11, 46, 14);
+		pnSideMenu.add(lblShowMenu);
 		pnContainer.add(pnContent);
 		pnContent.setLayout(new BorderLayout(0, 0));
 
-		
-		pnContent.add(pnContentNhanSu);
-		pnContentNhanSu.setVisible(true);
+		pnContent.add(content[0]);
+		content[0].setVisible(true);
 	}
 
-	public void clickMenu() {
+	public void clickShowMenu() {
 		side.onSideMenu();
-    	if (click) {
-    		imageAvatar.setVisible(true);
-	    	lblName.setVisible(true);
-	    	click = false;
-    	}else {
-    		imageAvatar.setVisible(false);
-	    	lblName.setVisible(false);
-	    	click = true;
-    	}
+		if (!showMenu) {
+			imageAvatar.setVisible(true);
+			lblName.setVisible(true);
+			showMenu = true;
+		} else {
+			imageAvatar.setVisible(false);
+			lblName.setVisible(false);
+			showMenu = false;
+		}
 	}
-	
-	public void showInfoEmployee() {
-		JFrame frame = new JFrame();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		
+
+	public void clickMenuItem(int index) {
+		if (showMenu) {
+			side.onSideMenu();
+			imageAvatar.setVisible(false);
+			lblName.setVisible(false);
+			showMenu = false;
+		}
+		for (int j = 0; j < arraySelectedItem.length; j++) {
+			if (index != j) {
+				arraySelectedItem[j] = false;
+				menu[j].setBackground(COLOR);
+			} else {
+				arraySelectedItem[j] = true;
+				menu[j].setBackground(COLOR_HOVER);
+				pnContent.removeAll();
+				pnContent.add(content[j]);
+				content[j].setVisible(true);
+				pnContent.repaint();
+				pnContent.revalidate();
+				pnMenu.repaint();
+			}
+		}
 	}
-	
+
+	public void hoverOutItem(int index) {
+		if (!arraySelectedItem[index]) {
+			menu[index].setBackground(COLOR);
+		}
+	}
 }

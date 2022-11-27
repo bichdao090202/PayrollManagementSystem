@@ -53,7 +53,7 @@ import java.awt.event.ItemEvent;
 
 public class TimesheetsGUI extends JFrame implements ActionListener {
 	public TimesheetsGUI() {
-		tabTimesheet();
+//		tabTimesheet();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -118,7 +118,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		});
 	}
 
-	public Component tabTimesheet() {
+	public Component getUI() {
 		sdfDate = new SimpleDateFormat("yyyy-MM-dd");
 		sdfTime = new SimpleDateFormat("HH:mm:ss");
 		timesheetsDAO = new TimesheetsDAO();

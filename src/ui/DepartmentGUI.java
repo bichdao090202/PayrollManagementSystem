@@ -57,10 +57,10 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		listDep = depDAO.getAllDepartments();
 		num = 30;
 		index = 0;
-		getContentPane().add(tabDepartment());
+		getContentPane().add(getUI());
 	}
 
-	public Component tabDepartment() {
+	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pnDepartment = new JPanel();
 		pnDepartment.setSize(1200, 690);
