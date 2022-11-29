@@ -55,7 +55,6 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.text.pdf.BaseFont;
 import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
 
 import model.SalaryDAO;
 import entity.TimesheetsOffice;
