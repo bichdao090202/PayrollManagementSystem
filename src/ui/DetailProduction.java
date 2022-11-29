@@ -3,6 +3,7 @@ package ui;
 import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import model.DetailPRoductionDAO;
@@ -135,14 +136,41 @@ public class DetailProduction extends JFrame implements ActionListener {
 			setVisible(false);
 		}
 		else {
-			detail.setDetailProductionID(txtDetailProductionId.getText());
-			if(!txtQuantityProduction.getText().isEmpty()) {
-				detail.setQuantityProduction(Integer.parseInt(txtQuantityProduction.getText()));
+			if(regexDetailProduct()) {
+				detail.setDetailProductionID(txtDetailProductionId.getText());
+				if(!txtQuantityProduction.getText().isEmpty()) {
+					detail.setQuantityProduction(Integer.parseInt(txtQuantityProduction.getText()));
+				}
+				detail.setState(cmbState.getSelectedItem().toString());
+				detail.setProductId(productID);
+				setVisible(false);
 			}
-			detail.setState(cmbState.getSelectedItem().toString());
-			detail.setProductId(productID);
-			setVisible(false);
 		}
 		
+	}
+	
+	public boolean regexDetailProduct() {
+		String announce = "";
+		String regexIdProduction = "^" + productID + "[0-9]{2}$";
+		String regexQuantityProduct = "(^[0-9]*)+";
+		if (txtDetailProductionId.getText().isEmpty() || txtQuantityProduction.getText().isEmpty()) {
+			announce += "Vui lòng nhập đầy đủ thông tin quy trình";
+		} else {
+			if (!txtDetailProductionId.getText().matches(regexIdProduction)) {
+				announce += "Mã chi tiết sản xuất phải bắt đầu bằng mã sản phẩm và theo sau 2 chữ số \n";
+				txtDetailProductionId.requestFocus();
+				txtDetailProductionId.selectAll();
+			} else if (!txtQuantityProduction.getText().matches(regexQuantityProduct)) {
+				announce += "Số lượng phải lớn hơn hoặc bằng 0";
+				txtQuantityProduction.requestFocus();
+				txtQuantityProduction.selectAll();
+			}
+		}
+		if (announce.isEmpty()) {
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(this, announce);
+			return false;
+		}
 	}
 }
