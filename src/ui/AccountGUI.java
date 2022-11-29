@@ -3,13 +3,13 @@ package ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,18 +24,20 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import entity.Account;
-import entity.Department;
 import entity.Employee;
 import entity.EmployeeOffice;
 import entity.Worker;
 import model.AccountDAO;
-import model.DepartmentDAO;
 import model.EmployeeOfficeDAO;
-import model.WorkerDAO;
 import net.miginfocom.swing.MigLayout;
 
 public class AccountGUI extends JFrame implements ActionListener {
+	
+	private static final long serialVersionUID = 1L;
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
+	private final String stringCb[] = { "Nhân viên hành chính", "Nhân viên sản xuất" };
+	private final String[] row0 = { "Mã nhân viên", "Họ tên", "Phòng ban/phân xưởng", "Chức vụ", "Tài khoản" };
 	private JButton btnCreateAccount;
 	private JButton btnDeleteAccount;
 	private JButton btnSetDefaultPassword;
@@ -44,25 +46,22 @@ public class AccountGUI extends JFrame implements ActionListener {
 	private JTable tblAccount;
 	private DefaultTableModel tblModel;
 	private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
-	private ArrayList<Account> ds;
 	private int index, num;
-	private List<Account> newList;
 	private EmployeeOfficeDAO empOffDAO;
 	private List<Employee> listEmpOff;
-	private WorkerDAO workerDAO;
 	private List<Worker> listWorker;
 	private AccountDAO accDAO;
 	private JComboBox<String> cbEmployee;
 	private boolean flag; // flag = true -> search; flag = false -> don't
 
 	public AccountGUI() {
+		getContentPane().setBackground(Color.WHITE);
 		setSize(1200, 690);
 		empOffDAO = new EmployeeOfficeDAO();
 		listEmpOff = new ArrayList<>();
-		workerDAO = new WorkerDAO();
 		listWorker = new ArrayList<>();
 		accDAO = new AccountDAO();
-		add(getUI());
+		getContentPane().add(getUI());
 
 		index = 0;
 		num = 30;
@@ -73,11 +72,13 @@ public class AccountGUI extends JFrame implements ActionListener {
 	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pnAccount = new JPanel();
+		pnAccount.setBackground(Color.WHITE);
 		pnAccount.setSize(1200, 690);
 		pnAccount.setLayout(null);
 		System.setProperty("Color", "0X000099");
 
 		JPanel pnSearch = new JPanel();
+		pnSearch.setBackground(Color.WHITE);
 		pnSearch.setLocation(10, 11);
 		pnSearch.setSize(494, 49);
 		pnSearch.setLayout(new MigLayout("", "[]10[]10[]", "[]"));
@@ -85,55 +86,121 @@ public class AccountGUI extends JFrame implements ActionListener {
 		pnSearch.add(txtSearch = new JTextField());
 		txtSearch.setColumns(30);
 		pnSearch.add(btnSearch = new JButton());
-		Image imgSearch = new ImageIcon("images\\operations\\search.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnSearch.setIcon(new ImageIcon(imgSearch));
+		btnSearch.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSearch.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSearch.setBackground(Color.WHITE);
+			}
+		});
+		btnSearch.setBorder(new LineBorder(COLOR, 3, false));
+		btnSearch.setForeground(COLOR);
+		btnSearch.setBackground(Color.WHITE);
+		btnSearch.setIcon(new ImageIcon("images\\operations\\search.png"));
 
 		JPanel pnButton = new JPanel();
-		pnButton.setLocation(527, 10);
+		pnButton.setBackground(Color.WHITE);
+		pnButton.setLocation(528, 4);
 		pnButton.setSize(401, 50);
-		pnButton.setLayout(new MigLayout("", "[]20[]20[]", ""));
+		pnButton.setLayout(null);
 		pnButton.add(btnCreateAccount = new JButton("Cấp tài khoản"));
-		pnButton.add(btnDeleteAccount = new JButton("Xóa tài khoản"));
-		pnButton.add(btnSetDefaultPassword = new JButton("Đặt lại mật khẩu"));
+		btnCreateAccount.setBounds(14, 11, 114, 28);
+		btnCreateAccount.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnCreateAccount.setBackground(COLOR_HOVER);
+			}
 
-		String stringCb[] = { "Nhân viên hành chính", "Nhân viên sản xuất" };
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnCreateAccount.setBackground(Color.WHITE);
+			}
+		});
+		btnCreateAccount.setBorder(new LineBorder(COLOR, 3, false));
+		btnCreateAccount.setForeground(COLOR);
+		btnCreateAccount.setBackground(Color.WHITE);
+		
+		pnButton.add(btnDeleteAccount = new JButton("Xóa tài khoản"));
+		btnDeleteAccount.setLocation(142, 11);
+		btnDeleteAccount.setSize(114, 28);
+		btnDeleteAccount.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDeleteAccount.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDeleteAccount.setBackground(Color.WHITE);
+			}
+		});
+		btnDeleteAccount.setBorder(new LineBorder(COLOR, 3, false));
+		btnDeleteAccount.setForeground(COLOR);
+		btnDeleteAccount.setBackground(Color.WHITE);
+		pnButton.add(btnSetDefaultPassword = new JButton("Đặt lại mật khẩu"));
+		btnSetDefaultPassword.setLocation(270, 11);
+		btnSetDefaultPassword.setSize(114, 28);
+		btnSetDefaultPassword.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSetDefaultPassword.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSetDefaultPassword.setBackground(Color.WHITE);
+			}
+		});
+		btnSetDefaultPassword.setBorder(new LineBorder(COLOR, 3, false));
+		btnSetDefaultPassword.setForeground(COLOR);
+		btnSetDefaultPassword.setBackground(Color.WHITE);
+		
 		cbEmployee = new JComboBox<>(stringCb);
+		cbEmployee.setBackground(Color.WHITE);
 		cbEmployee.setLocation(978, 15);
 		cbEmployee.setSize(172, 30);
 
 		JPanel pnTable = new JPanel();
+		pnTable.setBackground(Color.WHITE);
 		pnTable.setSize(1184, 531);
 		pnTable.setLocation(0, 70);
-		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách nhân viên"));
-		tblAccount = new JTable();
-		String[] row0 = { "Mã nhân viên", "Họ tên", "Phòng ban/phân xưởng", "Chức vụ", "Tài khoản" };
+		pnTable.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách nhân viên"));
+		
 		tblAccount = new JTable(tblModel = new DefaultTableModel(row0, 0));
+		tblAccount.getTableHeader().setOpaque(false);
+		tblAccount.getTableHeader().setBackground(COLOR);
+		tblAccount.getTableHeader().setForeground(Color.WHITE);
 		JScrollPane sp = new JScrollPane(tblAccount);
 		sp.setPreferredSize(new Dimension(1165, 503));
 		pnTable.add(sp);
 
 		JPanel pnChangePage = new JPanel();
+		pnChangePage.setBackground(Color.WHITE);
 		pnChangePage.setLocation(10, 604);
 		pnChangePage.setSize(1164, 36);
+		
 		pnChangePage.add(btnGoFirstPage = new JButton());
-		Image imgFirst = new ImageIcon("images\\jump page\\first.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnGoFirstPage.setIcon(new ImageIcon(imgFirst));
+		btnGoFirstPage.setBackground(Color.WHITE);
+		btnGoFirstPage.setIcon(new ImageIcon("images\\jump page\\first.png"));
+		
 		pnChangePage.add(btnPreviousPage = new JButton());
-		Image imgPrevious = new ImageIcon("images\\jump page\\previous.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnPreviousPage.setIcon(new ImageIcon(imgPrevious));
+		btnPreviousPage.setBackground(Color.WHITE);
+		btnPreviousPage.setIcon(new ImageIcon("images\\jump page\\previous.png"));
+		
 		pnChangePage.add(btnNextPage = new JButton());
-		Image imgNext = new ImageIcon("images\\jump page\\next.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnNextPage.setIcon(new ImageIcon(imgNext));
-		pnChangePage.add(btnGoLastPage = new JButton(""));
-		Image imgLast = new ImageIcon("images\\jump page\\last.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnGoLastPage.setIcon(new ImageIcon(imgLast));
+		btnNextPage.setBackground(Color.WHITE);
+		btnNextPage.setIcon(new ImageIcon("images\\jump page\\next.png"));
+		
+		pnChangePage.add(btnGoLastPage = new JButton());
+		btnGoLastPage.setBackground(Color.WHITE);
+		btnGoLastPage.setIcon(new ImageIcon("images\\jump page\\last.png"));
 
 		JPanel pnNorth = new JPanel();
+		pnNorth.setBackground(Color.WHITE);
 		pnNorth.setLocation(0, 0);
 		pnNorth.setSize(1184, 60);
 		pnNorth.setLayout(null);
@@ -217,7 +284,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 				}
 				loadTable();
 				JOptionPane.showMessageDialog(this, "Cấp tài khoản thành công");
-			}			
+			}
 		}
 		if (o.equals(btnDeleteAccount)) {
 			int row = tblAccount.getSelectedRow();
@@ -238,7 +305,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 				}
 				loadTable();
 				JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công");
-			}			
+			}
 		}
 		if (o.equals(btnSetDefaultPassword)) {
 			int row = tblAccount.getSelectedRow();
@@ -259,7 +326,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 				}
 				loadTable();
 				JOptionPane.showMessageDialog(this, "Tài khoản đã đổi về mật khẩu mặc định");
-			}			
+			}
 		}
 		if (o.equals(cbEmployee)) {
 			flag = false;
@@ -300,9 +367,10 @@ public class AccountGUI extends JFrame implements ActionListener {
 		if (cbEmployee.getSelectedItem().toString().equals("Nhân viên hành chính")) {
 			listEmpOff = accDAO.getListAccountOffice();
 			if (flag == true) {
-				String search = txtSearch.getText();				
+				String search = txtSearch.getText().trim();
 				for (int i = 0; i < listEmpOff.size(); i++)
-					if (!listEmpOff.get(i).getEmployeeID().toLowerCase().contains(search.toLowerCase()) && !listEmpOff.get(i).getName().toLowerCase().contains(search.toLowerCase())) {
+					if (!listEmpOff.get(i).getEmployeeID().toLowerCase().contains(search.toLowerCase())
+							&& !listEmpOff.get(i).getName().toLowerCase().contains(search.toLowerCase())) {
 						listEmpOff.remove(listEmpOff.get(i));
 						i--;
 					}
@@ -311,9 +379,10 @@ public class AccountGUI extends JFrame implements ActionListener {
 		} else {
 			listWorker = accDAO.getListAccountWorker();
 			if (flag == true) {
-				String search = txtSearch.getText();
+				String search = txtSearch.getText().trim();
 				for (int i = 0; i < listWorker.size(); i++)
-					if (!listWorker.get(i).getEmployeeID().toLowerCase().contains(search.toLowerCase()) && !listWorker.get(i).getName().toLowerCase().contains(search.toLowerCase())) {
+					if (!listWorker.get(i).getEmployeeID().toLowerCase().contains(search.toLowerCase())
+							&& !listWorker.get(i).getName().toLowerCase().contains(search.toLowerCase())) {
 						listWorker.remove(listWorker.get(i));
 						i--;
 					}
@@ -321,7 +390,5 @@ public class AccountGUI extends JFrame implements ActionListener {
 			loadListWorker();
 		}
 	}
-
-
 
 }

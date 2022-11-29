@@ -53,7 +53,7 @@ import java.awt.event.ItemEvent;
 
 public class TimesheetsGUI extends JFrame implements ActionListener {
 	public TimesheetsGUI() {
-//		tabTimesheet();
+		getUI();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -179,6 +179,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		panel_2.add(lblNewLabel_17, "cell 0 3,alignx left,aligny top");
 
 		dateJoin = new JDateChooser();
+		dateJoin.getCalendarButton().setBackground(Color.WHITE);
 		dateJoin.setMaxSelectableDate(CURRENT_DATE);
 		dateJoin.setDate(CURRENT_DATE);
 		dateJoin.setDateFormatString("yyyy-MM-dd");
@@ -296,6 +297,8 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		panel_4.add(textFieldHint, "cell 0 0,grow");
 
 		JDateChooser dateChooser_3 = new JDateChooser();
+		dateChooser_3.setDateFormatString("yyyy-MM-dd");
+		dateChooser_3.getCalendarButton().setBackground(Color.WHITE);
 		dateChooser_3.setMinimumSize(new Dimension(150, 20));
 		panel_4.add(dateChooser_3, "cell 1 0,grow");
 
@@ -318,6 +321,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		pnInputEmpOffice.add(lblEmpOffice, "cell 0 0,alignx left");
 
 		cboEmpOffice = new JComboBox<String>();
+		cboEmpOffice.setBackground(Color.WHITE);
 		cboEmpOffice.setModel(new DefaultComboBoxModel<String>(employeeOfficeDAO.getAllName().toArray(String[]::new)));
 		pnInputEmpOffice.add(cboEmpOffice, "cell 1 0,growx");
 
@@ -325,6 +329,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		pnInputEmpOffice.add(lblCheckInAM, "cell 3 0");
 
 		spinHourCheckInAM = new JSpinField(0, 23);
+		spinHourCheckInAM.setBackground(Color.WHITE);
 		spinHourCheckInAM.setMaximum(9);
 		spinHourCheckInAM.setMinimum(7);
 		spinHourCheckInAM.setValue(8);
@@ -498,6 +503,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		pnSearchEmpOffice.add(lblNewLabel, "cell 0 0,alignx left,aligny center");
 
 		cboSearchEmpOffice = new JComboBox<String>();
+		cboSearchEmpOffice.setBackground(Color.WHITE);
 		cboSearchEmpOffice
 				.setModel(new DefaultComboBoxModel<String>(timesheetsDAO.getAllNameEmp().toArray(String[]::new)));
 		pnSearchEmpOffice.add(cboSearchEmpOffice, "cell 1 0,growx,aligny center");
@@ -506,6 +512,7 @@ public class TimesheetsGUI extends JFrame implements ActionListener {
 		pnSearchEmpOffice.add(lblNewLabel_1, "cell 3 0,alignx left,aligny center");
 
 		dateSearchEmpOffice = new JDateChooser();
+		dateSearchEmpOffice.getCalendarButton().setBackground(Color.WHITE);
 		dateSearchEmpOffice.setMaxSelectableDate(CURRENT_DATE);
 		dateSearchEmpOffice.setDate(CURRENT_DATE);
 		dateSearchEmpOffice.setDateFormatString("yyyy-MM-dd");

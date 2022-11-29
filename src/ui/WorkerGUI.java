@@ -6,24 +6,17 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.Format;
-import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,14 +34,13 @@ import com.toedter.calendar.JDateChooser;
 
 import custom_field.JTextFieldHint;
 import entity.Employee;
-import entity.EmployeeOffice;
 import entity.Worker;
-import model.DepartmentDAO;
-import model.EmployeeOfficeDAO;
 import model.FactoryDAO;
 import model.TeamDAO;
 import model.WorkerDAO;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class WorkerGUI extends JFrame implements ActionListener {
 	public WorkerGUI() {
@@ -56,6 +48,8 @@ public class WorkerGUI extends JFrame implements ActionListener {
 	}
 
 	private static final long serialVersionUID = 1L;
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private JPanel contentPane;
 	private String[] gender = new String[] { "Nam", "Nữ" };
 	private String[] bankName = new String[] { "BIDV" };
@@ -66,7 +60,6 @@ public class WorkerGUI extends JFrame implements ActionListener {
 	private JTextField txtAccountNumber;
 	private JTextField txtBeneficiany;
 	private JTextField txtSpeciality;
-	private EmployeeOfficeDAO employeeOfficeDAO;
 	private WorkerDAO workerDAO;
 	private FactoryDAO factoryDAO;
 	private TeamDAO teamDAO;
@@ -103,14 +96,14 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		});
 	}
 
+	@SuppressWarnings("deprecation")
 	public Component getUI() {
-		employeeOfficeDAO = new EmployeeOfficeDAO();
 		workerDAO = new WorkerDAO();
 		factoryDAO = new FactoryDAO();
 		teamDAO = new TeamDAO();
 
 		dcmNameFactory = new DefaultComboBoxModel<String>(factoryDAO.getAllNameFactory().toArray(String[]::new));
-		dcmPosition = new DefaultComboBoxModel<String>(new String[] { "Công nhân", "Tổ trưởng", "Quản đốc" });
+		dcmPosition = new DefaultComboBoxModel<String>(new String[] { "Công Nhân", "Tổ Trưởng", "Quản Đốc" });
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 690);
@@ -122,7 +115,7 @@ public class WorkerGUI extends JFrame implements ActionListener {
 
 		JPanel pnInputInfo = new JPanel();
 		pnInputInfo.setBackground(Color.WHITE);
-		pnInputInfo.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Nhập thông tin nhân sự"));
+		pnInputInfo.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Nhập thông tin nhân sự"));
 		contentPane.add(pnInputInfo, BorderLayout.NORTH);
 		pnInputInfo.setLayout(new MigLayout("", "[][grow][][grow][][grow]", "[][][][grow][]"));
 
@@ -135,11 +128,12 @@ public class WorkerGUI extends JFrame implements ActionListener {
 
 		JLabel lblDob = new JLabel("Ngày sinh");
 		pnInputInfo.add(lblDob, "cell 2 0,alignx left");
-		
+
 		minSelectedDate = new Date();
 		minSelectedDate.setYear(minSelectedDate.getYear() - 18);
 
 		txtDob = new JDateChooser();
+		txtDob.getCalendarButton().setBackground(Color.WHITE);
 		txtDob.setMaxSelectableDate(minSelectedDate);
 		txtDob.setDate(minSelectedDate);
 		txtDob.setDateFormatString("yyyy-MM-dd");
@@ -148,7 +142,8 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		JLabel lblGender = new JLabel("Giới tính");
 		pnInputInfo.add(lblGender, "cell 4 0,alignx left");
 
-		cboGender = new JComboBox(gender);
+		cboGender = new JComboBox<>(gender);
+		cboGender.setBackground(Color.WHITE);
 		pnInputInfo.add(cboGender, "cell 5 0,growx");
 
 		JLabel lblAddress = new JLabel("Địa chỉ");
@@ -176,7 +171,8 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		JLabel lblBankName = new JLabel("Ngân hàng");
 		pnInputInfo.add(lblBankName, "cell 0 2,alignx left");
 
-		cboBankName = new JComboBox(bankName);
+		cboBankName = new JComboBox<>(bankName);
+		cboBankName.setBackground(Color.WHITE);
 		pnInputInfo.add(cboBankName, "cell 1 2,growx");
 
 		JLabel lblAccountNumber = new JLabel("STK");
@@ -196,7 +192,8 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		JLabel lblFactory = new JLabel("Phân xưởng");
 		pnInputInfo.add(lblFactory, "cell 0 4,alignx trailing");
 
-		cboFactory = new JComboBox();
+		cboFactory = new JComboBox<>();
+		cboFactory.setBackground(Color.WHITE);
 		cboFactory.addActionListener(this);
 		cboFactory.setModel(dcmNameFactory);
 		pnInputInfo.add(cboFactory, "cell 1 4,growx");
@@ -204,13 +201,15 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		JLabel lblTeam = new JLabel("Tổ");
 		pnInputInfo.add(lblTeam, "cell 2 4,alignx left");
 
-		cboTeam = new JComboBox();
+		cboTeam = new JComboBox<>();
+		cboTeam.setBackground(Color.WHITE);
 		pnInputInfo.add(cboTeam, "cell 3 4,growx");
 
 		JLabel lblPosition = new JLabel("Chức vụ");
 		pnInputInfo.add(lblPosition, "cell 4 4,alignx left");
 
-		cboPosition = new JComboBox();
+		cboPosition = new JComboBox<>();
+		cboPosition.setBackground(Color.WHITE);
 		cboPosition.setModel(dcmPosition);
 		pnInputInfo.add(cboPosition, "cell 5 4,growx");
 
@@ -221,38 +220,109 @@ public class WorkerGUI extends JFrame implements ActionListener {
 
 		JPanel pnOperations = new JPanel();
 		pnOperations.setBackground(Color.WHITE);
-		FlowLayout fl_pnOperations = (FlowLayout) pnOperations.getLayout();
-		fl_pnOperations.setHgap(60);
 		pnOutputInfo.add(pnOperations, BorderLayout.NORTH);
 
 		btnAdd = new JButton("Thêm");
+		btnAdd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnAdd.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnAdd.setBackground(Color.WHITE);
+			}
+		});
+		btnAdd.setBorder(new LineBorder(COLOR, 3, false));
+		btnAdd.setForeground(COLOR);
+		btnAdd.setBackground(Color.WHITE);
 		btnAdd.addActionListener(this);
 		btnAdd.setToolTipText("Thêm nhân viên");
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAdd.setFocusable(false);
-		pnOperations.add(btnAdd);
 
 		btnUpdate = new JButton("Cập nhật");
+		btnUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdate.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdate.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdate.setBorder(new LineBorder(COLOR, 3, false));
+		btnUpdate.setForeground(COLOR);
+		btnUpdate.setBackground(Color.WHITE);
 		btnUpdate.addActionListener(this);
 		btnUpdate.setIcon(new ImageIcon("images\\operations\\update.png"));
 		btnUpdate.setFocusable(false);
-		pnOperations.add(btnUpdate);
 
 		btnDelete = new JButton("Xóa");
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDelete.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDelete.setBackground(Color.WHITE);
+			}
+		});
+		btnDelete.setBorder(new LineBorder(COLOR, 3, false));
+		btnDelete.setForeground(COLOR);
+		btnDelete.setBackground(Color.WHITE);
 		btnDelete.setFocusable(false);
 		btnDelete.addActionListener(this);
 		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
-		pnOperations.add(btnDelete);
 
 		btnReset = new JButton("Làm mới");
+		btnReset.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnReset.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnReset.setBackground(Color.WHITE);
+			}
+		});
+		btnReset.setBorder(new LineBorder(COLOR, 3, false));
+		btnReset.setForeground(COLOR);
+		btnReset.setBackground(Color.WHITE);
 		btnReset.addActionListener(this);
 		btnReset.setIcon(new ImageIcon("images\\operations\\refresh.png"));
 		btnReset.setFocusable(false);
-		pnOperations.add(btnReset);
+		GroupLayout gl_pnOperations = new GroupLayout(pnOperations);
+		gl_pnOperations.setHorizontalGroup(gl_pnOperations.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnOperations.createSequentialGroup().addGap(317).addComponent(btnAdd).addGap(60)
+						.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE).addGap(60)
+						.addComponent(btnDelete).addGap(59).addComponent(btnReset)
+						.addContainerGap(316, Short.MAX_VALUE)));
+		gl_pnOperations.setVerticalGroup(gl_pnOperations.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnOperations.createSequentialGroup()
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(gl_pnOperations.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_pnOperations.createParallelGroup(Alignment.BASELINE, false)
+										.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 38,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 32,
+												GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap()));
+		gl_pnOperations.linkSize(SwingConstants.VERTICAL, new Component[] { btnAdd, btnUpdate, btnDelete, btnReset });
+		gl_pnOperations.linkSize(SwingConstants.HORIZONTAL, new Component[] { btnAdd, btnUpdate, btnDelete, btnReset });
+		pnOperations.setLayout(gl_pnOperations);
 
 		JPanel pnTable = new JPanel();
 		pnTable.setBackground(Color.WHITE);
-		pnTable.setBorder(new TitledBorder(new LineBorder(Color.BLUE, 2, true), "Danh sách nhân viên sản xuất"));
+		pnTable.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách nhân viên sản xuất"));
 		pnOutputInfo.add(pnTable);
 		pnTable.setLayout(new BorderLayout(0, 0));
 
@@ -271,9 +341,6 @@ public class WorkerGUI extends JFrame implements ActionListener {
 				if (rowSelected >= 0) {
 					String employeeID = tblWorker.getValueAt(rowSelected, 0).toString();
 					Employee emp = workerDAO.getWorker(employeeID);
-					cboFactory.setModel(dcmNameFactory);
-					lblFactory.setText("Phân xưởng");
-					cboTeam.setEnabled(true);
 					String factory = ((String) cboFactory.getSelectedItem()).substring(0, 4);
 					dcmNameTeam = new DefaultComboBoxModel<String>(
 							teamDAO.getAllNameTeam(factory).toArray(String[]::new));
@@ -286,19 +353,23 @@ public class WorkerGUI extends JFrame implements ActionListener {
 					} else {
 						cboGender.setSelectedIndex(1);
 					}
-
-					txtPhone.setText(emp.getPhone());
-					txtAddress.setText(emp.getAddress());
-					txtAccountNumber.setText(emp.getAccountNumber());
-					txtBeneficiany.setText(emp.getBeneficiany());
-					txtSpeciality.setText(((Worker) emp).getSpeciality());
+					
+					txtPhone.setText(emp.getPhone().trim());
+					txtAddress.setText(emp.getAddress().trim());
+					txtAccountNumber.setText(emp.getAccountNumber().trim());
+					txtBeneficiany.setText(emp.getBeneficiany().trim());
+					txtSpeciality.setText(((Worker) emp).getSpeciality().trim());
 					String nameFactory = factoryDAO.getNameFactoryByTeamID(((Worker) emp).getTeamID());
 					cboFactory.setSelectedItem(nameFactory);
+					cboPosition.setSelectedItem(((Worker)emp).getPosition());
 					String nameTeam = teamDAO.getNameTeamByID(((Worker) emp).getTeamID());
 					cboTeam.setSelectedItem(nameTeam);
 				}
 			}
 		});
+		tblWorker.getTableHeader().setOpaque(false);
+		tblWorker.getTableHeader().setBackground(COLOR);
+		tblWorker.getTableHeader().setForeground(Color.WHITE);
 
 		JScrollPane scrollTable = new JScrollPane(tblWorker);
 		pnTable.add(scrollTable);
@@ -314,15 +385,17 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		pnSearch.add(txtSearch);
 
 		btnSearch = new JButton();
+		btnSearch.setBackground(Color.WHITE);
 		btnSearch.setFocusable(false);
 		btnSearch.setIcon(new ImageIcon("images\\operations\\search.png"));
+		btnSearch.addActionListener(this);
 		pnSearch.add(btnSearch);
 
 		setContentPane(contentPane);
 
 		loadDataToTable(workerDAO.getAllWorker());
 		getTeamByFactory();
-		
+
 		return contentPane;
 	}
 
@@ -341,37 +414,51 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		tblWorker.setModel(dtmWorker);
 	}
 
-	public boolean checkInput(String input, String patternStr) {
-		Pattern pattern = Pattern.compile(patternStr);
-		Matcher macth = pattern.matcher(input);
-		return macth.matches();
-	}
-	
 	public void getTeamByFactory() {
 		String factory = ((String) cboFactory.getSelectedItem()).substring(0, 4);
 		dcmNameTeam = new DefaultComboBoxModel<String>(teamDAO.getAllNameTeam(factory).toArray(String[]::new));
 		cboTeam.setModel(dcmNameTeam);
 	}
 
-	public String validInput(String name, Date birthday, String address, String phone, String accountNumber,
-			String beneficiany, Double salary) {
+	public void showMessage(JTextField txt, String message) {
+		txt.requestFocus();
+		txt.selectAll();
+		JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.NO_OPTION, null);
+	}
+
+	public boolean validInput(String name, Date birthday, String address, String phone, String accountNumber,
+			String beneficiany, String speciality) {
 		if (name.isBlank() | birthday == null | address.isEmpty() | phone.isEmpty() | accountNumber.isEmpty()
-				| beneficiany.isEmpty() | salary == 0) {
-			return "Hãy nhập đầy đủ thông tin trước";
+				| beneficiany.isEmpty() | speciality.isEmpty()) {
+			showMessage(txtName, "Hãy nhập đầy đủ thông tin trước");
+			return false;
 		} else {
 			if (!name.matches(
-					"^[A-Z][a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+(\s[A-Z][a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+)*")) {
-				return "Tên gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa";
-			} else if (!address.matches("^[A-Za-z0-9][A-Za-z0-9/,\s]")) {
-				return "Địa chỉ bắt đầu bằng chữ cái, chữ số có thể chứa \"/\" hoặc dấu \",\"";
-			} else if (phone.matches("^[0-9][0-9]{9}$")) {
-				return "Số điện thoại gồm 10 số và bắt đầu bằng số 0";
-			} else if (accountNumber.matches("^[A-Z][A-Z\s]$")) {
-				return "Tên người thụ hưởng chỉ chứa chữ cái và phải viết in hoa";
-			} else if (salary == 0) {
-				return "Lương phải lớn hơn 0";
-			} else {
-				return "";
+					"^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+(\s[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+)*")) {
+				showMessage(txtName,
+						"Tên gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa");
+				return false;
+			} else if (!address.matches(
+					"^[A-Za-z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ][A-Za-z0-9,\sàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ]+$")) {
+				showMessage(txtAddress, "Địa chỉ bắt đầu bằng chữ cái, chữ số có thể chứa \"/\" hoặc dấu \",\"");
+				return false;
+			} else if (!phone.matches("^0[35789][0-9]{8}")) {
+				showMessage(txtPhone, "Số điện thoại gồm 10 số và bắt đầu bằng 03, 05, 07, 08 hoặc 09");
+				return false;
+			} else if (!beneficiany.matches(
+					"^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+(\s[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+)*")) {
+				showMessage(txtBeneficiany,
+						"Tên người thụ hưởng gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa");
+				return false;
+			}  else if (!accountNumber.matches("^[0-9]{9,14}$")) {
+				showMessage(txtAccountNumber, "Số tài khoản ngân hàng từ 9 đến 14 chữ số.");
+				return false;
+			} else if (!speciality.matches("^[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ][A-Za-z\sàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ]+$")) {
+				showMessage(txtSpeciality, "Chuyên môn chỉ chứa chữ cái");
+				return false;
+			}
+			else {
+				return true;
 			}
 		}
 	}
@@ -392,25 +479,28 @@ public class WorkerGUI extends JFrame implements ActionListener {
 			String bankName = (String) cboBankName.getSelectedItem();
 			String accountNumber = txtAccountNumber.getText().trim();
 			String beneficiany = txtBeneficiany.getText().trim();
-			String speciality = txtSpeciality.getText();
+			String speciality = txtSpeciality.getText().trim();
 			String teamID = cboTeam.getSelectedItem().toString().substring(0, 6);
+			String position = (String) cboPosition.getSelectedItem();
 			Employee employee = new Worker(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany,
-					speciality, teamID);
-			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				if (workerDAO.addWorker(employee)) {
-					loadDataToTable(workerDAO.getAllWorker());
-					JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.", "Thông báo xóa",
-							JOptionPane.NO_OPTION, null);
-				} else {
-					JOptionPane.showMessageDialog(this, "Thêm nhân viên không thành công.", "Thông báo",
-							JOptionPane.NO_OPTION, null);
+					speciality, teamID, position);
+			if (validInput(name, birthday, address, phone, accountNumber, beneficiany, speciality)) {
+				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					if (workerDAO.addWorker(employee)) {
+						loadDataToTable(workerDAO.getAllWorker());
+						JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.", "Thông báo xóa",
+								JOptionPane.NO_OPTION, null);
+					} else {
+						JOptionPane.showMessageDialog(this, "Thêm nhân viên không thành công.", "Thông báo",
+								JOptionPane.NO_OPTION, null);
+					}
 				}
 			}
 		}
 		if (e.getSource() == btnUpdate) {
 			int rowSelectedWorker = tblWorker.getSelectedRow();
-			String name = txtName.getText();
+			String name = txtName.getText().trim();
 			boolean gender;
 			if (cboGender.getSelectedItem() == "Nam") {
 				gender = true;
@@ -418,28 +508,34 @@ public class WorkerGUI extends JFrame implements ActionListener {
 				gender = false;
 			}
 			Date birthday = txtDob.getDate();
-			String address = txtAddress.getText();
-			String phone = txtPhone.getText();
+			String address = txtAddress.getText().trim();
+			String phone = txtPhone.getText().trim();
 			String bankName = (String) cboBankName.getSelectedItem();
-			String accountNumber = txtAccountNumber.getText();
-			String beneficiany = txtBeneficiany.getText();
+			String accountNumber = txtAccountNumber.getText().trim();
+			String beneficiany = txtBeneficiany.getText().trim();
+			String position = (String) cboPosition.getSelectedItem();
 			if (rowSelectedWorker >= 0) {
-				String speciality = txtSpeciality.getText();
+				String speciality = txtSpeciality.getText().trim();
 				String teamID = cboTeam.getSelectedItem().toString().substring(0, 6);
 				String empID = tblWorker.getValueAt(rowSelectedWorker, 0).toString();
 				Employee employee = new Worker(empID, name, gender, birthday, address, phone, bankName, accountNumber,
-						beneficiany, speciality, teamID);
-				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (workerDAO.updateWorker(employee)) {
-						loadDataToTable(workerDAO.getAllWorker());
-						JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công.", "Thông báo",
-								JOptionPane.NO_OPTION, null);
-					} else {
-						JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên không thành công.",
-								"Thông báo", JOptionPane.NO_OPTION, null);
+						beneficiany, speciality, teamID, position);
+				if (validInput(name, birthday, address, phone, accountNumber, beneficiany, speciality)) {
+					if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						if (workerDAO.updateWorker(employee)) {
+							loadDataToTable(workerDAO.getAllWorker());
+							JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
+						} else {
+							JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên không thành công.",
+									"Thông báo", JOptionPane.NO_OPTION, null);
+						}
 					}
 				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên trước.", "Thông báo", JOptionPane.NO_OPTION,
+						null);
 			}
 
 		}
@@ -479,7 +575,14 @@ public class WorkerGUI extends JFrame implements ActionListener {
 			cboPosition.setSelectedIndex(0);
 		}
 		if (e.getSource() == btnSearch) {
-
+			String strSearch = txtSearch.getText().trim();
+			if (strSearch.isEmpty()) {
+				loadDataToTable(workerDAO.getAllWorker());
+			} else if (strSearch.matches("^[A-Za-z]*[0-9]+$")) {
+				loadDataToTable(workerDAO.searchEmployeeByEmployeeID(strSearch));
+			} else {
+				loadDataToTable(workerDAO.searchEmployeeByName(strSearch));
+			}
 		}
 		if (e.getSource() == cboFactory) {
 			getTeamByFactory();
