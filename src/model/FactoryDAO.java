@@ -353,4 +353,28 @@ public class FactoryDAO {
 		}
 		return name;
     }
+	
+	public int checkOrderFactoryPresent() {
+		List<Factory> listFactory = getListFactory();
+		int order = 0;
+		for(Factory factory : listFactory) {
+			int orderIdFactory = Integer.parseInt(factory.getFactoryID().substring(2));
+			if(orderIdFactory > order) {
+				order = orderIdFactory;
+			}
+		}
+		return order;
+	}
+	
+	public int checkOrderTeamOfFactory(String factoryID) {
+		List<TeamProducing> listTeam = getListTeamByIdFactory(factoryID);
+		int order = 0;
+		for(TeamProducing team : listTeam) {
+			int orderTeam = Integer.parseInt(team.getTeamID().substring(4));
+			if(orderTeam > order) {
+				order = orderTeam;
+			}
+		}
+		return order;
+	}
 }

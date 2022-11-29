@@ -13,8 +13,10 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -35,6 +37,23 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.text.pdf.BaseFont;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
@@ -78,8 +97,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private JComboBox<String> cmbTypeEmployee;
 	private JComboBox<String> cmbFactoryDeparment;
 	private DefaultTableModel dtmListEmployee;
-	private JButton btnExportSalary;
-	private JDateChooser dateBirthDayEmployee;
+	private JButton btnExportListSalary;
+	private JTextField dateBirthDayEmployee;
 	private SalaryDAO Dao_Salary = new SalaryDAO();
 	private DefaultComboBoxModel<String> dcmbTypeEmployee;
 	private DefaultComboBoxModel<String> dcmbPosition;
@@ -87,23 +106,26 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private DefaultComboBoxModel<String> dcmbFactoryDeparment;
 	private JMonthChooser mChMonth;
 	private JYearChooser yChYear;
+	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	private JButton btnExportSalary;
+	public static final String fontString = "C:\\Windows\\Fonts\\arial.ttf";
 
 	public Component getUI() {
 //	public SalaryGUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
-		getContentPane().setBackground(new Color(0,140,140));
+//		getContentPane().setBackground(new Color(0,140,140));
 
 		JPanel pnlTopSalary = new JPanel();
-		pnlTopSalary.setBackground(new Color(0,140,140));
-		pnlTopSalary.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Nhập thôn tin",
-				TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
+//		pnlTopSalary.setBackground(new Color(0,140,140));
+		pnlTopSalary.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Nhập thôn tin",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlTopSalary.setBounds(10, 10, 924, 150);
 		getContentPane().add(pnlTopSalary);
 		pnlTopSalary.setLayout(null);
 
 		JLabel lblNoteIdEmployee = new JLabel("Nhập mã nhân viên :");
-		lblNoteIdEmployee.setForeground(Color.WHITE);
+		lblNoteIdEmployee.setForeground(Color.BLACK);
 		lblNoteIdEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNoteIdEmployee.setBounds(43, 30, 116, 13);
 		pnlTopSalary.add(lblNoteIdEmployee);
@@ -121,29 +143,29 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTopSalary.add(btnSearchIdEmployee);
 
 		JPanel pnlFilterInformation = new JPanel();
-		pnlFilterInformation.setBackground(new Color(0,140,140));
-		pnlFilterInformation.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Lọc", TitledBorder.LEADING,
-				TitledBorder.TOP, null, Color.WHITE));
+//		pnlFilterInformation.setBackground(new Color(0,140,140));
+		pnlFilterInformation.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Lọc", TitledBorder.LEADING,
+				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlFilterInformation.setBounds(10, 53, 904, 87);
 		pnlTopSalary.add(pnlFilterInformation);
 		pnlFilterInformation.setLayout(null);
 
 		JLabel lblTypeEmployee = new JLabel("Loại nhân sự:");
-		lblTypeEmployee.setForeground(Color.WHITE);
+		lblTypeEmployee.setForeground(Color.BLACK);
 		lblTypeEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTypeEmployee.setBounds(36, 35, 85, 13);
 		pnlFilterInformation.add(lblTypeEmployee);
 
 		cmbTypeEmployee = new JComboBox<String>();
 		dcmbTypeEmployee = new DefaultComboBoxModel<String>(
-				new String[] { "All", "Nhân viên sản xuất", "Nhân viên hành chính" });
+				new String[] { "Tất cả nhân viên", "Nhân viên sản xuất", "Nhân viên hành chính" });
 		cmbTypeEmployee.setModel(dcmbTypeEmployee);
 		cmbTypeEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		cmbTypeEmployee.setBounds(120, 35, 145, 21);
 		pnlFilterInformation.add(cmbTypeEmployee);
 
 		JLabel lblFactoryDeparment = new JLabel("PX/PB:");
-		lblFactoryDeparment.setForeground(Color.WHITE);
+		lblFactoryDeparment.setForeground(Color.BLACK);
 		lblFactoryDeparment.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblFactoryDeparment.setBounds(355, 35, 50, 13);
 		pnlFilterInformation.add(lblFactoryDeparment);
@@ -157,7 +179,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		dcmbPosition = new DefaultComboBoxModel<String>(new String[] {});
 
 		JLabel lblTeam = new JLabel("Tổ :");
-		lblTeam.setForeground(Color.WHITE);
+		lblTeam.setForeground(Color.BLACK);
 		lblTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTeam.setBounds(664, 35, 31, 13);
 		pnlFilterInformation.add(lblTeam);
@@ -179,9 +201,9 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTopSalary.add(yChYear);
 
 		JPanel pnlTableSalary = new JPanel();
-		pnlTableSalary.setBackground(new Color(0,140,140));
-		pnlTableSalary.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Bảng lương",
-				TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
+//		pnlTableSalary.setBackground(new Color(0,140,140));
+		pnlTableSalary.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Bảng lương",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlTableSalary.setBounds(10, 170, 1166, 473);
 		getContentPane().add(pnlTableSalary);
 		pnlTableSalary.setLayout(null);
@@ -191,11 +213,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTableSalary.add(scrListEmployee);
 
 		tblListEmployee = new JTable();
-		tblListEmployee.setBackground(new Color(0,140,140));
-		tblListEmployee.setForeground(Color.WHITE);
-		tblListEmployee.setGridColor(Color.WHITE);
+//		tblListEmployee.setBackground(new Color(0,140,140));
+		tblListEmployee.setForeground(Color.BLACK);
+		tblListEmployee.setGridColor(new Color(0,140,140));
 		tblListEmployee.setRowHeight(25);
-		tblListEmployee.setBorder(new LineBorder(Color.WHITE));
+		tblListEmployee.setBorder(new LineBorder(new Color(0,140,140)));
 		JTableHeader tblHeaderListEmployee = tblListEmployee.getTableHeader();
 		tblHeaderListEmployee.setBackground(new Color(14,85,78));
 		tblHeaderListEmployee.setForeground(Color.WHITE);
@@ -212,15 +234,15 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		scrListEmployee.setViewportView(tblListEmployee);
 
 		JPanel pnlDetailSalary = new JPanel();
-		pnlDetailSalary.setBackground(new Color(0,140,140));
-		pnlDetailSalary.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Thông tin bảng lương",
-				TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
+//		pnlDetailSalary.setBackground(new Color(0,140,140));
+		pnlDetailSalary.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Thông tin bảng lương",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlDetailSalary.setBounds(604, 27, 552, 436);
 		pnlTableSalary.add(pnlDetailSalary);
 		pnlDetailSalary.setLayout(null);
 
 		JLabel lblIdEmployee = new JLabel("Mã nhân viên :");
-		lblIdEmployee.setForeground(Color.WHITE);
+		lblIdEmployee.setForeground(Color.BLACK);
 		lblIdEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdEmployee.setBounds(10, 25, 86, 13);
 		pnlDetailSalary.add(lblIdEmployee);
@@ -228,11 +250,12 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtIdEmployee = new JTextField();
 		txtIdEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtIdEmployee.setBounds(106, 25, 136, 19);
+		txtIdEmployee.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtIdEmployee);
 		txtIdEmployee.setColumns(10);
 
 		JLabel lblNameEmployee = new JLabel("Tên nhân viên :");
-		lblNameEmployee.setForeground(Color.WHITE);
+		lblNameEmployee.setForeground(Color.BLACK);
 		lblNameEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameEmployee.setBounds(10, 65, 86, 13);
 		pnlDetailSalary.add(lblNameEmployee);
@@ -241,10 +264,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNameEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtNameEmployee.setColumns(10);
 		txtNameEmployee.setBounds(106, 65, 136, 19);
+		txtNameEmployee.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtNameEmployee);
 
 		JLabel lblGenderEmployee = new JLabel("Giới tính :");
-		lblGenderEmployee.setForeground(Color.WHITE);
+		lblGenderEmployee.setForeground(Color.BLACK);
 		lblGenderEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblGenderEmployee.setBounds(10, 105, 86, 13);
 		pnlDetailSalary.add(lblGenderEmployee);
@@ -253,16 +277,17 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtGenderEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtGenderEmployee.setColumns(10);
 		txtGenderEmployee.setBounds(106, 105, 136, 19);
+		txtGenderEmployee.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtGenderEmployee);
 
 		JLabel lblBirthDay = new JLabel("Ngày sinh :");
-		lblBirthDay.setForeground(Color.WHITE);
+		lblBirthDay.setForeground(Color.BLACK);
 		lblBirthDay.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblBirthDay.setBounds(10, 145, 86, 13);
 		pnlDetailSalary.add(lblBirthDay);
 
 		JLabel lblPhonenumberEmployee = new JLabel("Số điện thoại :");
-		lblPhonenumberEmployee.setForeground(Color.WHITE);
+		lblPhonenumberEmployee.setForeground(Color.BLACK);
 		lblPhonenumberEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblPhonenumberEmployee.setBounds(10, 185, 86, 13);
 		pnlDetailSalary.add(lblPhonenumberEmployee);
@@ -271,10 +296,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtPhonenumberEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtPhonenumberEmployee.setColumns(10);
 		txtPhonenumberEmployee.setBounds(106, 185, 136, 19);
+		txtPhonenumberEmployee.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtPhonenumberEmployee);
 
 		JLabel lblNameBank = new JLabel("Tên ngân hàng :");
-		lblNameBank.setForeground(Color.WHITE);
+		lblNameBank.setForeground(Color.BLACK);
 		lblNameBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameBank.setBounds(288, 25, 102, 13);
 		pnlDetailSalary.add(lblNameBank);
@@ -283,10 +309,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNameBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtNameBank.setColumns(10);
 		txtNameBank.setBounds(406, 25, 136, 19);
+		txtNameBank.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtNameBank);
 
 		JLabel lblSTKBank = new JLabel("Số tài khoản :");
-		lblSTKBank.setForeground(Color.WHITE);
+		lblSTKBank.setForeground(Color.BLACK);
 		lblSTKBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblSTKBank.setBounds(288, 65, 102, 13);
 		pnlDetailSalary.add(lblSTKBank);
@@ -295,10 +322,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtSTKBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSTKBank.setColumns(10);
 		txtSTKBank.setBounds(406, 65, 136, 19);
+		txtSTKBank.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtSTKBank);
 
 		JLabel lblNameOwnerBank = new JLabel("Người hưởng thụ :");
-		lblNameOwnerBank.setForeground(Color.WHITE);
+		lblNameOwnerBank.setForeground(Color.BLACK);
 		lblNameOwnerBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNameOwnerBank.setBounds(288, 105, 102, 13);
 		pnlDetailSalary.add(lblNameOwnerBank);
@@ -307,10 +335,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNameOwnerBank.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtNameOwnerBank.setColumns(10);
 		txtNameOwnerBank.setBounds(406, 105, 136, 19);
+		txtNameOwnerBank.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtNameOwnerBank);
 
 		JLabel lblSpecializePosition = new JLabel("Chuyên môn/Chức vụ:");
-		lblSpecializePosition.setForeground(Color.WHITE);
+		lblSpecializePosition.setForeground(Color.BLACK);
 		lblSpecializePosition.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblSpecializePosition.setBounds(274, 145, 128, 13);
 		pnlDetailSalary.add(lblSpecializePosition);
@@ -319,10 +348,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtSpecializePosition.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSpecializePosition.setColumns(10);
 		txtSpecializePosition.setBounds(406, 145, 136, 19);
+		txtSpecializePosition.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtSpecializePosition);
 
 		JLabel lblIdTeamIdDeparment = new JLabel("Mã tổ/Mã PB:");
-		lblIdTeamIdDeparment.setForeground(Color.WHITE);
+		lblIdTeamIdDeparment.setForeground(Color.BLACK);
 		lblIdTeamIdDeparment.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIdTeamIdDeparment.setBounds(274, 185, 128, 13);
 		pnlDetailSalary.add(lblIdTeamIdDeparment);
@@ -331,10 +361,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtIdTeamIdDeparment.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtIdTeamIdDeparment.setColumns(10);
 		txtIdTeamIdDeparment.setBounds(406, 185, 136, 19);
+		txtIdTeamIdDeparment.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtIdTeamIdDeparment);
 
 		JLabel lblAddressEmployee = new JLabel("Địa chỉ :");
-		lblAddressEmployee.setForeground(Color.WHITE);
+		lblAddressEmployee.setForeground(Color.BLACK);
 		lblAddressEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblAddressEmployee.setBounds(10, 225, 63, 13);
 		pnlDetailSalary.add(lblAddressEmployee);
@@ -343,14 +374,16 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtAddressEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtAddressEmployee.setColumns(10);
 		txtAddressEmployee.setBounds(106, 225, 436, 19);
+		txtAddressEmployee.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtAddressEmployee);
 
-		dateBirthDayEmployee = new JDateChooser();
+		dateBirthDayEmployee = new JTextField();
 		dateBirthDayEmployee.setBounds(106, 145, 136, 19);
+		dateBirthDayEmployee.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(dateBirthDayEmployee);
 
 		JLabel lblNumberOfWorkDay = new JLabel("Số ngày làm :");
-		lblNumberOfWorkDay.setForeground(Color.WHITE);
+		lblNumberOfWorkDay.setForeground(Color.BLACK);
 		lblNumberOfWorkDay.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNumberOfWorkDay.setBounds(10, 265, 86, 13);
 		pnlDetailSalary.add(lblNumberOfWorkDay);
@@ -359,10 +392,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNumberOfWorkDay.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtNumberOfWorkDay.setColumns(10);
 		txtNumberOfWorkDay.setBounds(106, 265, 136, 19);
+		txtNumberOfWorkDay.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtNumberOfWorkDay);
 
 		JLabel lblNumberOfDayOff = new JLabel("Số ngày nghỉ :");
-		lblNumberOfDayOff.setForeground(Color.WHITE);
+		lblNumberOfDayOff.setForeground(Color.BLACK);
 		lblNumberOfDayOff.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNumberOfDayOff.setBounds(288, 265, 102, 13);
 		pnlDetailSalary.add(lblNumberOfDayOff);
@@ -371,10 +405,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNumberOfDayOff.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtNumberOfDayOff.setColumns(10);
 		txtNumberOfDayOff.setBounds(406, 265, 136, 19);
+		txtNumberOfDayOff.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtNumberOfDayOff);
 
 		JLabel lblTargets = new JLabel("Chỉ tiêu :");
-		lblTargets.setForeground(Color.WHITE);
+		lblTargets.setForeground(Color.BLACK);
 		lblTargets.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTargets.setBounds(10, 305, 86, 13);
 		pnlDetailSalary.add(lblTargets);
@@ -383,10 +418,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtTargets.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtTargets.setColumns(10);
 		txtTargets.setBounds(106, 305, 136, 19);
+		txtTargets.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtTargets);
 
 		JLabel lblReason = new JLabel("Lý do :");
-		lblReason.setForeground(Color.WHITE);
+		lblReason.setForeground(Color.BLACK);
 		lblReason.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblReason.setBounds(288, 305, 46, 13);
 		pnlDetailSalary.add(lblReason);
@@ -395,10 +431,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtReason.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtReason.setColumns(10);
 		txtReason.setBounds(340, 305, 200, 19);
+		txtReason.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtReason);
 
 		JLabel lblBonus = new JLabel("Tiền thưởng :");
-		lblBonus.setForeground(Color.WHITE);
+		lblBonus.setForeground(Color.BLACK);
 		lblBonus.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblBonus.setBounds(10, 345, 86, 13);
 		pnlDetailSalary.add(lblBonus);
@@ -407,10 +444,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtBonus.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtBonus.setColumns(10);
 		txtBonus.setBounds(106, 345, 136, 19);
+		txtBonus.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtBonus);
 
 		JLabel lblFine = new JLabel("Tiền phạt :");
-		lblFine.setForeground(Color.WHITE);
+		lblFine.setForeground(Color.BLACK);
 		lblFine.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblFine.setBounds(288, 345, 102, 13);
 		pnlDetailSalary.add(lblFine);
@@ -419,10 +457,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtFine.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtFine.setColumns(10);
 		txtFine.setBounds(406, 345, 136, 19);
+		txtFine.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtFine);
 
 		JLabel lblTotalSalary = new JLabel("Tổng lương :");
-		lblTotalSalary.setForeground(Color.WHITE);
+		lblTotalSalary.setForeground(Color.BLACK);
 		lblTotalSalary.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTotalSalary.setBounds(10, 385, 102, 13);
 		pnlDetailSalary.add(lblTotalSalary);
@@ -430,20 +469,25 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtTotalSalary = new JTextField();
 		txtTotalSalary.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtTotalSalary.setColumns(10);
-		txtTotalSalary.setBounds(106, 385, 436, 19);
+		txtTotalSalary.setBounds(106, 385, 296, 19);
+		txtTotalSalary.setBorder(new LineBorder(new Color(0,140,140)));
 		pnlDetailSalary.add(txtTotalSalary);
 
-		btnExportSalary = new JButton("Xuất lương");
-		btnExportSalary.setFocusable(false);
+		btnExportListSalary = new JButton("Xuất DS Lương");
+		btnExportListSalary.setFocusable(false);
+		btnExportListSalary.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnExportListSalary.setBounds(977, 68, 147, 41);
+		getContentPane().add(btnExportListSalary);
+		
+		btnExportSalary = new JButton("Xuất Lương");
 		btnExportSalary.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnExportSalary.setBounds(977, 68, 147, 41);
-		getContentPane().add(btnExportSalary);
+		btnExportSalary.setBounds(422, 380, 120, 30);
+		pnlDetailSalary.add(btnExportSalary);
 		
 		txtIdEmployee.setEditable(false);
 		txtNameEmployee.setEditable(false);
 		txtGenderEmployee.setEditable(false);
-		JTextFieldDateEditor birthDay = (JTextFieldDateEditor) dateBirthDayEmployee.getDateEditor();
-		birthDay.setEditable(false);
+		dateBirthDayEmployee.setEditable(false);
 		txtPhonenumberEmployee.setEditable(false);
 		txtAddressEmployee.setEditable(false);
 		txtNameBank.setEditable(false);
@@ -459,8 +503,14 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtTotalSalary.setEditable(false);
 		txtTargets.setEditable(false);
 		
+		btnSearchIdEmployee.setFocusPainted(false);
+		btnExportSalary.setFocusPainted(false);
+		btnExportListSalary.setFocusPainted(false);
+		
+		
 		tblListEmployee.addMouseListener(this);
 		btnSearchIdEmployee.addActionListener(this);
+		btnExportListSalary.addActionListener(this);
 		btnExportSalary.addActionListener(this);
 
 		cmbTypeEmployee.addItemListener((ItemEvent e) -> {
@@ -481,7 +531,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 						dtmListEmployee.addRow(row);
 					}
 					List<Factory> listFactory = Dao_Salary.getListFactory();
-					dcmbFactoryDeparment.addElement("AllPX");
+					dcmbFactoryDeparment.addElement("Tất cả Phân Xưởng");
 					for (Factory factory : listFactory) {
 						dcmbFactoryDeparment.addElement(factory.getFactoryID());
 					}
@@ -496,7 +546,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 						dtmListEmployee.addRow(row);
 					}
 					List<Department> listDepartment = Dao_Salary.getListDepartment();
-					dcmbFactoryDeparment.addElement("AllPB");
+					dcmbFactoryDeparment.addElement("Tất cả Phòng Ban");
 					for (Department department : listDepartment) {
 						dcmbFactoryDeparment.addElement(department.getDepartmentID());
 					}
@@ -509,13 +559,13 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		cmbFactoryDeparment.addItemListener((ItemEvent e) -> {
 			Object item = e.getItem();
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				if (dcmbFactoryDeparment.getElementAt(0).equals("AllPX")) {
+				if (dcmbFactoryDeparment.getElementAt(0).equals("Tất cả Phân Xưởng")) {
 					List<Worker> listEmployee = new ArrayList<Worker>();
 					List<TeamProducing> listTeam = Dao_Salary.getListTeamByIdFactory(item.toString());
 					deleteDataOnTableModel();
 					dcmbTeam.removeAllElements();
-					dcmbTeam.addElement("All");
-					if (item.toString() != "AllPX") {
+					dcmbTeam.addElement("Tất cả Tổ");
+					if (item.toString() != "Tất cả Phân Xưởng") {
 						deleteDataOnTableModel();
 						for (TeamProducing team : listTeam) {
 							dcmbTeam.addElement(team.getTeamID());
@@ -542,7 +592,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				} else {
 					List<EmployeeOffice> listEmployee = Dao_Salary.getListEmployeeByIdDepartment(item.toString());
 					deleteDataOnTableModel();
-					if (item.toString().equals("AllPB")) {
+					if (item.toString().equals("Tất cả Phòng Ban")) {
 						List<EmployeeOffice> ListEmployeeAdministrative = Dao_Salary.getListEmployeeAdministrative();
 						for (EmployeeOffice eAdministrative : ListEmployeeAdministrative) {
 							@SuppressWarnings("deprecation")
@@ -570,7 +620,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				// Item has been selected
 				deleteDataOnTableModel();
-				if (item.toString() != "All") {
+				if (item.toString() != "Tất cả Tổ") {
 					List<Worker> listEmployeeProductive = Dao_Salary.getListEmployeeByIdTeam(item.toString());
 					for (Worker eProductive : listEmployeeProductive) {
 						@SuppressWarnings("deprecation")
@@ -626,6 +676,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	public void formSalaryEmployeeProductive(Worker eProductive) {
 		List<TimesheetsFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int targets = 0;
 		int numberDayOfMonth = 0;
 		double bonus = 0;
@@ -650,10 +701,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		} else {
 			numberDayOfMonth = 30;
 		}
+		
 		txtIdEmployee.setText(eProductive.getEmployeeID().trim());
 		txtNameEmployee.setText(eProductive.getName().trim());
 		txtGenderEmployee.setText(eProductive.isGender() ? "Nam" : "Nữ");
-		dateBirthDayEmployee.setDate(eProductive.getBirthday());
+		dateBirthDayEmployee.setText(dateFormat.format(eProductive.getBirthday()));
 		txtPhonenumberEmployee.setText("0" + eProductive.getPhone().trim());
 		txtAddressEmployee.setText(eProductive.getAddress().trim());
 		txtNameBank.setText(eProductive.getBankName().trim());
@@ -665,11 +717,10 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNumberOfDayOff.setText(numberDayOfMonth - listTimeKeep.size() + "");
 		txtTargets.setText(targets >= 15000 ? "Đạt" : "Không đạt");
 		txtReason.setText(txtTargets.getText().equals("Không đạt") ? "Số lượng không đạt yêu cầu" : "");
-		txtBonus.setText(bonus + "");
-		txtFine.setText(fine + "");
+		txtBonus.setText(formatter.format(bonus)+"");
+		txtFine.setText(formatter.format(fine)+"");
 		
 		double salary = Double.parseDouble(Dao_Salary.totalSalaryOfE(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear())+ bonus + fine + "");
-		NumberFormat formatter = new DecimalFormat("###.#####");
 		String totalSalary = formatter.format(salary);
 		txtTotalSalary.setText(totalSalary);
 	}
@@ -682,6 +733,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	public void FormSalaryEmployeeAdministrative(EmployeeOffice eAdministrative) {
 		List<TimesheetsOffice> listTimeKeep = Dao_Salary.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int timeWorkOfMonth = 0;
 		int numberDayOfMonth = 0;
 		double bonus = 0;
@@ -710,7 +762,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtIdEmployee.setText(eAdministrative.getEmployeeID().trim());
 		txtNameEmployee.setText(eAdministrative.getName().trim());
 		txtGenderEmployee.setText(eAdministrative.isGender() ? "Nam" : "Nữ");
-		dateBirthDayEmployee.setDate(eAdministrative.getBirthday());
+		dateBirthDayEmployee.setText(dateFormat.format(eAdministrative.getBirthday()));
 		txtPhonenumberEmployee.setText("0" + eAdministrative.getPhone().trim());
 		txtAddressEmployee.setText(eAdministrative.getAddress().trim());
 		txtNameBank.setText(eAdministrative.getBankName().trim());
@@ -722,9 +774,13 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNumberOfDayOff.setText(numberDayOfMonth - listTimeKeep.size() + "");
 		txtTargets.setText(timeWorkOfMonth >= 280 ? "Đạt" : "Không đạt");
 		txtReason.setText(txtTargets.getText().equals("Không đạt") ? "Số giờ làm không đạt yêu cầu" : "");
-		txtBonus.setText(bonus + "");
-		txtFine.setText(fine + "");
-		txtTotalSalary.setText(timeWorkOfMonth * 30000 + bonus + fine + "");
+		txtBonus.setText(formatter.format(bonus) + "");
+		txtFine.setText(formatter.format(fine) + "");
+		
+		double salary = timeWorkOfMonth * 30000 + bonus + fine;
+		String totalSalary = formatter.format(salary);
+		
+		txtTotalSalary.setText(totalSalary);
 	}
 
 	@Override
@@ -795,67 +851,996 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				deleteDataOnTableModel();
 			}
 		} else if (o.equals(btnExportSalary)) {
-			String idE = "Mã nhân viên : " + txtIdEmployee.getText();
-			String nameE = "Tên nhân viên : " + txtNameEmployee.getText();
-			String gender = "Giới tính : " + txtGenderEmployee.getText();
-			SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
-			String stringDate = DateFor.format(dateBirthDayEmployee.getDate());
-			String birthDay = "Ngày sinh : " + stringDate;
-			String phonenumber = "Số điện thoại : " + txtPhonenumberEmployee.getText();
-			String address = "Địa chỉ : " + txtAddressEmployee.getText();
-			String nameBank = "Tên ngân hàng : " + txtNameBank.getText();
-			String stkBank = "Số tài khoản : " + txtSTKBank.getText();
-			String nameOwner = "Người hưởng thụ : " + txtNameOwnerBank.getText();
-			String specializePosition = "Chuyên môn/Chức vụ : " + txtSpecializePosition.getText();
-			String idTeamDepartment = "Mã tổ/Mã phòng ban : " + txtIdTeamIdDeparment.getText();
-			String numberOfWorkDay = "Số ngày làm việc : " + txtNumberOfWorkDay.getText();
-			String numberOfDayOff = "Số ngày nghỉ : " + txtNumberOfDayOff.getText();
-			String targets = "Chỉ tiêu : " + txtTargets.getText();
-			String reason = "Lý do : " + txtReason.getText();
-			String bonus = "Tiền thưởng : " + txtBonus.getText();
-			String fine = "Tiền phạt : " + txtFine.getText();
-			String totalSalary = "Tổng lương : " + txtTotalSalary.getText();
-			List<String> listInfo = new ArrayList<String>();
-			listInfo.add(idE);
-			listInfo.add(nameE);
-			listInfo.add(gender);
-			listInfo.add(birthDay);
-			listInfo.add(phonenumber);
-			listInfo.add(address);
-			listInfo.add(nameBank);
-			listInfo.add(stkBank);
-			listInfo.add(nameOwner);
-			listInfo.add(specializePosition);
-			listInfo.add(idTeamDepartment);
-			listInfo.add(numberOfWorkDay);
-			listInfo.add(numberOfDayOff);
-			listInfo.add(targets);
-			listInfo.add(reason);
-			listInfo.add(bonus);
-			listInfo.add(fine);
-			listInfo.add(totalSalary);
-
-			LocalDateTime date = LocalDateTime.now();
-
+			
 			try {
-				FileWriter fw = new FileWriter("tableSalaryEployee/salary" + date.getMonthValue() + "." + date.getYear()
-						+ "" + txtIdEmployee.getText() + ".txt");
-				BufferedWriter bw = new BufferedWriter(fw);
-				bw.write("Bảng lương " + date.getMonthValue() + "/" + date.getYear());
-				bw.newLine();
-				bw.newLine();
-				for (String s : listInfo) {
-					bw.write(s);
-					bw.newLine();
-					bw.newLine();
+				String path = "tableSalaryEployee/salary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + "." + txtIdEmployee.getText() + ".pdf";
+				PdfWriter pdfWriter = new PdfWriter(path);
+				PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+				pdfDocument.addNewPage();
+				Document document = new Document(pdfDocument);
+				pdfDocument.setDefaultPageSize(PageSize.A4);
+				
+				PdfFont fontUtf8 = PdfFontFactory.createFont(fontString, BaseFont.IDENTITY_H, true);
+				
+				
+				String nameCity = "Công Ty TNHH Group 14";
+				Paragraph paragraphNameCity = new Paragraph(nameCity);
+				paragraphNameCity.setTextAlignment(TextAlignment.CENTER);
+				paragraphNameCity.setFontSize(30f);
+				
+				String title = "PHIẾU LƯƠNG THÁNG " + (mChMonth.getMonth()+1) + "/" + yChYear.getYear();
+				Paragraph paragraphTitle = new Paragraph(title);
+				paragraphTitle.setTextAlignment(TextAlignment.CENTER);
+				paragraphTitle.setFontSize(15f);
+				paragraphTitle.setMarginTop(30f);
+				paragraphTitle.setFont(fontUtf8);
+				
+				
+				float columnWit[] = {250f,300f,50f,270f,270f}; 
+				Table table = new Table(columnWit);
+				table.setMargins(30f, 0f, 30f, 60f);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Tên nhân viên : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtNameEmployee.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Mã nhân viên : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtIdEmployee.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Ngày sinh : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(dateBirthDayEmployee.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Giới tính : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtGenderEmployee.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Số điện thoại : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtPhonenumberEmployee.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Địa chỉ : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtAddressEmployee.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Tên ngân hàng : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtNameBank.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Số tài khoản : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtSTKBank.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Người hưởng : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtNameOwnerBank.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("CM/CV : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtSpecializePosition.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Mã tổ : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtIdTeamIdDeparment.getText().contains("PX") ? txtIdTeamIdDeparment.getText() : ""))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Mã Phòng ban : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtIdTeamIdDeparment.getText().contains("PB") ? txtIdTeamIdDeparment.getText() : ""))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Số ngày làm : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtNumberOfWorkDay.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Số ngày nghỉ : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtNumberOfDayOff.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Chỉ tiêu : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtTargets.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Lý do : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtReason.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Tiền thưởng : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtBonus.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().setBorder(Border.NO_BORDER));
+				table.addCell(new Cell().add(new Paragraph("Tiền phạt : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell().add(new Paragraph(txtFine.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				//row
+				table.addCell(new Cell().add(new Paragraph("Tổng lương : "))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				table.addCell(new Cell(0, 4).add(new Paragraph(txtTotalSalary.getText()))
+						.setBorder(Border.NO_BORDER)
+						.setHeight(25f)
+						.setFont(fontUtf8)
+				);
+				
+				float columnWithComfirm[] = {280f,280f};
+				Table tblComfirm = new Table(columnWithComfirm);
+				Paragraph comfirm = new Paragraph("Xác nhận của cơ quan chức năng");
+				tblComfirm.addCell(new Cell().add(comfirm)
+						.setBorder(Border.NO_BORDER)
+						.setTextAlignment(TextAlignment.CENTER)
+						.setFont(fontUtf8)
+				);
+				tblComfirm.addCell(new Cell().add(new Paragraph("Chữ ký người nhận"))
+						.setBorder(Border.NO_BORDER)
+						.setTextAlignment(TextAlignment.CENTER)
+						.setFont(fontUtf8)
+				);
+				
+				String image = "images//logoCity.jpg";
+				ImageData imagedata = ImageDataFactory.create(image);
+				Image logo = new Image(imagedata);
+				logo.setMarginLeft(70f);
+				
+				Paragraph president = new Paragraph("GIÁM ĐỐC");
+				president.setMarginLeft(90f);
+				president.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
+				president.setFontColor(ColorConstants.RED);
+				president.setBold();
+				president.setItalic();
+				president.setFont(fontUtf8);
+				
+				
+				Paragraph sign = new Paragraph("Nguyễn Minh Quân");
+				sign.setMarginLeft(70f);
+				try {
+					sign.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(this, "Xuất lương thành công!!!");
-				bw.close();
-				fw.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				sign.setFontColor(ColorConstants.RED);
+				sign.setBold();
+				sign.setItalic();
+				sign.setFont(fontUtf8);
+				
+				document.add(paragraphNameCity);
+				document.add(paragraphTitle);
+				document.add(table);
+				document.add(tblComfirm);
+				document.add(logo);
+				document.add(president);
+				document.add(sign);
+				
+				
+				document.close();
+			} catch (FileNotFoundException ex) {
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
 
+		}
+		else if(o.equals(btnExportListSalary)) {
+			List<Worker> ListEmployeeProductive = Dao_Salary.getListEmployeeProductive();
+			List<EmployeeOffice> ListEmployeeAdministrative = Dao_Salary.getListEmployeeAdministrative();
+			
+			for(Worker worker : ListEmployeeProductive) {
+				try {
+					
+					List<TimesheetsFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					DecimalFormat formatter = new DecimalFormat("###,###,### VND");
+					int targets = 0;
+					int numberDayOfMonth = 0;
+					double bonus = 0;
+					double fine = 0;
+					for (Bonus_Discipline rd : listRD) {
+						if (rd.getAmountMoney() >= 0) {
+							bonus += rd.getAmountMoney();
+						} else {
+							fine += rd.getAmountMoney();
+						}
+					}
+					for (TimesheetsFactory time : listTimeKeep) {
+						targets += time.getQuantity();
+					}
+					LocalDate date = LocalDate.now();
+					if (date.getMonthValue() == 1 || date.getMonthValue() == 3 || date.getMonthValue() == 5
+							|| date.getMonthValue() == 7 || date.getMonthValue() == 8 || date.getMonthValue() == 10
+							|| date.getMonthValue() == 12) {
+						numberDayOfMonth = 31;
+					} else if (date.getMonthValue() == 2) {
+						numberDayOfMonth = 28;
+					} else {
+						numberDayOfMonth = 30;
+					}
+					
+					String path = "tableSalaryEployee/salary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + "." + worker.getEmployeeID() + ".pdf";
+					PdfWriter pdfWriter = new PdfWriter(path);
+					PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+					pdfDocument.addNewPage();
+					Document document = new Document(pdfDocument);
+					pdfDocument.setDefaultPageSize(PageSize.A4);
+					
+					PdfFont fontUtf8 = PdfFontFactory.createFont(fontString, BaseFont.IDENTITY_H, true);
+					
+					
+					String nameCity = "Công Ty TNHH Group 14";
+					Paragraph paragraphNameCity = new Paragraph(nameCity);
+					paragraphNameCity.setTextAlignment(TextAlignment.CENTER);
+					paragraphNameCity.setFontSize(30f);
+					
+					String title = "PHIẾU LƯƠNG THÁNG " + (mChMonth.getMonth()+1) + "/" + yChYear.getYear();
+					Paragraph paragraphTitle = new Paragraph(title);
+					paragraphTitle.setTextAlignment(TextAlignment.CENTER);
+					paragraphTitle.setFontSize(15f);
+					paragraphTitle.setMarginTop(30f);
+					paragraphTitle.setFont(fontUtf8);
+					
+					
+					float columnWit[] = {250f,300f,50f,270f,270f}; 
+					Table table = new Table(columnWit);
+					table.setMargins(30f, 0f, 30f, 60f);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Tên nhân viên : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getName()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Mã nhân viên : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getEmployeeID()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Ngày sinh : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getBirthday() + ""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Giới tính : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.isGender() ? "Nam" : "Nữ"))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Số điện thoại : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getPhone()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Địa chỉ : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getAddress()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Tên ngân hàng : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getBankName()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Số tài khoản : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getAccountNumber()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Người hưởng : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getBeneficiany()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("CM/CV : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getSpeciality()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Mã tổ : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(worker.getTeamID()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Mã Phòng ban : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Số ngày làm : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(listTimeKeep.size() + ""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Số ngày nghỉ : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph((numberDayOfMonth - listTimeKeep.size()) + ""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Chỉ tiêu : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(targets >= 15000 ? "Đạt" : "Không đạt"))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Lý do : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(targets >= 15000 ? "" : "Số lượng không đạt yêu cầu"))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Tiền thưởng : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(formatter.format(bonus)))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Tiền phạt : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(formatter.format(fine)))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					double salary = Double.parseDouble(Dao_Salary.totalSalaryOfE(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear())+ bonus + fine + "");
+					String totalSalary = formatter.format(salary);
+					table.addCell(new Cell().add(new Paragraph("Tổng lương : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell(0, 4).add(new Paragraph(totalSalary))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					float columnWithComfirm[] = {280f,280f};
+					Table tblComfirm = new Table(columnWithComfirm);
+					Paragraph comfirm = new Paragraph("Xác nhận của cơ quan chức năng");
+					tblComfirm.addCell(new Cell().add(comfirm)
+							.setBorder(Border.NO_BORDER)
+							.setTextAlignment(TextAlignment.CENTER)
+							.setFont(fontUtf8)
+					);
+					tblComfirm.addCell(new Cell().add(new Paragraph("Chữ ký người nhận"))
+							.setBorder(Border.NO_BORDER)
+							.setTextAlignment(TextAlignment.CENTER)
+							.setFont(fontUtf8)
+					);
+					
+					String image = "images//logoCity.jpg";
+					ImageData imagedata = ImageDataFactory.create(image);
+					Image logo = new Image(imagedata);
+					logo.setMarginLeft(70f);
+					
+					Paragraph president = new Paragraph("GIÁM ĐỐC");
+					president.setMarginLeft(90f);
+					president.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
+					president.setFontColor(ColorConstants.RED);
+					president.setBold();
+					president.setItalic();
+					president.setFont(fontUtf8);
+					
+					
+					Paragraph sign = new Paragraph("Nguyễn Minh Quân");
+					sign.setMarginLeft(70f);
+					try {
+						sign.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					sign.setFontColor(ColorConstants.RED);
+					sign.setBold();
+					sign.setItalic();
+					sign.setFont(fontUtf8);
+					
+					document.add(paragraphNameCity);
+					document.add(paragraphTitle);
+					document.add(table);
+					document.add(tblComfirm);
+					document.add(logo);
+					document.add(president);
+					document.add(sign);
+					
+					
+					document.close();
+				} catch (FileNotFoundException ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+			
+			for(EmployeeOffice eAdministrative : ListEmployeeAdministrative) {
+				try {
+					
+					DecimalFormat formatter = new DecimalFormat("###,###,### VND");
+					List<TimesheetsOffice> listTimeKeep = Dao_Salary.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					int timeWorkOfMonth = 0;
+					int numberDayOfMonth = 0;
+					double bonus = 0;
+					double fine = 0;
+					for (Bonus_Discipline rd : listRD) {
+						if (rd.getAmountMoney() >= 0) {
+							bonus += rd.getAmountMoney();
+						} else {
+							fine += rd.getAmountMoney();
+						}
+					}
+					for (TimesheetsOffice time : listTimeKeep) {
+						timeWorkOfMonth += (time.getCheckOutAM().getHours() - time.getCheckInAM().getHours())
+								+ (time.getCheckOutPM().getHours() - time.getCheckInPM().getHours());
+					}
+					LocalDate date = LocalDate.now();
+					if (date.getMonthValue() == 1 || date.getMonthValue() == 3 || date.getMonthValue() == 5
+							|| date.getMonthValue() == 7 || date.getMonthValue() == 8 || date.getMonthValue() == 10
+							|| date.getMonthValue() == 12) {
+						numberDayOfMonth = 31;
+					} else if (date.getMonthValue() == 2) {
+						numberDayOfMonth = 28;
+					} else {
+						numberDayOfMonth = 30;
+					}
+					
+					String path = "tableSalaryEployee/salary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + "." + eAdministrative.getEmployeeID() + ".pdf";
+					PdfWriter pdfWriter = new PdfWriter(path);
+					PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+					pdfDocument.addNewPage();
+					Document document = new Document(pdfDocument);
+					pdfDocument.setDefaultPageSize(PageSize.A4);
+					
+					PdfFont fontUtf8 = PdfFontFactory.createFont(fontString, BaseFont.IDENTITY_H, true);
+					
+					
+					String nameCity = "Công Ty TNHH Group 14";
+					Paragraph paragraphNameCity = new Paragraph(nameCity);
+					paragraphNameCity.setTextAlignment(TextAlignment.CENTER);
+					paragraphNameCity.setFontSize(30f);
+					
+					String title = "PHIẾU LƯƠNG THÁNG " + (mChMonth.getMonth()+1) + "/" + yChYear.getYear();
+					Paragraph paragraphTitle = new Paragraph(title);
+					paragraphTitle.setTextAlignment(TextAlignment.CENTER);
+					paragraphTitle.setFontSize(15f);
+					paragraphTitle.setMarginTop(30f);
+					paragraphTitle.setFont(fontUtf8);
+					
+					
+					float columnWit[] = {250f,300f,50f,270f,270f}; 
+					Table table = new Table(columnWit);
+					table.setMargins(30f, 0f, 30f, 60f);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Tên nhân viên : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getName()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Mã nhân viên : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getEmployeeID()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Ngày sinh : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getBirthday() + ""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Giới tính : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.isGender() ? "Nam" : "Nữ"))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Số điện thoại : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getPhone()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Địa chỉ : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getAddress()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Tên ngân hàng : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getBankName()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Số tài khoản : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getAccountNumber()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Người hưởng : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getBeneficiany()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("CM/CV : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getPosition()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Mã tổ : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Mã Phòng ban : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(eAdministrative.getDepartmentID()))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Số ngày làm : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(listTimeKeep.size() + ""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Số ngày nghỉ : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph((numberDayOfMonth - listTimeKeep.size()) + ""))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Chỉ tiêu : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(timeWorkOfMonth >= 280 ? "Đạt" : "Không đạt"))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Lý do : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(timeWorkOfMonth >= 280 ? "" : "Số giờ làm không đạt yêu cầu"))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					table.addCell(new Cell().add(new Paragraph("Tiền thưởng : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(formatter.format(bonus)))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().setBorder(Border.NO_BORDER));
+					table.addCell(new Cell().add(new Paragraph("Tiền phạt : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell().add(new Paragraph(formatter.format(fine)))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					//row
+					double salary = timeWorkOfMonth * 30000 + bonus + fine;
+					String totalSalary = formatter.format(salary);
+					table.addCell(new Cell().add(new Paragraph("Tổng lương : "))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					table.addCell(new Cell(0, 4).add(new Paragraph(totalSalary))
+							.setBorder(Border.NO_BORDER)
+							.setHeight(25f)
+							.setFont(fontUtf8)
+					);
+					
+					float columnWithComfirm[] = {280f,280f};
+					Table tblComfirm = new Table(columnWithComfirm);
+					Paragraph comfirm = new Paragraph("Xác nhận của cơ quan chức năng");
+					tblComfirm.addCell(new Cell().add(comfirm)
+							.setBorder(Border.NO_BORDER)
+							.setTextAlignment(TextAlignment.CENTER)
+							.setFont(fontUtf8)
+					);
+					tblComfirm.addCell(new Cell().add(new Paragraph("Chữ ký người nhận"))
+							.setBorder(Border.NO_BORDER)
+							.setTextAlignment(TextAlignment.CENTER)
+							.setFont(fontUtf8)
+					);
+					
+					String image = "images//logoCity.jpg";
+					ImageData imagedata = ImageDataFactory.create(image);
+					Image logo = new Image(imagedata);
+					logo.setMarginLeft(70f);
+					
+					Paragraph president = new Paragraph("GIÁM ĐỐC");
+					president.setMarginLeft(90f);
+					president.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
+					president.setFontColor(ColorConstants.RED);
+					president.setBold();
+					president.setItalic();
+					president.setFont(fontUtf8);
+					
+					
+					Paragraph sign = new Paragraph("Nguyễn Minh Quân");
+					sign.setMarginLeft(70f);
+					try {
+						sign.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					sign.setFontColor(ColorConstants.RED);
+					sign.setBold();
+					sign.setItalic();
+					sign.setFont(fontUtf8);
+					
+					document.add(paragraphNameCity);
+					document.add(paragraphTitle);
+					document.add(table);
+					document.add(tblComfirm);
+					document.add(logo);
+					document.add(president);
+					document.add(sign);
+					
+					
+					document.close();
+				} catch (FileNotFoundException ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
 		}
 	}
 
