@@ -9,10 +9,9 @@ public class ConnectDB {
 	private static ConnectDB instance;
 	
 	public ConnectDB() {
-		String url = "jdbc:sqlserver://localhost:1433;databaseName=PayrollManagementSystem";
+		String url = "jdbc:sqlserver://localhost:1433;databaseName=PayrollManagementSystem2";
 		String user = "sa";
-//		String pwd = "sa";
-		String pwd = "123456789";
+		String pwd = "sa";
 		try {
 			connection = DriverManager.getConnection(url, user, pwd);
 		} catch (SQLException e) {
