@@ -4,12 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -32,9 +30,12 @@ import entity.Employee;
 import model.DepartmentDAO;
 import net.miginfocom.swing.MigLayout;
 
-public class DepartmentGUI extends JFrame implements ActionListener, MouseListener {
+public class DepartmentGUI extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
+	private final String[] row1 = { "Mã nhân viên", "Tên nhân viên"};
 	private JButton btnCreate;
 	private JButton btnDelete;
 	private JButton btnUpdate;
@@ -51,6 +52,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 	private List<Department> listDep;
 
 	public DepartmentGUI() {
+		getContentPane().setBackground(Color.WHITE);
 		setSize(1200, 690);
 		depDAO = new DepartmentDAO();
 		listDep = new ArrayList<>();
@@ -63,101 +65,190 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pnDepartment = new JPanel();
+		pnDepartment.setBackground(Color.WHITE);
 		pnDepartment.setSize(1200, 690);
 
 		JPanel pnInformation = new JPanel();
-		pnInformation.setSize(486, 63);
-		pnInformation.setLocation(10, 11);
+		pnInformation.setBackground(Color.WHITE);
+		pnInformation.setSize(730, 63);
+		pnInformation.setLocation(0, 11);
 		System.setProperty("Color", "0X000099");
 		pnInformation.setBorder(
-				new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Nhập thông tin phòng ban"));
-		pnInformation.setLayout(new MigLayout());
+				new TitledBorder(new LineBorder(COLOR, 2, true), "Nhập thông tin phòng ban"));
+		pnInformation.setLayout(new MigLayout("", "[][grow]", "[]"));
 		pnInformation.add(new JLabel("Tên phòng ban:   "));
+		
 		txtName = new JTextField();
-		pnInformation.add(txtName);
 		txtName.setColumns(50);
+		pnInformation.add(txtName, "growx");
 
 		JPanel pnButton = new JPanel();
-		pnButton.setSize(537, 42);
-		pnButton.setLocation(564, 21);
-		FlowLayout fl_pnButton = new FlowLayout();
-		fl_pnButton.setHgap(20);
-		pnButton.setLayout(fl_pnButton);
+		pnButton.setBackground(Color.WHITE);
+		pnButton.setSize(435, 63);
+		pnButton.setLocation(746, 11);
+		pnButton.setLayout(null);
 
 		btnCreate = new JButton("Thêm");
+		btnCreate.setBounds(20, 14, 83, 34);
+		btnCreate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnCreate.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnCreate.setBackground(Color.WHITE);
+			}
+		});
+		btnCreate.setBorder(new LineBorder(COLOR, 3, false));
+		btnCreate.setForeground(COLOR);
+		btnCreate.setBackground(Color.WHITE);
 		btnCreate.setFocusable(false);
+		btnCreate.setIcon(new ImageIcon("images\\operations\\new.png"));
 		pnButton.add(btnCreate);
+		
 		pnDepartment.setLayout(null);
 		pnDepartment.add(pnInformation);
 		pnDepartment.add(pnButton);
 
-		Image imgAdd = new ImageIcon("images\\operations\\new.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnCreate.setIcon(new ImageIcon(imgAdd));
 		pnButton.add(btnDelete = new JButton("Xóa"));
+		btnDelete.setBounds(123, 14, 83, 34);
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDelete.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDelete.setBackground(Color.WHITE);
+			}
+		});
+		btnDelete.setBorder(new LineBorder(COLOR, 3, false));
+		btnDelete.setForeground(COLOR);
+		btnDelete.setBackground(Color.WHITE);
 		btnDelete.setFocusable(false);
-		Image imgDelete = new ImageIcon("images\\operations\\delete.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnDelete.setIcon(new ImageIcon(imgDelete));
+		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
+		
 		pnButton.add(btnUpdate = new JButton("Cập nhật"));
+		btnUpdate.setBounds(226, 14, 83, 34);
+		btnUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdate.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdate.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdate.setBorder(new LineBorder(COLOR, 3, false));
+		btnUpdate.setForeground(COLOR);
+		btnUpdate.setBackground(Color.WHITE);
 		btnUpdate.setFocusable(false);
-		Image imgUpdate = new ImageIcon("images\\operations\\update.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnUpdate.setIcon(new ImageIcon(imgUpdate));
+		btnUpdate.setIcon(new ImageIcon("images\\operations\\update.png"));
+		
 		pnButton.add(btnRefresh = new JButton("Làm mới"));
+		btnRefresh.setBounds(329, 14, 83, 34);
+		btnRefresh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnRefresh.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnRefresh.setBackground(Color.WHITE);
+			}
+		});
+		btnRefresh.setBorder(new LineBorder(COLOR, 3, false));
+		btnRefresh.setForeground(COLOR);
+		btnRefresh.setBackground(Color.WHITE);
+		btnRefresh.setIcon(new ImageIcon("images\\operations\\refresh.png"));
 		btnDelete.setFocusable(false);
 
 		JPanel pnTable = new JPanel();
+		pnTable.setBackground(Color.WHITE);
 		pnTable.setSize(730, 569);
 		pnTable.setLocation(0, 82);
-		pnTable.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách phòng ban"));
-		tblDepartment = new JTable();
+		pnTable.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách phòng ban"));
 		String[] row0 = { "Mã", "Tên phòng ban", "Tên trưởng phòng", "Số lượng nhân viên" };
 		pnTable.setLayout(new BorderLayout(0, 0));
 		tblDepartment = new JTable(tblModel = new DefaultTableModel(row0, 0));
-		JScrollPane sp = new JScrollPane(tblDepartment);
-		sp.setPreferredSize(new Dimension(1150, 470));
-		pnTable.add(sp);
+		tblDepartment.getTableHeader().setOpaque(false);
+		tblDepartment.getTableHeader().setBackground(COLOR);
+		tblDepartment.getTableHeader().setForeground(Color.WHITE);
+		tblDepartment.setBackground(Color.WHITE);
 		tblDepartment.getColumnModel().getColumn(0).setPreferredWidth(20);
 		tblDepartment.getColumnModel().getColumn(1).setPreferredWidth(150);
 		tblDepartment.getColumnModel().getColumn(1).setPreferredWidth(150);
 		tblDepartment.getColumnModel().getColumn(1).setPreferredWidth(150);
+		tblDepartment.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = tblDepartment.getSelectedRow();
+				txtName.setText((String) tblDepartment.getValueAt(row, 1));
+				List<Employee> listEmp = depDAO.getEmployeeByDepartmentID( tblDepartment.getValueAt(row, 0).toString());
+				while (tblModelEmp.getRowCount() != 0)
+					tblModelEmp.removeRow(0);
+				for (Employee x : listEmp) {
+					String[] string = {x.getEmployeeID(), x.getName()};
+					tblModelEmp.addRow(string);
+				}
+				
+			}
+		});
+		
+		JScrollPane sp = new JScrollPane(tblDepartment);
+		sp.setLocation(10, 16);
+		sp.setBackground(Color.WHITE);
+		sp.setPreferredSize(new Dimension(1150, 470));
+		pnTable.add(sp);
 		
 		JPanel pnTableEmp = new JPanel();
+		pnTableEmp.setBackground(Color.WHITE);
 		pnTableEmp.setSize(435, 530);
 		pnTableEmp.setLocation(746, 82);
-		pnTableEmp.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách nhân viên"));
-		tblEmp = new JTable();
-		String[] row1 = { "Mã nhân viên", "Tên nhân viên"};
+		pnTableEmp.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách nhân viên"));
 		pnTableEmp.setLayout(new BorderLayout(0, 0));
+		
 		tblEmp = new JTable(tblModelEmp = new DefaultTableModel(row1, 0));
-		JScrollPane sp1 = new JScrollPane(tblEmp);
-		sp1.setPreferredSize(new Dimension(1150, 470));
-		pnTableEmp.add(sp1);
+		tblEmp.getTableHeader().setOpaque(false);
+		tblEmp.getTableHeader().setBackground(COLOR);
+		tblEmp.getTableHeader().setForeground(Color.WHITE);
 		tblEmp.getColumnModel().getColumn(0).setPreferredWidth(20);
 		tblEmp.getColumnModel().getColumn(1).setPreferredWidth(150);
 		
+		JScrollPane sp1 = new JScrollPane(tblEmp);
+		sp1.setPreferredSize(new Dimension(1150, 470));
+		pnTableEmp.add(sp1);
+		
+		
 		JPanel pnChangePage = new JPanel();
+		pnChangePage.setBackground(Color.WHITE);
+		
 		pnChangePage.add(btnGoFirstPage = new JButton());
+		btnGoFirstPage.setBackground(Color.WHITE);
 		btnGoFirstPage.setFocusable(false);
-		Image imgFirst = new ImageIcon("images\\jump page\\first.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnGoFirstPage.setIcon(new ImageIcon(imgFirst));
+		btnGoFirstPage.setIcon(new ImageIcon("images\\jump page\\first.png"));
+		
 		pnChangePage.add(btnPreviousPage = new JButton());
+		btnPreviousPage.setBackground(Color.WHITE);
 		btnPreviousPage.setFocusable(false);
-		Image imgPrevious = new ImageIcon("images\\jump page\\previous.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnPreviousPage.setIcon(new ImageIcon(imgPrevious));
+		btnPreviousPage.setIcon(new ImageIcon("images\\jump page\\previous.png"));
+		
 		pnChangePage.add(btnNextPage = new JButton());
+		btnNextPage.setBackground(Color.WHITE);
 		btnNextPage.setFocusable(false);
-		Image imgNext = new ImageIcon("images\\jump page\\next.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnNextPage.setIcon(new ImageIcon(imgNext));
+		btnNextPage.setIcon(new ImageIcon("images\\jump page\\next.png"));
+		
 		pnChangePage.add(btnGoLastPage = new JButton(""));
+		btnGoLastPage.setBackground(Color.WHITE);
 		btnGoLastPage.setFocusable(false);
-		Image imgLast = new ImageIcon("images\\jump page\\last.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		btnGoLastPage.setIcon(new ImageIcon(imgLast));
+		btnGoLastPage.setIcon(new ImageIcon("images\\jump page\\last.png"));
+		
 
 		pnDepartment.add(pnTable);
 		pnDepartment.add(pnTableEmp);
@@ -175,7 +266,6 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		btnDelete.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
-		tblDepartment.addMouseListener(this);
 		refresh();
 		loadTable();
 		return pnDepartment;
@@ -189,7 +279,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 				JOptionPane.showMessageDialog(this, "Tên phòng ban không thể để trống hoặc chứa kí tự đặc biệt");
 				return;
 			}
-			Department newDep = new Department(depDAO.getNewDeparmentID(), txtName.getText());
+			Department newDep = new Department(depDAO.getNewDeparmentID(), txtName.getText().trim());
 			if (newDep.getDepartmentID().equals("PB00")) {
 				JOptionPane.showMessageDialog(this, "Phòng ban đã đầy, hãy bảo trì hệ thống");
 				return;
@@ -243,7 +333,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 				return;
 			}
 			Department newDep = new Department(tblDepartment.getValueAt(tblDepartment.getSelectedRow(), 0).toString(),
-					txtName.getText());
+					txtName.getText().trim());
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn cập nhật tên phòng ban này không?",
 					"Thông báo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 				if (depDAO.updateDepartment(newDep.getDepartmentID(), newDep.getName()) == false) {
@@ -299,7 +389,7 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 	}
 
 	public boolean checkName() {
-		String name = txtName.getText();
+		String name = txtName.getText().trim();
 		if (name == null || name.trim().isEmpty() || !Pattern.matches(
 				"[a-zA-Z0-9\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+",
 				name))
@@ -311,42 +401,4 @@ public class DepartmentGUI extends JFrame implements ActionListener, MouseListen
 		new DepartmentGUI().setVisible(true);
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		int row = tblDepartment.getSelectedRow();
-		txtName.setText((String) tblDepartment.getValueAt(row, 1));
-		List<Employee> listEmp = depDAO.getEmployeeByDepartmentID( tblDepartment.getValueAt(row, 0).toString());
-		while (tblModelEmp.getRowCount() != 0)
-			tblModelEmp.removeRow(0);
-		for (Employee x : listEmp) {
-			String[] string = {x.getEmployeeID(), x.getName()};
-			tblModelEmp.addRow(string);
-		}
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
 }

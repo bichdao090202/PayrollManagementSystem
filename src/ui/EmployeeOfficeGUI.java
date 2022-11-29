@@ -15,8 +15,6 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -51,8 +49,10 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 	public EmployeeOfficeGUI() {
 		getUI();
 	}
+
 	private static final long serialVersionUID = 1L;
 	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private String[] gender = new String[] { "Nam", "Nữ" };
 	private String[] bankName = new String[] { "BIDV" };
 	private String[] headerTable = new String[] { "Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ", "SDT" };
@@ -95,12 +95,12 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 			}
 		});
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 690);
-		
+
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -127,11 +127,12 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 
 		JLabel lblDob = new JLabel("Ngày sinh");
 		pnInputInfo.add(lblDob, "cell 2 0,alignx left");
-		
+
 		maxSelectedDate = new Date();
 		maxSelectedDate.setYear(maxSelectedDate.getYear() - 18);
 
 		txtDob = new JDateChooser();
+		txtDob.getCalendarButton().setBackground(Color.WHITE);
 		txtDob.setMaxSelectableDate(maxSelectedDate);
 		txtDob.setDate(maxSelectedDate);
 		txtDob.setDateFormatString("yyyy-MM-dd");
@@ -140,7 +141,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		JLabel lblGender = new JLabel("Giới tính");
 		pnInputInfo.add(lblGender, "cell 4 0,alignx left");
 
-		cboGender = new JComboBox(gender);
+		cboGender = new JComboBox<>(gender);
 		cboGender.setBackground(Color.WHITE);
 		pnInputInfo.add(cboGender, "cell 5 0,growx");
 
@@ -170,7 +171,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		JLabel lblBankName = new JLabel("Ngân hàng");
 		pnInputInfo.add(lblBankName, "cell 0 2,alignx left");
 
-		cboBankName = new JComboBox(bankName);
+		cboBankName = new JComboBox<>(bankName);
 		cboBankName.setBackground(Color.WHITE);
 		pnInputInfo.add(cboBankName, "cell 1 2,growx");
 
@@ -218,16 +219,17 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnAdd.setBackground(new Color(173, 217, 245));
+				btnAdd.setBackground(COLOR_HOVER);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnAdd.setBackground(Color.WHITE);
 			}
 		});
-		btnAdd.setBorder(new LineBorder(new Color(16, 84, 129), 3, false));
-		btnAdd.setForeground(new Color(16, 84, 129));
-		btnAdd.setBackground(new Color(255, 255, 255));
+		btnAdd.setBorder(new LineBorder(COLOR, 3, false));
+		btnAdd.setForeground(COLOR);
+		btnAdd.setBackground(Color.WHITE);
 		btnAdd.addActionListener(this);
 		btnAdd.setToolTipText("Thêm nhân viên");
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
@@ -237,16 +239,17 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnUpdate.setBackground(new Color(173, 217, 245));
+				btnUpdate.setBackground(COLOR_HOVER);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnUpdate.setBackground(Color.WHITE);
 			}
 		});
-		btnUpdate.setBorder(new LineBorder(new Color(16, 84, 129), 3, false));
-		btnUpdate.setForeground(new Color(16, 84, 129));
-		btnUpdate.setBackground(new Color(255, 255, 255));
+		btnUpdate.setBorder(new LineBorder(COLOR, 3, false));
+		btnUpdate.setForeground(COLOR);
+		btnUpdate.setBackground(Color.WHITE);
 		btnUpdate.addActionListener(this);
 		btnUpdate.setIcon(new ImageIcon("images\\operations\\update.png"));
 		btnUpdate.setFocusable(false);
@@ -255,16 +258,17 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnDelete.setBackground(new Color(173, 217, 245));
+				btnDelete.setBackground(COLOR_HOVER);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnDelete.setBackground(Color.WHITE);
 			}
 		});
-		btnDelete.setBorder(new LineBorder(new Color(16, 84, 129), 3, false));
-		btnDelete.setForeground(new Color(16, 84, 129));
-		btnDelete.setBackground(new Color(255, 255, 255));
+		btnDelete.setBorder(new LineBorder(COLOR, 3, false));
+		btnDelete.setForeground(COLOR);
+		btnDelete.setBackground(Color.WHITE);
 		btnDelete.setFocusable(false);
 		btnDelete.addActionListener(this);
 		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
@@ -273,16 +277,17 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnReset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnReset.setBackground(new Color(173, 217, 245));
+				btnReset.setBackground(COLOR_HOVER);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnReset.setBackground(Color.WHITE);
 			}
 		});
-		btnReset.setBorder(new LineBorder(new Color(16, 84, 129), 3, false));
-		btnReset.setForeground(new Color(16, 84, 129));
-		btnReset.setBackground(new Color(255, 255, 255));
+		btnReset.setBorder(new LineBorder(COLOR, 3, false));
+		btnReset.setForeground(COLOR);
+		btnReset.setBackground(Color.WHITE);
 		btnReset.addActionListener(this);
 		btnReset.setIcon(new ImageIcon("images\\operations\\refresh.png"));
 		btnReset.setFocusable(false);
@@ -290,7 +295,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		gl_pnOperations.setHorizontalGroup(
 			gl_pnOperations.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_pnOperations.createSequentialGroup()
-					.addGap(293)
+					.addGap(324)
 					.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
 					.addGap(51)
 					.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
@@ -298,19 +303,19 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 					.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
 					.addGap(51)
 					.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(356, Short.MAX_VALUE))
+					.addContainerGap(323, Short.MAX_VALUE))
 		);
 		gl_pnOperations.setVerticalGroup(
 			gl_pnOperations.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_pnOperations.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_pnOperations.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_pnOperations.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_pnOperations.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_pnOperations.createParallelGroup(Alignment.BASELINE)
 							.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnUpdate, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnAdd, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+						.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_pnOperations.linkSize(SwingConstants.VERTICAL, new Component[] {btnAdd, btnUpdate, btnDelete, btnReset});
 		gl_pnOperations.linkSize(SwingConstants.HORIZONTAL, new Component[] {btnAdd, btnUpdate, btnDelete, btnReset});
@@ -382,7 +387,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 
 		loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
-		
+
 		return contentPane;
 	}
 
@@ -401,31 +406,44 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		tblEmp.setModel(dtmEmp);
 	}
 
-	public boolean checkInput(String input, String patternStr) {
-		Pattern pattern = Pattern.compile(patternStr);
-		Matcher macth = pattern.matcher(input);
-		return macth.matches();
+	public void showMessage(JTextField txt, String message) {
+		txt.requestFocus();
+		txt.selectAll();
+		JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.NO_OPTION, null);
 	}
 
-	public String validInput(String name, Date birthday, String address, String phone, String accountNumber,
+	public boolean validInput(String name, Date birthday, String address, String phone, String accountNumber,
 			String beneficiany, Double salary) {
 		if (name.isBlank() | birthday == null | address.isEmpty() | phone.isEmpty() | accountNumber.isEmpty()
 				| beneficiany.isEmpty() | salary == 0) {
-			return "Hãy nhập đầy đủ thông tin trước";
+			showMessage(txtName, "Hãy nhập đầy đủ thông tin trước");
+			return false;
 		} else {
 			if (!name.matches(
-					"^[A-Z][a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+(\s[A-Z][a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+)*")) {
-				return "Tên gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa";
-			} else if (!address.matches("^[A-Za-z0-9][A-Za-z0-9/,\s]")) {
-				return "Địa chỉ bắt đầu bằng chữ cái, chữ số có thể chứa \"/\" hoặc dấu \",\"";
-			} else if (phone.matches("^[0-9][0-9]{9}$")) {
-				return "Số điện thoại gồm 10 số và bắt đầu bằng số 0";
-			} else if (accountNumber.matches("^[A-Z][A-Z\s]$")) {
-				return "Tên người thụ hưởng chỉ chứa chữ cái và phải viết in hoa";
+					"^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+(\s[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+)*")) {
+				showMessage(txtName,
+						"Tên gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa");
+				return false;
+			} else if (!address.matches(
+					"^[A-Za-z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ][A-Za-z0-9,\sàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ]+$")) {
+				showMessage(txtAddress, "Địa chỉ bắt đầu bằng chữ cái, chữ số có thể chứa \"/\" hoặc dấu \",\"");
+				return false;
+			} else if (!phone.matches("^0[35789][0-9]{8}")) {
+				showMessage(txtPhone, "Số điện thoại gồm 10 số và bắt đầu bằng 03, 05, 07, 08 hoặc 09");
+				return false;
+			} else if (!beneficiany.matches(
+					"^[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+(\s[A-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ][a-zàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ]+)*")) {
+				showMessage(txtBeneficiany,
+						"Tên người thụ hưởng gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa");
+				return false;
 			} else if (salary == 0) {
-				return "Lương phải lớn hơn 0";
+				showMessage(txtSalary, "Lương phải lớn hơn 0");
+				return false;
+			} else if (!accountNumber.matches("^[0-9]{9,14}$")) {
+				showMessage(txtAccountNumber, "Số tài khoản ngân hàng từ 9 đến 14 chữ số.");
+				return false;
 			} else {
-				return "";
+				return true;
 			}
 		}
 
@@ -454,29 +472,27 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				e2.printStackTrace();
 			}
 			String position = (String) cboPosition.getSelectedItem();
+			System.out.println(position);
 			String departmentID = ((String) cboDept.getSelectedItem()).substring(0, 4);
-			String message = validInput(name, birthday, address, phone, accountNumber, beneficiany, salary);
-			if (message.isEmpty()) {
+			if (validInput(name, birthday, address, phone, accountNumber, beneficiany, salary)) {
 				Employee employee = new EmployeeOffice(name, gender, birthday, address, phone, bankName, accountNumber,
 						beneficiany, salary, position, departmentID);
 				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (employeeOfficeDAO.addEmployeeOffice(employee)) {
+					if (employeeOfficeDAO.addEmployee(employee)) {
 						loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
-						JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.", "Thông báo xóa",
+						JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);
 					} else {
 						JOptionPane.showMessageDialog(this, "Thêm nhân viên không thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);
 					}
 				}
-			} else {
-				JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.NO_OPTION, null);
 			}
 		}
 		if (e.getSource() == btnUpdate) {
 			int rowSelected = tblEmp.getSelectedRow();
-			String name = txtName.getText();
+			String name = txtName.getText().trim();
 			boolean gender;
 			if (cboGender.getSelectedItem() == "Nam") {
 				gender = true;
@@ -484,11 +500,11 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				gender = false;
 			}
 			Date birthday = txtDob.getDate();
-			String address = txtAddress.getText();
-			String phone = txtPhone.getText();
+			String address = txtAddress.getText().trim();
+			String phone = txtPhone.getText().trim();
 			String bankName = (String) cboBankName.getSelectedItem();
-			String accountNumber = txtAccountNumber.getText();
-			String beneficiany = txtBeneficiany.getText();
+			String accountNumber = txtAccountNumber.getText().trim();
+			String beneficiany = txtBeneficiany.getText().trim();
 			if (rowSelected >= 0) {
 				double salary = Double.parseDouble(txtSalary.getText().replace(".", ""));
 				String position = (String) cboPosition.getSelectedItem();
@@ -508,6 +524,9 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 								JOptionPane.NO_OPTION, null);
 					}
 				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên muốn cập nhật trước", "Thông báo",
+						JOptionPane.NO_OPTION, null);
 			}
 		}
 		if (e.getSource() == btnDelete) {
@@ -548,10 +567,9 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 			String strSearch = txtSearch.getText().trim();
 			if (strSearch.isEmpty()) {
 				loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
-			}
-			else if (strSearch.matches("^[A-Za-z]*[0-9]+$")) {
+			} else if (strSearch.matches("^[A-Za-z]*[0-9]+$")) {
 				loadDataToTable(employeeOfficeDAO.searchEmployeeByEmployeeID(strSearch));
-			}else {
+			} else {
 				loadDataToTable(employeeOfficeDAO.searchEmployeeByName(strSearch));
 			}
 		}

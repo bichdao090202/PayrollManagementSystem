@@ -84,6 +84,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		this.worker = daoWorker.getWorkerByID(worker.getEmployeeID());
 	}
 
+
 	public Component getUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel pnAssignment = new JPanel();

@@ -13,10 +13,6 @@ import entity.EmployeeOffice;
 public class EmployeeOfficeDAO {
 	private Connection connection;
 
-	/**
-	 * fix
-	 */
-
 	public EmployeeOfficeDAO() {
 		connection = ConnectDB.getInstance().getConnection();
 	}
@@ -58,19 +54,22 @@ public class EmployeeOfficeDAO {
 		return emp;
 	}
 
-	public boolean addEmployeeOffice(Employee emp) {
+	public boolean addEmployee(Employee emp) {
 		try {
-			PreparedStatement stmt2 = connection.prepareStatement(
-					"INSERT INTO NHANVIENHANHCHINH (TenNhanVien, GioiTinh, NgaySinh, DiaChi, SDT, LuongTheoChucDanh, ChucVu, MaPhongBan) values(?,?,?,?,?,?,?,?)");
-			stmt2.setString(1, emp.getName());
-			stmt2.setBoolean(2, emp.isGender());
-			stmt2.setDate(3, new java.sql.Date(emp.getBirthday().getTime()));
-			stmt2.setString(4, emp.getAddress());
-			stmt2.setString(5, emp.getPhone());
-			stmt2.setDouble(6, ((EmployeeOffice) emp).getSalary());
-			stmt2.setString(7, ((EmployeeOffice) emp).getPosition());
-			stmt2.setString(8, ((EmployeeOffice) emp).getDepartmentID());
-			int insertResult = stmt2.executeUpdate();
+			PreparedStatement stmt = connection.prepareStatement(
+					"INSERT INTO NHANVIENHANHCHINH (TenNhanVien, GioiTinh, NgaySinh, DiaChi, SDT, LuongTheoChucDanh, ChucVu, MaPhongBan, TenNganHang, SoTaiKhoan, TenNguoiThuHuong) values(?,?,?,?,?,?,?,?,?,?,?)");
+			stmt.setString(1, emp.getName());
+			stmt.setBoolean(2, emp.isGender());
+			stmt.setDate(3, new java.sql.Date(emp.getBirthday().getTime()));
+			stmt.setString(4, emp.getAddress());
+			stmt.setString(5, emp.getPhone());
+			stmt.setDouble(6, ((EmployeeOffice) emp).getSalary());
+			stmt.setString(7, ((EmployeeOffice) emp).getPosition());
+			stmt.setString(8, ((EmployeeOffice) emp).getDepartmentID());
+			stmt.setString(9, emp.getBankName());
+			stmt.setString(10, emp.getAccountNumber());
+			stmt.setString(11, emp.getBeneficiany());
+			int insertResult = stmt.executeUpdate();
 			if (insertResult > 0) {
 				return true;
 			}
@@ -83,7 +82,7 @@ public class EmployeeOfficeDAO {
 	public boolean updateEmployeeOffice(Employee emp) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
-					"UPDATE NHANVIENHANHCHINH SET TenNhanVien = ?, GioiTinh = ?, NgaySinh = ?, DiaChi = ?, SDT = ?, LuongTheoChucDanh = ?, ChucVu = ?, MaPhongBan = ? WHERE MaNhanVien = ?");
+					"UPDATE NHANVIENHANHCHINH SET TenNhanVien = ?, GioiTinh = ?, NgaySinh = ?, DiaChi = ?, SDT = ?, LuongTheoChucDanh = ?, ChucVu = ?, MaPhongBan = ?, TenNganHang = ?, SoTaiKhoan = ?, TenNguoiThuHuong = ? WHERE MaNhanVien = ?");
 			stmt.setString(1, emp.getName());
 			stmt.setBoolean(2, emp.isGender());
 			stmt.setDate(3, new java.sql.Date(emp.getBirthday().getTime()));
@@ -92,7 +91,10 @@ public class EmployeeOfficeDAO {
 			stmt.setDouble(6, ((EmployeeOffice) emp).getSalary());
 			stmt.setString(7, ((EmployeeOffice) emp).getPosition());
 			stmt.setString(8, ((EmployeeOffice) emp).getDepartmentID());
-			stmt.setString(9, emp.getEmployeeID());
+			stmt.setString(12, emp.getEmployeeID());
+			stmt.setString(9, emp.getBankName());
+			stmt.setString(10, emp.getAccountNumber());
+			stmt.setString(11, emp.getBeneficiany());
 			int insertResult = stmt.executeUpdate();
 			if (insertResult > 0) {
 				return true;
@@ -108,13 +110,13 @@ public class EmployeeOfficeDAO {
 			PreparedStatement stmt = connection.prepareStatement("DELETE FROM NHANVIENHANHCHINH WHERE MaNhanVien = ?");
 			stmt.setString(1, empID);
 			int result = stmt.executeUpdate();
-			if (result < 0) {
-				return false;
+			if (result > 0) {
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 
 	public String getDepNameByEmpID(String empID) {
