@@ -288,7 +288,8 @@ public class SalaryDAO {
 		return totalSalary;
 	}
 	
-	public List<TimesheetOffice> hourWorkOfEmployeeAdministrative(String idEmployee, int month, int year){
+
+	public List<TimesheetsOffice> numberWorkOfEmployeeAdministrative(String idEmployee, int month, int year){
 //		LocalDateTime date = LocalDateTime.now();
 		String sql = "SELECT * from ChamCongHanhChinh where DATEPART(MONTH, NgayChamCong) = ? AND DATEPART(YEAR, NgayChamCong) = ? AND MaNhanVien = ?";
 		List<TimesheetOffice> listTimeKeep = new ArrayList<TimesheetOffice>();
@@ -300,7 +301,7 @@ public class SalaryDAO {
 			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				timeKeep = new TimesheetOffice(rs.getString("MaChamCong"), rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"), rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("MaNhanVien"));
+				timeKeep = new TimesheetsOffice(rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"), rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("MaNhanVien"));
 				if(timeKeep != null) {
 					listTimeKeep.add(timeKeep);
 				}

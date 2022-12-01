@@ -4,33 +4,31 @@ import java.util.Date;
 import java.util.Objects;
 
 public class DetailProduction {
-	private String detailProductionID;
+	private int detailProductionID;
 	private int quantityProduction;
 	private String state;
 	private String productId;
 	private Date date;
-	private int orders;
 	
 	public DetailProduction() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DetailProduction(String detailProductionID, int quantityProduction, String state, String productId,
-			Date date, int orders) {
+	public DetailProduction(int detailProductionID, int quantityProduction, String state, String productId,
+			Date date) {
 		super();
 		this.detailProductionID = detailProductionID;
 		this.quantityProduction = quantityProduction;
 		this.state = state;
 		this.productId = productId;
 		this.date = date;
-		this.orders = orders;
 	}
 
-	public String getDetailProductionID() {
+	public int getDetailProductionID() {
 		return detailProductionID;
 	}
 
-	public void setDetailProductionID(String detailProductionID) {
+	public void setDetailProductionID(int detailProductionID) {
 		this.detailProductionID = detailProductionID;
 	}
 
@@ -66,14 +64,6 @@ public class DetailProduction {
 		this.date = date;
 	}
 
-	public int getOrders() {
-		return orders;
-	}
-
-	public void setOrders(int orders) {
-		this.orders = orders;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(detailProductionID);
@@ -94,8 +84,7 @@ public class DetailProduction {
 	@Override
 	public String toString() {
 		return "DetailProduction [detailProductionID=" + detailProductionID + ", quantityProduction="
-				+ quantityProduction + ", state=" + state + ", productId=" + productId + ", date=" + date + ", orders="
-				+ orders + "]";
+				+ quantityProduction + ", state=" + state + ", productId=" + productId + ", date=" + date + "]";
 	}
 
 	
