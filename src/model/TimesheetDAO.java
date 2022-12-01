@@ -6,25 +6,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.TimesheetsOffice;
+import entity.TimesheetOffice;
 
-public class TimesheetsDAO {
+public class TimesheetDAO {
 	private Connection connection;
 
-	public TimesheetsDAO() {
+	public TimesheetDAO() {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 
-	public List<TimesheetsOffice> getAllTimesheetsOffices() {
-		List<TimesheetsOffice> listTimesheet = new ArrayList<TimesheetsOffice>();
+	public List<TimesheetOffice> getAllTimesheet() {
+		List<TimesheetOffice> listTimesheet = new ArrayList<TimesheetOffice>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGHANHCHINH");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				TimesheetsOffice timesheet = new TimesheetsOffice(
+				TimesheetOffice timesheet = new TimesheetOffice(
 						rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"),
 						rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("NhanVien"));
 				listTimesheet.add(timesheet);
@@ -35,7 +36,7 @@ public class TimesheetsDAO {
 		return listTimesheet;
 	}
 	
-	public boolean addTimesheetsOffice(TimesheetsOffice timesheetsOffice) {
+	public boolean addTimesheet(TimesheetOffice timesheetsOffice) {
 		try {
 			PreparedStatement stmt = null;
 			if (timesheetsOffice.getCheckInAM() == null) {
@@ -72,14 +73,14 @@ public class TimesheetsDAO {
 		return false;
 	}
 	
-	public List<TimesheetsOffice> searchByEmp(String emp) {
-		List<TimesheetsOffice> listTimesheet = new ArrayList<TimesheetsOffice>();
+	public List<TimesheetOffice> searchByEmp(String emp) {
+		List<TimesheetOffice> listTimesheet = new ArrayList<TimesheetOffice>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGHANHCHINH WHERE NhanVien = ?");
 			stmt.setString(1, emp);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				TimesheetsOffice timesheet = new TimesheetsOffice(
+				TimesheetOffice timesheet = new TimesheetOffice(
 						rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"),
 						rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("NhanVien"));
 				listTimesheet.add(timesheet);
@@ -90,15 +91,15 @@ public class TimesheetsDAO {
 		return listTimesheet;
 	}
 	
-	public List<TimesheetsOffice> searchByDateAndEmp(String emp, java.util.Date date) {
-		List<TimesheetsOffice> listTimesheet = new ArrayList<TimesheetsOffice>();
+	public List<TimesheetOffice> searchByDateAndEmp(String emp, java.util.Date date) {
+		List<TimesheetOffice> listTimesheet = new ArrayList<TimesheetOffice>();
 		if (emp.equals("Tất cả nhân viên")) {
 			try {
 				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGHANHCHINH WHERE NgayChamCong = ?");
 				stmt.setDate(1, new java.sql.Date(date.getTime()));
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
-					TimesheetsOffice timesheet = new TimesheetsOffice(
+					TimesheetOffice timesheet = new TimesheetOffice(
 							rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"),
 							rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("NhanVien"));
 					listTimesheet.add(timesheet);
@@ -113,7 +114,7 @@ public class TimesheetsDAO {
 				stmt.setDate(2, new java.sql.Date(date.getTime()));
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
-					TimesheetsOffice timesheet = new TimesheetsOffice(
+					TimesheetOffice timesheet = new TimesheetOffice(
 							rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"),
 							rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("NhanVien"));
 					listTimesheet.add(timesheet);
@@ -125,16 +126,26 @@ public class TimesheetsDAO {
 		return listTimesheet;
 	}
 	
-	public boolean updateTimesheetsOffice(TimesheetsOffice timesheetsOffice) {
+	public boolean updateTimesheet(TimesheetOffice timesheetOffice) {
 		try {
             PreparedStatement stmt = connection
                     .prepareStatement("UPDATE CHAMCONGHANHCHINH SET CheckInSang = ?, CheckOutSang = ?, CheckInChieu = ?, CheckOutChieu = ? WHERE MaNhanVien = ? AND NgayChamCong = ?");
-            stmt.setTime(1, new Time(timesheetsOffice.getCheckInAM().getTime()));
-            stmt.setTime(2, new Time(timesheetsOffice.getCheckOutAM().getTime()));
-            stmt.setTime(3, new Time(timesheetsOffice.getCheckInPM().getTime()));
-            stmt.setTime(4, new Time(timesheetsOffice.getCheckOutPM().getTime()));
-            stmt.setString(5, timesheetsOffice.getEmployeeID());
-            stmt.setDate(6, new Date(timesheetsOffice.getDate().getTime()));
+            if (timesheetOffice.getCheckInAM() == null) {
+            	stmt.setNull(1, Types.TIME);
+            	stmt.setNull(2, Types.TIME);
+            }else {
+            	stmt.setTime(1, new Time(timesheetOffice.getCheckInAM().getTime()));
+                stmt.setTime(2, new Time(timesheetOffice.getCheckOutAM().getTime()));
+            }
+            if (timesheetOffice.getCheckInPM() == null) {
+            	stmt.setNull(3, Types.TIME);
+            	stmt.setNull(4, Types.TIME);
+            }else {
+            	stmt.setTime(3, new Time(timesheetOffice.getCheckInPM().getTime()));
+                stmt.setTime(4, new Time(timesheetOffice.getCheckOutPM().getTime()));
+            }
+            stmt.setString(5, timesheetOffice.getEmployeeID());
+            stmt.setDate(6, new Date(timesheetOffice.getDate().getTime()));
             int insertResult = stmt.executeUpdate();
             if (insertResult > 0) {
                 return true;
@@ -142,6 +153,21 @@ public class TimesheetsDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+		return false;
+	}
+	
+	public boolean deleteTimesheet(String empID, java.util.Date date) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("DELETE CHAMCONGHANHCHINH WHERE MaNhanVien = ? AND NgayChamCong = ?");
+			stmt.setString(1, empID);
+			stmt.setDate(2, new Date(date.getTime()));
+			int result = stmt.executeUpdate();
+			if (result > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 	

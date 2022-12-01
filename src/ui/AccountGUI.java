@@ -171,6 +171,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		pnTable.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách nhân viên"));
 		
 		tblAccount = new JTable(tblModel = new DefaultTableModel(row0, 0));
+		tblAccount.setFillsViewportHeight(true);
 		tblAccount.getTableHeader().setOpaque(false);
 		tblAccount.getTableHeader().setBackground(COLOR);
 		tblAccount.getTableHeader().setForeground(Color.WHITE);

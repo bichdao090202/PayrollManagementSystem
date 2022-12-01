@@ -57,12 +57,12 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.toedter.calendar.JDateChooser;
 
 import model.SalaryDAO;
-import entity.TimesheetsOffice;
+import entity.TimesheetOffice;
 import entity.Department;
 import entity.EmployeeOffice;
 import entity.Worker;
 import entity.Factory;
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 import entity.Bonus_Discipline;
 import entity.TeamProducing;
 
@@ -673,7 +673,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	}
 
 	public void formSalaryEmployeeProductive(Worker eProductive) {
-		List<TimesheetsFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<TimesheetFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int targets = 0;
@@ -687,7 +687,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				fine += rd.getAmountMoney();
 			}
 		}
-		for (TimesheetsFactory time : listTimeKeep) {
+		for (TimesheetFactory time : listTimeKeep) {
 			targets += time.getQuantity();
 		}
 		LocalDate date = LocalDate.now();
@@ -730,7 +730,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 
 	@SuppressWarnings("deprecation")
 	public void FormSalaryEmployeeAdministrative(EmployeeOffice eAdministrative) {
-		List<TimesheetsOffice> listTimeKeep = Dao_Salary.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<TimesheetOffice> listTimeKeep = Dao_Salary.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int timeWorkOfMonth = 0;
@@ -744,7 +744,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				fine += rd.getAmountMoney();
 			}
 		}
-		for (TimesheetsOffice time : listTimeKeep) {
+		for (TimesheetOffice time : listTimeKeep) {
 			timeWorkOfMonth += (time.getCheckOutAM().getHours() - time.getCheckInAM().getHours())
 					+ (time.getCheckOutPM().getHours() - time.getCheckInPM().getHours());
 		}
@@ -1165,7 +1165,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 			for(Worker worker : ListEmployeeProductive) {
 				try {
 					
-					List<TimesheetsFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 					int targets = 0;
@@ -1179,7 +1179,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 							fine += rd.getAmountMoney();
 						}
 					}
-					for (TimesheetsFactory time : listTimeKeep) {
+					for (TimesheetFactory time : listTimeKeep) {
 						targets += time.getQuantity();
 					}
 					LocalDate date = LocalDate.now();
@@ -1505,7 +1505,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				try {
 					
 					DecimalFormat formatter = new DecimalFormat("###,###,### VND");
-					List<TimesheetsOffice> listTimeKeep = Dao_Salary.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetOffice> listTimeKeep = Dao_Salary.hourWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					int timeWorkOfMonth = 0;
 					int numberDayOfMonth = 0;
@@ -1518,7 +1518,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 							fine += rd.getAmountMoney();
 						}
 					}
-					for (TimesheetsOffice time : listTimeKeep) {
+					for (TimesheetOffice time : listTimeKeep) {
 						timeWorkOfMonth += (time.getCheckOutAM().getHours() - time.getCheckInAM().getHours())
 								+ (time.getCheckOutPM().getHours() - time.getCheckInPM().getHours());
 					}

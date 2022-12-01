@@ -342,12 +342,12 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				if (rowSelected >= 0) {
 					String employeeID = tblEmp.getValueAt(rowSelected, 0).toString();
 					Employee emp = employeeOfficeDAO.getEmployeeOffice(employeeID);
-					txtName.setText(emp.getName());
+					txtName.setText(emp.getName().trim());
 					txtDob.setDate(emp.getBirthday());
-					txtPhone.setText(emp.getPhone());
-					txtAddress.setText(emp.getAddress());
-					txtAccountNumber.setText(emp.getAccountNumber());
-					txtBeneficiany.setText(emp.getBeneficiany());
+					txtPhone.setText(emp.getPhone().trim());
+					txtAddress.setText(emp.getAddress().trim());
+					txtAccountNumber.setText(emp.getAccountNumber().trim());
+					txtBeneficiany.setText(emp.getBeneficiany().trim());
 					txtSalary.setValue(((EmployeeOffice) emp).getSalary());
 					if (emp.isGender()) {
 						cboGender.setSelectedIndex(0);
@@ -360,6 +360,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				}
 			}
 		});
+		tblEmp.setFillsViewportHeight(true);
 		tblEmp.getTableHeader().setOpaque(false);
 		tblEmp.getTableHeader().setBackground(COLOR);
 		tblEmp.getTableHeader().setForeground(Color.WHITE);
@@ -472,7 +473,6 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				e2.printStackTrace();
 			}
 			String position = (String) cboPosition.getSelectedItem();
-			System.out.println(position);
 			String departmentID = ((String) cboDept.getSelectedItem()).substring(0, 4);
 			if (validInput(name, birthday, address, phone, accountNumber, beneficiany, salary)) {
 				Employee employee = new EmployeeOffice(name, gender, birthday, address, phone, bankName, accountNumber,

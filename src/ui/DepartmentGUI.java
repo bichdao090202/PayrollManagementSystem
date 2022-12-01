@@ -177,6 +177,7 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		String[] row0 = { "Mã", "Tên phòng ban", "Tên trưởng phòng", "Số lượng nhân viên" };
 		pnTable.setLayout(new BorderLayout(0, 0));
 		tblDepartment = new JTable(tblModel = new DefaultTableModel(row0, 0));
+		tblDepartment.setFillsViewportHeight(true);
 		tblDepartment.getTableHeader().setOpaque(false);
 		tblDepartment.getTableHeader().setBackground(COLOR);
 		tblDepartment.getTableHeader().setForeground(Color.WHITE);
@@ -215,6 +216,7 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		pnTableEmp.setLayout(new BorderLayout(0, 0));
 		
 		tblEmp = new JTable(tblModelEmp = new DefaultTableModel(row1, 0));
+		tblEmp.setFillsViewportHeight(true);
 		tblEmp.getTableHeader().setOpaque(false);
 		tblEmp.getTableHeader().setBackground(COLOR);
 		tblEmp.getTableHeader().setForeground(Color.WHITE);

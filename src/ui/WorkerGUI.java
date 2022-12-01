@@ -346,7 +346,7 @@ public class WorkerGUI extends JFrame implements ActionListener {
 							teamDAO.getAllNameTeam(factory).toArray(String[]::new));
 					cboTeam.setModel(dcmNameTeam);
 
-					txtName.setText(emp.getName());
+					txtName.setText(emp.getName().trim());
 					txtDob.setDate(emp.getBirthday());
 					if (emp.isGender()) {
 						cboGender.setSelectedIndex(0);

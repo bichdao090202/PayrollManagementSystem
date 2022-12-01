@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 
 import entity.Produre;
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 import entity.Assignment;
 import entity.DetailProduction;
 import entity.Product;
@@ -370,16 +370,16 @@ public class ProductDAO {
 		return procedure;
 	}
 	
-	public List<TimesheetsFactory> searchTimeSheetFactoryById(String assignmentID) {
+	public List<TimesheetFactory> searchTimeSheetFactoryById(String assignmentID) {
 		String sql = "select * from ChamCongSanXuat where MaPhanCong = ?";
-		List<TimesheetsFactory> listTimesheet = new ArrayList<TimesheetsFactory>();
-		TimesheetsFactory timesheet = null;
+		List<TimesheetFactory> listTimesheet = new ArrayList<TimesheetFactory>();
+		TimesheetFactory timesheet = null;
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, assignmentID);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				timesheet = new TimesheetsFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
+				timesheet = new TimesheetFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
 				listTimesheet.add(timesheet);
 			}
 		} catch (Exception e) {
@@ -392,7 +392,7 @@ public class ProductDAO {
 		DetailProduction detail = detailDAO.searchDetailProductionById(productID);
 		List<Produre> listProdure = this.getListProcedurebyIdProduct(productID);
 		List<Assignment> listAssignment = new ArrayList<Assignment>();
-		List<TimesheetsFactory> listTimeSheetFactory = new ArrayList<TimesheetsFactory>();
+		List<TimesheetFactory> listTimeSheetFactory = new ArrayList<TimesheetFactory>();
 		int quantitySmall = detail.getQuantityProduction();
 		if(listProdure.size() > 0) {
 			for(Produre produre : listProdure) {
@@ -404,9 +404,9 @@ public class ProductDAO {
 							      .atZone(ZoneId.systemDefault())
 							      .toLocalDate();
 						if(assignment.getDate().compareTo(localDate) >= 0) {
-							List<TimesheetsFactory> listTimesheet = searchTimeSheetFactoryById(assignment.getAssignmentID());
+							List<TimesheetFactory> listTimesheet = searchTimeSheetFactoryById(assignment.getAssignmentID());
 							if(listAssignment.size() > 0) {
-								for(TimesheetsFactory timesheet : listTimesheet) {
+								for(TimesheetFactory timesheet : listTimesheet) {
 									if(timesheet != null) {
 										quantityTotal += timesheet.getQuantity();
 									}
