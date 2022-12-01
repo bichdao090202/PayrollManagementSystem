@@ -34,7 +34,7 @@ public class MenuGUI extends JFrame {
 	private boolean showMenu = false;
 	private boolean[] arraySelectedItem;
 	private EmployeeGUI employeeGUI;
-	private TimesheetsGUI timesheetsGUI;
+	private TimesheetGUI timesheetGUI;
 	private DepartmentGUI departmentGUI;
 	private ProductGUI productGUI;
 	private AccountGUI accountGUI;
@@ -47,7 +47,7 @@ public class MenuGUI extends JFrame {
 	private JPanel pnContent;
 
 	public MenuGUI(Employee employee) {
-		timesheetsGUI = new TimesheetsGUI();
+		timesheetGUI = new TimesheetGUI();
 		employeeGUI = new EmployeeGUI();
 		departmentGUI = new DepartmentGUI();
 		productGUI = new ProductGUI();
@@ -63,7 +63,7 @@ public class MenuGUI extends JFrame {
 		content[1] = departmentGUI.getUI();
 		content[2] = factoryGUI.getUI();
 //		content[3] = assignmentGUI.getUI();
-		content[4] = timesheetsGUI.getUI();
+		content[4] = timesheetGUI.getUI();
 		content[5] = productGUI.getUI();
 		content[6] = salaryGUI.getUI();
 		content[7] = accountGUI.getUI();
