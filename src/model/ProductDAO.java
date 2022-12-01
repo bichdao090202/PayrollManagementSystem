@@ -226,7 +226,6 @@ public class ProductDAO {
 	
 	public boolean deleteProduct(String idProduct) {
 		String sql = "delete from SanPham where MaSanPham = ?";
-//		boolean deleteDSQuyTrinh = deleteDSQuyTrinhTheoSP(maSP);
 		List<Produre> listProcedure = getListProcedurebyIdProduct(idProduct);
 		if(listProcedure.size() == 0) {
 			try {

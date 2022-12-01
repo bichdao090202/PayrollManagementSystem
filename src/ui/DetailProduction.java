@@ -91,36 +91,21 @@ public class DetailProduction extends JFrame implements ActionListener {
 		
 		txtDetailProductionId.setEditable(false);
 
-		if(detail.getDetailProductionID() == null) {
-			randomIdDetailProduction(productID);
+		if(detail.getDetailProductionID() == 0) {
+			randomIdDetailProduction();
+			txtQuantityProduction.setText("");
 		}
 		else {
-			txtDetailProductionId.setText(detail.getDetailProductionID());
+			txtDetailProductionId.setText(detail.getDetailProductionID() + "");
 			txtQuantityProduction.setText(detail.getQuantityProduction()+"");
+			cmbState.setSelectedItem(detail.getState());
 		}
 	}
 	
 
-	public void randomIdDetailProduction(String detailID) {
-		int order = (int) (Math.random() * (99 - 1 + 1) + 1);
-		String idDetail = "";
-		if (order >= 10) {
-			idDetail = detailID + order + "";
-		} else {
-			idDetail = detailID + "0" + order;
-		}
-		
-		txtDetailProductionId.setText(idDetail);
-
-		boolean test = true;
-		while (detail_DAO.searchDetailProductionById(idDetail) == null && test) {
-			txtDetailProductionId.setText(idDetail);
-			test = false;
-			break;
-		}
-		if (test) {
-			randomIdDetailProduction(detailID);
-		}
+	public void randomIdDetailProduction() {
+		int order = detail_DAO.getOrderDetailPresent() + 1;
+		txtDetailProductionId.setText(order+"");
 	}
 	
 	
@@ -137,13 +122,36 @@ public class DetailProduction extends JFrame implements ActionListener {
 		}
 		else {
 			if(regexDetailProduct()) {
-				detail.setDetailProductionID(txtDetailProductionId.getText());
-				if(!txtQuantityProduction.getText().isEmpty()) {
-					detail.setQuantityProduction(Integer.parseInt(txtQuantityProduction.getText()));
+				if(detail.getDetailProductionID() != 0) {
+					if(
+							detail.getState().equals("Ngưng Sản Xuất") && cmbState.getSelectedItem().toString().equals("Ngưng Sản Xuất") && !txtQuantityProduction.getText().equals(detail.getQuantityProduction()+"")
+						) {
+							JOptionPane.showMessageDialog(this, "Không thể thay đổi số lượng khi Sản Phẩm đã ngưng sản xuất!!!");
+						}
+						else if(
+							detail.getState().equals("Hoàn Thành") && cmbState.getSelectedItem().toString().equals("Hoàn Thành") && !txtQuantityProduction.getText().equals(detail.getQuantityProduction()+"")
+						) {
+							JOptionPane.showMessageDialog(this, "Không thể thay đổi số lượng khi Sản Phẩm đã hoàn thành!!!");
+						}
+						else {
+							detail.setDetailProductionID(Integer.parseInt(txtDetailProductionId.getText()));
+							if(!txtQuantityProduction.getText().isEmpty()) {
+								detail.setQuantityProduction(Integer.parseInt(txtQuantityProduction.getText()));
+							}
+							detail.setState(cmbState.getSelectedItem().toString());
+							detail.setProductId(productID);
+							setVisible(false);
+						}
 				}
-				detail.setState(cmbState.getSelectedItem().toString());
-				detail.setProductId(productID);
-				setVisible(false);
+				else {
+					detail.setDetailProductionID(Integer.parseInt(txtDetailProductionId.getText()));
+					if(!txtQuantityProduction.getText().isEmpty()) {
+						detail.setQuantityProduction(Integer.parseInt(txtQuantityProduction.getText()));
+					}
+					detail.setState(cmbState.getSelectedItem().toString());
+					detail.setProductId(productID);
+					setVisible(false);
+				}
 			}
 		}
 		
@@ -151,7 +159,7 @@ public class DetailProduction extends JFrame implements ActionListener {
 	
 	public boolean regexDetailProduct() {
 		String announce = "";
-		String regexIdProduction = "^" + productID + "[0-9]{2}$";
+		String regexIdProduction = "^([1-9][0-9]*)+";
 		String regexQuantityProduct = "(^[0-9]*)+";
 		if (txtDetailProductionId.getText().isEmpty() || txtQuantityProduction.getText().isEmpty()) {
 			announce += "Vui lòng nhập đầy đủ thông tin quy trình";
