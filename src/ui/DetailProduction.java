@@ -123,7 +123,7 @@ public class DetailProduction extends JFrame implements ActionListener {
 		else {
 			if(regexDetailProduct()) {
 				if(detail.getDetailProductionID() != 0) {
-					if(
+						if(
 							detail.getState().equals("Ngưng Sản Xuất") && cmbState.getSelectedItem().toString().equals("Ngưng Sản Xuất") && !txtQuantityProduction.getText().equals(detail.getQuantityProduction()+"")
 						) {
 							JOptionPane.showMessageDialog(this, "Không thể thay đổi số lượng khi Sản Phẩm đã ngưng sản xuất!!!");
@@ -133,6 +133,16 @@ public class DetailProduction extends JFrame implements ActionListener {
 						) {
 							JOptionPane.showMessageDialog(this, "Không thể thay đổi số lượng khi Sản Phẩm đã hoàn thành!!!");
 						}
+						else if(
+							detail.getState().equals("Hoàn Thành") && cmbState.getSelectedItem().toString().equals("Sản Xuất") && Integer.parseInt(txtQuantityProduction.getText()) == 0
+						) {
+							JOptionPane.showMessageDialog(this, "Số lượng sản xuất phải lớn 0");
+						}
+						else if(
+								detail.getState().equals("Ngưng Sản Xuất") && cmbState.getSelectedItem().toString().equals("Sản Xuất") && Integer.parseInt(txtQuantityProduction.getText()) == 0
+							) {
+								JOptionPane.showMessageDialog(this, "Số lượng sản xuất phải lớn 0");
+							}
 						else {
 							detail.setDetailProductionID(Integer.parseInt(txtDetailProductionId.getText()));
 							if(!txtQuantityProduction.getText().isEmpty()) {
