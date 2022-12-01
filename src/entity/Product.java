@@ -5,7 +5,6 @@ import java.util.Objects;
 public class Product {
 	private String productID;
 	private String name;
-	private int quantity; // số lượng
 
 	public Product() {
 		super();
@@ -16,11 +15,10 @@ public class Product {
 		this.productID = productID;
 	}
 
-	public Product(String productID, String name, int quantity) {
+	public Product(String productID, String name) {
 		super();
 		this.productID = productID;
 		this.name = name;
-		this.quantity = quantity;
 	}
 
 	public String getProductID() {
@@ -37,14 +35,6 @@ public class Product {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	@Override
@@ -66,7 +56,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [productID=" + productID + ", name=" + name + ", quantity=" + quantity + "]";
+		return "Product [productID=" + productID + ", name=" + name + "]";
 	}
 
 }
