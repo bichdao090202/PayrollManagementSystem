@@ -173,7 +173,6 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 		btnAdd.setBorder(new LineBorder(COLOR, 2, false));
 		btnAdd.setForeground(COLOR);
 		btnAdd.setBackground(Color.WHITE);
-		btnAdd.setBackground(new Color(255, 255, 255));
 		btnAdd.addActionListener(this);
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAdd.setFocusable(false);
@@ -262,7 +261,6 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 		btnUpdate.setBorder(new LineBorder(COLOR, 2, false));
 		btnUpdate.setForeground(COLOR);
 		btnUpdate.setBackground(Color.WHITE);
-		btnUpdate.setBackground(new Color(255, 255, 255));
 		btnUpdate.addActionListener(this);
 
 		chkAbsentPM = new JCheckBox("Vắng chiều");

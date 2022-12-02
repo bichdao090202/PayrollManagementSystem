@@ -79,6 +79,8 @@ import custom_field.JTextFieldHint;
 import javax.swing.ImageIcon;
 
 public class SalaryGUI extends JFrame implements ActionListener, MouseListener, ItemListener {
+	
+	
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtSearchIdEmployee;
@@ -117,8 +119,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private JButton btnExportSalary;
 	public static final String fontString = "C:\\Windows\\Fonts\\times.ttf";
 
-//	public Component getUI() {
-	public SalaryGUI() {
+	public Component getUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
 //		getContentPane().setBackground(new Color(0,140,140));
@@ -663,7 +664,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		});
 
 		loadListEmployee();
-//		return getContentPane();
+		return getContentPane();
 	}
 
 	public static void main(String[] args) {
@@ -746,7 +747,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 
 	@SuppressWarnings("deprecation")
 	public void FormSalaryEmployeeAdministrative(EmployeeOffice eAdministrative) {
-		List<TimesheetsOffice> listTimeKeep = Dao_Salary.numberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<TimesheetOffice> listTimeKeep = Dao_Salary.numberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 
 		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
@@ -1265,7 +1266,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				double totalSalaryOfWorker = 0;
 				for(Worker worker : ListEmployeeProductive) {
-					List<TimesheetsFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					int targets = 0;
 					int numberDayOfMonth = 0;
@@ -1358,7 +1359,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				double totalSalaryOfEOffice = 0;
 				for(EmployeeOffice eAdministrative : ListEmployeeAdministrative) {
-					List<TimesheetsOffice> listTimeKeep = Dao_Salary.numberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetOffice> listTimeKeep = Dao_Salary.numberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 
 					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					int numberWorkOfMonth = listTimeKeep.size();

@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,9 @@ import entity.TeamProducing;
 import javax.swing.ImageIcon;
 
 public class FactoryGUI extends JFrame implements ActionListener, MouseListener {
+	public FactoryGUI() {
+//		getUI();
+	}
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtIdFactory;
@@ -67,8 +71,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	private JButton btnChange;
 	private JButton btnClean;
 
-//	public Component getUI() {
-	public FactoryGUI() {
+	public Component getUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
 //		getContentPane().setBackground(new Color(0,140,140));
@@ -456,7 +459,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtIdFactory.setEditable(false);
 		txtIdTeam.setEditable(false);
 
-//		return getContentPane();
+		return getContentPane();
 	}
 
 	public void loadListFactory() {
