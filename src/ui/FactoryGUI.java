@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -27,21 +28,26 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.WebColors;
+
 import custom_field.JTextFieldHint;
 import model.FactoryDAO;
 import entity.Worker;
+import entity.Factory;
 import entity.TeamProducing;
 import javax.swing.ImageIcon;
 
 public class FactoryGUI extends JFrame implements ActionListener, MouseListener {
+	public FactoryGUI() {
+//		getUI();
+	}
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtIdFactory;
 	private JTextField txtNameFactory;
-	private JTextField txtIdLeadFactory;
 	private JTextField txtIdTeam;
 	private JTextField txtNameTeam;
-	private JTextField txtIdLeadTeam;
 	private JTextField txtSearchIdFactory;
 	private JTable tblListFactory;
 	private JTextField txtSearchIdTeam;
@@ -81,7 +87,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		JLabel lblIdFactory = new JLabel("Mã phân xưởng :");
 		lblIdFactory.setForeground(Color.BLACK);
 		lblIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblIdFactory.setBounds(37, 35, 87, 13);
+		lblIdFactory.setBounds(37, 35, 115, 13);
 		pnlFactory.add(lblIdFactory);
 
 		txtIdFactory = new JTextField();
@@ -93,7 +99,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		JLabel lblNameFactory = new JLabel("Tên phân xưởng :");
 		lblNameFactory.setForeground(Color.BLACK);
 		lblNameFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNameFactory.setBounds(37, 75, 100, 13);
+		lblNameFactory.setBounds(37, 75, 115, 13);
 		pnlFactory.add(lblNameFactory);
 
 		txtNameFactory = new JTextField();
@@ -104,8 +110,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtNameFactory.addFocusListener((FocusListener) new FocusListener() {
 			public void focusGained(FocusEvent e) {
 				if (Dao_Factory.searchFactoryByIdFactory(txtIdFactory.getText()) == null && dtmTeam.getRowCount() == 0
-						&& txtNameTeam.getText().isEmpty() && txtIdLeadTeam.getText().isEmpty()
-						&& !txtIdFactory.getText().isEmpty()) {
+						&& txtNameTeam.getText().isEmpty() && !txtIdFactory.getText().isEmpty()) {
 					randomIdTeam();
 
 				}
@@ -116,23 +121,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			}
 		});
 
-		JLabel lblIdLeadFactory = new JLabel("Mã quản đốc :");
-		lblIdLeadFactory.setForeground(Color.BLACK);
-		lblIdLeadFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblIdLeadFactory.setBounds(37, 115, 87, 13);
-		pnlFactory.add(lblIdLeadFactory);
-
-		txtIdLeadFactory = new JTextField();
-		txtIdLeadFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		txtIdLeadFactory.setColumns(10);
-		txtIdLeadFactory.setBounds(162, 115, 245, 19);
-		pnlFactory.add(txtIdLeadFactory);
-
 		btnClean = new JButton("");
 		btnClean.setIcon(new ImageIcon("images\\Clear-icon.png"));
 		btnClean.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnClean.setFocusPainted(false);
-		btnClean.setBounds(37, 149, 50, 21);
+		btnClean.setBounds(37, 110, 50, 21);
 		pnlFactory.add(btnClean);
 
 		JPanel pnlTeam = new JPanel();
@@ -152,7 +145,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtIdTeam = new JTextField();
 		txtIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtIdTeam.setColumns(10);
-		txtIdTeam.setBounds(96, 29, 106, 19);
+		txtIdTeam.setBounds(96, 29, 340, 19);
 		pnlTeam.add(txtIdTeam);
 		txtIdTeam.addFocusListener((FocusListener) new FocusListener() {
 			public void focusGained(FocusEvent e) {
@@ -186,30 +179,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 					btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
 //	            	btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 				}
-			}/* from w ww . j a va2 s. c o m */
-
-			public void focusLost(FocusEvent e) {
-//	        	 System.out.println("focus lost");
-			}
-		});
-
-		JLabel lblIdLeadTeam = new JLabel("Mã tổ trưởng :");
-		lblIdLeadTeam.setForeground(Color.BLACK);
-		lblIdLeadTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblIdLeadTeam.setBounds(237, 32, 87, 13);
-		pnlTeam.add(lblIdLeadTeam);
-
-		txtIdLeadTeam = new JTextField();
-		txtIdLeadTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		txtIdLeadTeam.setColumns(10);
-		txtIdLeadTeam.setBounds(330, 29, 106, 19);
-		pnlTeam.add(txtIdLeadTeam);
-		txtIdLeadTeam.addFocusListener((FocusListener) new FocusListener() {
-			public void focusGained(FocusEvent e) {
-//	            System.out.println("focus gained");
-				if (btnInsertTeam.getIcon().toString().equals("images\\Close-2-icon.png")) {
-					btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
-//	            	btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
+				else if(txtIdTeam.getText().isEmpty()) {
+					randomIdTeam();
 				}
 			}/* from w ww . j a va2 s. c o m */
 
@@ -241,7 +212,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		tblHeaderTeam.setBackground(new Color(14,85,78));
 		tblHeaderTeam.setForeground(Color.WHITE);
 		tblTeam.setModel(
-				dtmTeam = new DefaultTableModel(new Object[][] {}, new String[] { "Mã tổ", "Tên tổ", "Mã tổ trưởng" }) {
+				dtmTeam = new DefaultTableModel(new Object[][] {}, new String[] { "Mã tổ", "Tên tổ"}) {
 					private static final long serialVersionUID = 1L;
 
 					public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -273,14 +244,14 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		JLabel lblNoteIdFactory = new JLabel("Nhập mã phân xưởng :");
 		lblNoteIdFactory.setForeground(Color.BLACK);
 		lblNoteIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNoteIdFactory.setBounds(25, 17, 120, 15);
+		lblNoteIdFactory.setBounds(10, 17, 134, 15);
 		pnlListFactory.add(lblNoteIdFactory);
 
 		txtSearchIdFactory = new JTextFieldHint("Nhập mã phân xưởng...");
 		txtSearchIdFactory.setPreferredSize(new Dimension(200,25));
 		txtSearchIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSearchIdFactory.setColumns(10);
-		txtSearchIdFactory.setBounds(153, 16, 134, 19);
+		txtSearchIdFactory.setBounds(142, 16, 145, 19);
 		pnlListFactory.add(txtSearchIdFactory);
 
 		btnSearchIdFactory = new JButton("");
@@ -317,7 +288,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		tblHeaderListFactory.setPreferredSize(new Dimension(100, 30));
 		tblHeaderListFactory.setFont(new Font("Tahoma", Font.BOLD, 12));
 		tblListFactory.setModel(dtmListFactory = new DefaultTableModel(new Object[][] {},
-				new String[] { "Mã phân xưởng", "Tên phân xưởng", "Mã quản đốc" }) {
+				new String[] { "Mã phân xưởng", "Tên phân xưởng"}) {
 			private static final long serialVersionUID = 1L;
 
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -350,7 +321,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		tblHeaderListTeam.setPreferredSize(new Dimension(100, 30));
 		tblHeaderListTeam.setFont(new Font("Tahoma", Font.BOLD, 12));
 		tblListTeam.setModel(dtmListTeam = new DefaultTableModel(new Object[][] {},
-				new String[] { "Mã tổ", "Tên tổ", "Mã tổ trưởng" }) {
+				new String[] { "Mã tổ", "Tên tổ"}) {
 			private static final long serialVersionUID = 1L;
 
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -362,14 +333,14 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		JLabel lblNoteIdTeam = new JLabel("Nhập mã tổ :");
 		lblNoteIdTeam.setForeground(Color.BLACK);
 		lblNoteIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNoteIdTeam.setBounds(25, 19, 70, 15);
+		lblNoteIdTeam.setBounds(10, 19, 85, 15);
 		pnlListTeam.add(lblNoteIdTeam);
 
 		txtSearchIdTeam = new JTextFieldHint("Nhập mã tổ...");
 		txtSearchIdTeam.setPreferredSize(new Dimension(200,25));
 		txtSearchIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSearchIdTeam.setColumns(10);
-		txtSearchIdTeam.setBounds(101, 18, 186, 19);
+		txtSearchIdTeam.setBounds(91, 18, 196, 19);
 		pnlListTeam.add(txtSearchIdTeam);
 
 		btnSearchIdTeam = new JButton("");
@@ -433,11 +404,34 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		btnChange.setFocusPainted(false);
 		btnChange.setBounds(386, 67, 50, 21);
 		pnlTeam.add(btnChange);
+		
+		btnClean.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnChange.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnInsertFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnInsertTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnSearchIdFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnSearchIdTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnDeleteFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnDeleteTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnUpdateFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
+		btnUpdateTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
 
 		tblListFactory.addMouseListener(this);
 		tblListTeam.addMouseListener(this);
 		tblTeam.addMouseListener(this);
 		tblEmployeeByTeam.addMouseListener(this);
+		
+		btnClean.addMouseListener(this);
+		btnChange.addMouseListener(this);
+		btnInsertFactory.addMouseListener(this);
+		btnInsertTeam.addMouseListener(this);
+		btnSearchIdFactory.addMouseListener(this);
+		btnSearchIdTeam.addMouseListener(this);
+		btnDeleteFactory.addMouseListener(this);
+		btnDeleteTeam.addMouseListener(this);
+		btnUpdateFactory.addMouseListener(this);
+		btnUpdateTeam.addMouseListener(this);
+		
 		btnClean.addActionListener(this);
 		btnChange.addActionListener(this);
 		btnInsertFactory.addActionListener(this);
@@ -459,7 +453,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		btnDeleteTeam.setFocusPainted(false);
 		btnUpdateFactory.setFocusPainted(false);
 		btnUpdateTeam.setFocusPainted(false);
-		btnChange.setFocusPainted(false);
 
 		loadListFactory();
 		randomIdFactory();
@@ -588,7 +581,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	public void cleanTextFieldTeam() {
 		txtIdTeam.setText("");
 		txtNameTeam.setText("");
-		txtIdLeadTeam.setText("");
 	}
 
 	public void cleanFactory() {
@@ -599,7 +591,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		loadListFactory();
 		txtIdFactory.setText("");
 		txtNameFactory.setText("");
-		txtIdLeadFactory.setText("");
 		cleanTextFieldTeam();
 		txtNameFactory.requestFocus();
 		btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
@@ -637,18 +628,15 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			if (rowFactorySelected >= 0 && listTeam.size() > 0) {
 				txtIdFactory.setText(dtmListFactory.getValueAt(rowFactorySelected, 0).toString());
 				txtNameFactory.setText(dtmListFactory.getValueAt(rowFactorySelected, 1).toString());
-				txtIdLeadFactory.setText(dtmListFactory.getValueAt(rowFactorySelected, 2).toString());
 
 				loadListTeamByIdFactory(dtmListFactory.getValueAt(rowFactorySelected, 0).toString(), dtmListTeam);
 				loadListTeamByIdFactory(dtmListFactory.getValueAt(rowFactorySelected, 0).toString(), dtmTeam);
 				txtIdTeam.setText(dtmTeam.getValueAt(0, 0).toString());
 				txtNameTeam.setText(dtmTeam.getValueAt(0, 1).toString());
-				txtIdLeadTeam.setText(dtmTeam.getValueAt(0, 2).toString());
 				resetTeam();
 			} else if (listTeam.size() <= 0) {
 				txtIdFactory.setText(dtmListFactory.getValueAt(rowFactorySelected, 0).toString());
 				txtNameFactory.setText(dtmListFactory.getValueAt(rowFactorySelected, 1).toString());
-				txtIdLeadFactory.setText(dtmListFactory.getValueAt(rowFactorySelected, 2).toString());
 				cleanTextFieldTeam();
 				txtSearchIdTeam.setText("");
 			}
@@ -658,7 +646,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			if (rowTeamSelected >= 0) {
 				txtIdTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
 				txtNameTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 1).toString());
-				txtIdLeadTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 2).toString());
 
 				deleteDataOnTableModel(dtmListEmployee);
 				loadListEmployeeByIdTeam(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
@@ -670,18 +657,20 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			}
 
 		} else if (o.equals(tblTeam)) {
+			Factory factory = Dao_Factory.searchFactoryByIdFactory(txtIdFactory.getText());
 			int rowTeamSelected = tblTeam.getSelectedRow();
 			if (rowTeamSelected >= 0) {
-				txtIdTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
-				txtNameTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 1).toString());
-				txtIdLeadTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 2).toString());
+				txtIdTeam.setText(dtmTeam.getValueAt(rowTeamSelected, 0).toString());
+				txtNameTeam.setText(dtmTeam.getValueAt(rowTeamSelected, 1).toString());
 				btnInsertTeam.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 				btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 				btnChange.setIcon(new ImageIcon("images\\exchange.png"));
 
-				deleteDataOnTableModel(dtmListEmployee);
-				tblListTeam.setRowSelectionInterval(rowTeamSelected, rowTeamSelected);
-				loadListEmployeeByIdTeam(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
+				if(factory != null) {
+					deleteDataOnTableModel(dtmListEmployee);
+					tblListTeam.setRowSelectionInterval(rowTeamSelected, rowTeamSelected);
+					loadListEmployeeByIdTeam(dtmTeam.getValueAt(rowTeamSelected, 0).toString());
+				}
 			}
 		}
 
@@ -699,12 +688,12 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-
+		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-
+		
 	}
 
 	@Override
@@ -742,10 +731,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 
 					if (!checkContainTeam) {
 						TeamProducing team = new TeamProducing(txtIdTeam.getText(), txtNameTeam.getText(),
-								txtIdLeadTeam.getText(), txtIdFactory.getText());
+								null, txtIdFactory.getText());
 						addRowListTeam(team, dtmTeam);
 						JOptionPane.showMessageDialog(this, "Thêm tổ thành công!!!");
 						randomIdTeam();
+						txtNameTeam.requestFocus();
 						List<entity.Factory> listFactory = Dao_Factory.getListFactory();
 						if (listFactory.contains(Dao_Factory.searchFactoryByIdFactory(txtIdFactory.getText()))) {
 							List<TeamProducing> listTeam = Dao_Factory.getListTeamByIdFactory(txtIdFactory.getText());
@@ -762,7 +752,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				} else {
 					if (btnInsertTeam.getIcon().toString().equals("images\\Text-Edit-icon.png")) {
 						TeamProducing team = new TeamProducing(txtIdTeam.getText(), txtNameTeam.getText(),
-								txtIdLeadTeam.getText(), txtIdFactory.getText());
+								null, txtIdFactory.getText());
 						if (Dao_Factory.updateTeam(team)) {
 							JOptionPane.showMessageDialog(this, "Sửa tổ thành công!!!");
 							deleteDataOnTableModel(dtmListTeam);
@@ -775,17 +765,25 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 					} else {
 						int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc xóa Tổ này không?");
 						if(confirm == JOptionPane.YES_OPTION) {
-							if (Dao_Factory.deleteTeam(txtIdTeam.getText())
-									&& !Dao_Factory.checkEmployeeOfTeam(txtIdTeam.getText())) {
+							Factory factory = Dao_Factory.searchFactoryByIdFactory(txtIdFactory.getText());
+							if(factory != null) {
+								if (Dao_Factory.deleteTeam(txtIdTeam.getText())
+										&& !Dao_Factory.checkEmployeeOfTeam(txtIdTeam.getText())) {
+									JOptionPane.showMessageDialog(this, "Xóa tổ thành công!!!");
+									deleteDataOnTableModel(dtmListTeam);
+									deleteDataOnTableModel(dtmTeam);
+									loadListTeamByIdFactory(txtIdFactory.getText(), dtmListTeam);
+									loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
+									btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
+									btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
+								} else {
+									JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc, không thể xóa");
+								}
+							}
+							else {
+								int rowSelectedTblTeam = tblTeam.getSelectedRow();
+								dtmTeam.removeRow(rowSelectedTblTeam);
 								JOptionPane.showMessageDialog(this, "Xóa tổ thành công!!!");
-								deleteDataOnTableModel(dtmListTeam);
-								deleteDataOnTableModel(dtmTeam);
-								loadListTeamByIdFactory(txtIdFactory.getText(), dtmListTeam);
-								loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
-								btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
-								btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
-							} else {
-								JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc, không thể xóa");
 							}
 						}
 						else if(confirm == JOptionPane.NO_OPTION) {
@@ -800,13 +798,13 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			if (regexFactory) {
 				if (btnInsertFactory.getText().equals("Thêm phân xưởng")) {
 					entity.Factory factory = new entity.Factory(txtIdFactory.getText(), txtNameFactory.getText(),
-							txtIdLeadFactory.getText());
+							null);
 					boolean checkContainFactory = checkContainFactory(factory);
 					int rowCountTeam = dtmTeam.getRowCount();
 					TeamProducing team = new TeamProducing();
 					for (int i = 0; i < rowCountTeam; i++) {
 						team = new TeamProducing(dtmTeam.getValueAt(i, 0).toString(),
-								dtmTeam.getValueAt(i, 1).toString(), dtmTeam.getValueAt(i, 2).toString(),
+								dtmTeam.getValueAt(i, 1).toString(), null,
 								txtIdFactory.getText());
 						ListTeam.add(team);
 					}
@@ -834,7 +832,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 					}
 					boolean updateListTeam = Dao_Factory.updateListTeam(ListTeam, txtIdFactory.getText());
 					entity.Factory factory = new entity.Factory(txtIdFactory.getText(), txtNameFactory.getText(),
-							txtIdLeadFactory.getText());
+							null);
 					boolean updateFactory = Dao_Factory.updateFactory(factory);
 					if (updateFactory == true && updateListTeam == true) {
 						JOptionPane.showMessageDialog(this, "Sửa phân xưởng thành công!!!");
@@ -935,18 +933,13 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		String announce = "";
 		String regexIdFactory = "^(PX)[0-9]{2}$";
 		String regexIdLeadFactory = "^(NVSX)[0-9]{5}$";
-		if (txtIdFactory.getText().isEmpty() || txtNameFactory.getText().isEmpty()
-				|| txtIdLeadFactory.getText().isEmpty()) {
+		if (txtIdFactory.getText().isEmpty() || txtNameFactory.getText().isEmpty()) {
 			announce += "Vui lòng nhập đầy đủ thông tin phân xưởng";
 		} else {
 			if (!txtIdFactory.getText().matches(regexIdFactory)) {
 				announce += "Mã phân xưởng phải bắt đầu bằng PX và theo sau là 2 chữ số \n";
 				txtIdFactory.requestFocus();
 				txtIdFactory.selectAll();
-			} else if (!txtIdLeadFactory.getText().matches(regexIdLeadFactory)) {
-				announce += "Mã quản đốc phải bắt đầu bằng NVSX và theo sau là 5 chữ số \n";
-				txtIdLeadFactory.requestFocus();
-				txtIdLeadFactory.selectAll();
 			}
 		}
 		if (announce.isEmpty()) {
@@ -961,17 +954,13 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		String announce = "";
 		String regexIdTeam = "^" + txtIdFactory.getText() + "[0-9]{2}$";
 		String regexIdLeadTeam = "^(NVSX)[0-9]{5}$";
-		if (txtIdTeam.getText().isEmpty() || txtNameTeam.getText().isEmpty() || txtIdLeadTeam.getText().isEmpty()) {
+		if (txtIdTeam.getText().isEmpty() || txtNameTeam.getText().isEmpty()) {
 			announce += "Vui lòng nhập đầy đủ thông tin tổ";
 		} else {
 			if (!txtIdTeam.getText().matches(regexIdTeam)) {
 				announce += "Mã tổ phải bắt đầu bằng mã phân xưởng và theo sau 2 chữ số \n";
 				txtIdTeam.requestFocus();
 				txtIdTeam.selectAll();
-			} else if (!txtIdLeadTeam.getText().matches(regexIdLeadTeam)) {
-				announce += "Mã tổ trưởng phải bắt đầu bằng NVSX và theo sau là 5 chữ số \n";
-				txtIdLeadTeam.requestFocus();
-				txtIdLeadTeam.selectAll();
 			}
 		}
 		if (announce.isEmpty()) {

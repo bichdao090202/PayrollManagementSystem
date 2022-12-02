@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 // chấm công hành chính
-public class TimesheetsOffice {
+public class TimesheetOffice {
 
 	private String timesheetID;
 	private Date date;
@@ -14,17 +14,17 @@ public class TimesheetsOffice {
 	private Date checkOutPM;
 	private String employeeID;
 
-	public TimesheetsOffice() {
+	public TimesheetOffice() {
 		super();
 	}
 
-	public TimesheetsOffice(Date date, String employeeID) {
+	public TimesheetOffice(Date date, String employeeID) {
 		super();
 		this.date = date;
 		this.employeeID = employeeID;
 	}
 
-	public TimesheetsOffice(Date date, Date checkInAM, Date checkOutAM, Date checkInPM, Date checkOutPM,
+	public TimesheetOffice(Date date, Date checkInAM, Date checkOutAM, Date checkInPM, Date checkOutPM,
 			String employeeID) {
 		super();
 		this.date = date;
@@ -35,7 +35,7 @@ public class TimesheetsOffice {
 		this.employeeID = employeeID;
 	}
 
-	public TimesheetsOffice(String timesheetID, Date date, Date checkInAM, Date checkOutAM, Date checkInPM,
+	public TimesheetOffice(String timesheetID, Date date, Date checkInAM, Date checkOutAM, Date checkInPM,
 			Date checkOutPm, String employeeID) {
 		super();
 		this.timesheetID = timesheetID;
@@ -116,7 +116,7 @@ public class TimesheetsOffice {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TimesheetsOffice other = (TimesheetsOffice) obj;
+		TimesheetOffice other = (TimesheetOffice) obj;
 		return Objects.equals(timesheetID, other.timesheetID);
 	}
 

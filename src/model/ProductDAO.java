@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 
 import entity.Produre;
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 import entity.Assignment;
 import entity.DetailProduction;
 import entity.Product;
@@ -37,7 +37,7 @@ public class ProductDAO {
 			PreparedStatement stmt = con.prepareStatement("select * from  SanPham sp join ChiTietSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất'");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				Product product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt(3));
+				Product product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"));
 				listProduct.add(product);
 			}
 		} catch (Exception e) {
@@ -50,11 +50,11 @@ public class ProductDAO {
 		Product product = new Product();
 		try {
 			PreparedStatement stmt = con.prepareStatement(
-					"select sp.MaSanPham, sp.TenSanPham, sp.SoLuongSanXuat from  SanPham sp join QuyTrinh qt on sp.MaSanPham = qt.MaSanPham where MaQuyTrinh = ?");
+					"select sp.MaSanPham, sp.TenSanPham from  SanPham sp join QuyTrinh qt on sp.MaSanPham = qt.MaSanPham where MaQuyTrinh = ?");
 			stmt.setString(1, idProdure);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt(3));
+				product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"));
 			}
 
 		} catch (SQLException e) {
@@ -71,7 +71,7 @@ public class ProductDAO {
 			prstm = con.prepareStatement(sql);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				Product sanPham = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt("SoLuongSanXuat"));
+				Product sanPham = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"));
 				listProduct.add(sanPham);
 			}
 		} catch (Exception e) {
@@ -143,12 +143,11 @@ public class ProductDAO {
 	}
 	
 	public boolean insertProduct(Product product) {
-		String sql = "insert into SanPham values(?,?,?)";
+		String sql = "insert into SanPham values(?,?)";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, product.getProductID());
 			prstm.setString(2, product.getName());
-			prstm.setInt(3, product.getQuantity());
 			int n = prstm.executeUpdate();
 			if(n > 0) {
 				return true;
@@ -226,7 +225,6 @@ public class ProductDAO {
 	
 	public boolean deleteProduct(String idProduct) {
 		String sql = "delete from SanPham where MaSanPham = ?";
-//		boolean deleteDSQuyTrinh = deleteDSQuyTrinhTheoSP(maSP);
 		List<Produre> listProcedure = getListProcedurebyIdProduct(idProduct);
 		if(listProcedure.size() == 0) {
 			try {
@@ -234,6 +232,20 @@ public class ProductDAO {
 				prstm.setString(1, idProduct);
 				int n = prstm.executeUpdate();
 				if(n > 0) {
+					return true;
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		else if(listProcedure.size() > 0) {
+			boolean deleteAllProdure = deleteListProcedureByIdProduct(idProduct);
+			try {
+				prstm = con.prepareStatement(sql);
+				prstm.setString(1, idProduct);
+				int n = prstm.executeUpdate();
+				if(n > 0 && deleteAllProdure) {
 					return true;
 				}
 			} catch (Exception e) {
@@ -345,7 +357,7 @@ public class ProductDAO {
 			prstm.setString(1, idProduct);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt("SoLuongSanXuat"));
+				product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -370,16 +382,16 @@ public class ProductDAO {
 		return procedure;
 	}
 	
-	public List<TimesheetsFactory> searchTimeSheetFactoryById(String assignmentID) {
+	public List<TimesheetFactory> searchTimeSheetFactoryById(String assignmentID) {
 		String sql = "select * from ChamCongSanXuat where MaPhanCong = ?";
-		List<TimesheetsFactory> listTimesheet = new ArrayList<TimesheetsFactory>();
-		TimesheetsFactory timesheet = null;
+		List<TimesheetFactory> listTimesheet = new ArrayList<TimesheetFactory>();
+		TimesheetFactory timesheet = null;
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, assignmentID);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				timesheet = new TimesheetsFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
+				timesheet = new TimesheetFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
 				listTimesheet.add(timesheet);
 			}
 		} catch (Exception e) {
@@ -392,7 +404,7 @@ public class ProductDAO {
 		DetailProduction detail = detailDAO.searchDetailProductionById(productID);
 		List<Produre> listProdure = this.getListProcedurebyIdProduct(productID);
 		List<Assignment> listAssignment = new ArrayList<Assignment>();
-		List<TimesheetsFactory> listTimeSheetFactory = new ArrayList<TimesheetsFactory>();
+		List<TimesheetFactory> listTimeSheetFactory = new ArrayList<TimesheetFactory>();
 		int quantitySmall = detail.getQuantityProduction();
 		if(listProdure.size() > 0) {
 			for(Produre produre : listProdure) {
@@ -404,9 +416,9 @@ public class ProductDAO {
 							      .atZone(ZoneId.systemDefault())
 							      .toLocalDate();
 						if(assignment.getDate().compareTo(localDate) >= 0) {
-							List<TimesheetsFactory> listTimesheet = searchTimeSheetFactoryById(assignment.getAssignmentID());
+							List<TimesheetFactory> listTimesheet = searchTimeSheetFactoryById(assignment.getAssignmentID());
 							if(listAssignment.size() > 0) {
-								for(TimesheetsFactory timesheet : listTimesheet) {
+								for(TimesheetFactory timesheet : listTimesheet) {
 									if(timesheet != null) {
 										quantityTotal += timesheet.getQuantity();
 									}

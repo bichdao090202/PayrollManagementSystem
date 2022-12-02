@@ -3,19 +3,18 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
-import entity.TimesheetsOffice;
+import entity.TimesheetOffice;
 import entity.Department;
 import entity.Employee;
 import entity.EmployeeOffice;
 import entity.Worker;
 import entity.Factory;
 import entity.Produre;
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 import entity.Assignment;
 import entity.Bonus_Discipline;
 import entity.TeamProducing;
@@ -187,15 +186,15 @@ public class SalaryDAO {
 		return (EmployeeOffice) eAdministrative;
 	}
 	
-	public TimesheetsFactory searchTimeSheetsFactoryById(String idAssignment) {
+	public TimesheetFactory searchTimeSheetsFactoryById(String idAssignment) {
 		String sql = "select * from ChamCongSanXuat where MaPhanCong = ?";
-		TimesheetsFactory time = null;
+		TimesheetFactory time = null;
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, idAssignment);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				time = new TimesheetsFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
+				time = new TimesheetFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -262,9 +261,9 @@ public class SalaryDAO {
 		return listAssignment;
 	}
 	
-	public List<TimesheetsFactory> workDayOfEmployyProductive(String idEmployee, int month, int year) {
+	public List<TimesheetFactory> workDayOfEmployyProductive(String idEmployee, int month, int year) {
 		List<Assignment> listAssignment = listAssignmentOfEmployee(idEmployee, month, year);
-		List<TimesheetsFactory> listTime = new ArrayList<TimesheetsFactory>();
+		List<TimesheetFactory> listTime = new ArrayList<TimesheetFactory>();
 		
 		for(Assignment a : listAssignment) {
 			listTime.add(searchTimeSheetsFactoryById(a.getAssignmentID()));
@@ -275,12 +274,12 @@ public class SalaryDAO {
 	public double totalSalaryOfE(String idEmployee, int month, int year) {
 		double totalSalary = 0;
 		List<Assignment> listAssignment = listAssignmentOfEmployee(idEmployee, month, year);
-		List<TimesheetsFactory> listTime = new ArrayList<TimesheetsFactory>();
+		List<TimesheetFactory> listTime = new ArrayList<TimesheetFactory>();
 		ProductDAO productDao = new ProductDAO();
 		for(Assignment a : listAssignment) {
 			listTime.add(searchTimeSheetsFactoryById(a.getAssignmentID()));
 		}
-		for(TimesheetsFactory time : listTime) {
+		for(TimesheetFactory time : listTime) {
 			Assignment assignment = searchAssignmentById(time.getAssignmentID());
 			Produre produre = productDao.searchProcedureByIdProcedure(assignment.getProdureID());
 			totalSalary += time.getQuantity() * produre.getPrice();
@@ -288,11 +287,12 @@ public class SalaryDAO {
 		return totalSalary;
 	}
 	
-	public List<TimesheetsOffice> hourWorkOfEmployeeAdministrative(String idEmployee, int month, int year){
+
+	public List<TimesheetOffice> numberWorkOfEmployeeAdministrative(String idEmployee, int month, int year){
 //		LocalDateTime date = LocalDateTime.now();
 		String sql = "SELECT * from ChamCongHanhChinh where DATEPART(MONTH, NgayChamCong) = ? AND DATEPART(YEAR, NgayChamCong) = ? AND MaNhanVien = ?";
-		List<TimesheetsOffice> listTimeKeep = new ArrayList<TimesheetsOffice>();
-		TimesheetsOffice timeKeep = null;
+		List<TimesheetOffice> listTimeKeep = new ArrayList<TimesheetOffice>();
+		TimesheetOffice timeKeep = null;
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setInt(1, month);
@@ -300,7 +300,7 @@ public class SalaryDAO {
 			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				timeKeep = new TimesheetsOffice(rs.getString("MaChamCong"), rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"), rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("MaNhanVien"));
+				timeKeep = new TimesheetOffice(rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"), rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("MaNhanVien"));
 				if(timeKeep != null) {
 					listTimeKeep.add(timeKeep);
 				}

@@ -516,6 +516,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		for (Product x : subListProduct) {
 			String[] row = { x.getProductID(), x.getName(), daoProdure.getAllProdureByProductID(x.getProductID()).size() + "", daoAssignment.getQuanProduct(x.getProductID())+"", daoAssignment.getQuanDoneProduct(x.getProductID())+"" };
 			modelProduct.addRow(row);
+
 		}
 	}
 
