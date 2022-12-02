@@ -18,7 +18,7 @@ public class ProdureDAO {
 	public List<Produre> getAllProdureByProductID(String id) {
 		List<Produre> listProdure = new ArrayList<Produre>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select * from QuyTrinh where MaSanPham = ?");
+			PreparedStatement stmt = connection.prepareStatement("select * from QuyTrinh where MaSanPham = ? ORDER BY ThuTuSanXuat ASC");
 			stmt.setString(1, id);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
