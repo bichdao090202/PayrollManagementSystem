@@ -371,8 +371,8 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		while (tblProduct.getRowCount() != 0)
 			modelProduct.removeRow(0);
 		for (Product x : listProduct) {
-			String[] row = { x.getProductID(), x.getName(), x.getQuantity() + "" };
-			modelProduct.addRow(row);
+//			String[] row = { x.getProductID(), x.getName(), x.getQuantity() + "" };
+//			modelProduct.addRow(row);
 		}
 	}
 

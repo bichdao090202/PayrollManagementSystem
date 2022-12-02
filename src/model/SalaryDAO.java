@@ -3,7 +3,6 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -289,7 +288,7 @@ public class SalaryDAO {
 	}
 	
 
-	public List<TimesheetsOffice> numberWorkOfEmployeeAdministrative(String idEmployee, int month, int year){
+	public List<TimesheetOffice> numberWorkOfEmployeeAdministrative(String idEmployee, int month, int year){
 //		LocalDateTime date = LocalDateTime.now();
 		String sql = "SELECT * from ChamCongHanhChinh where DATEPART(MONTH, NgayChamCong) = ? AND DATEPART(YEAR, NgayChamCong) = ? AND MaNhanVien = ?";
 		List<TimesheetOffice> listTimeKeep = new ArrayList<TimesheetOffice>();
@@ -301,7 +300,7 @@ public class SalaryDAO {
 			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				timeKeep = new TimesheetsOffice(rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"), rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("MaNhanVien"));
+				timeKeep = new TimesheetOffice(rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"), rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("MaNhanVien"));
 				if(timeKeep != null) {
 					listTimeKeep.add(timeKeep);
 				}

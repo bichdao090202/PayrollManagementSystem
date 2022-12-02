@@ -34,7 +34,7 @@ import com.toedter.components.JSpinField;
 
 import custom_field.JTextFieldHint;
 import entity.TimesheetFactory;
-import model.TimesheetDAO;
+//import model.TimesheetDAO;
 import model.TimesheetFactoryDAO;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.ListSelectionModel;
@@ -158,18 +158,59 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		pnInput.add(pnOperations, "flowx,cell 0 4 4 1,alignx center");
 
 		btnAdd = new JButton("Thêm chấm công");
+		btnAdd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnAdd.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnAdd.setBackground(Color.WHITE);
+			}
+		});
+		btnAdd.setBorder(new LineBorder(COLOR, 2, false));
+		btnAdd.setForeground(COLOR);
+		btnAdd.setBackground(Color.WHITE);
 		btnAdd.addActionListener(this);
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAdd.setFocusable(false);
 		pnOperations.add(btnAdd);
 
 		btnDelete = new JButton("Xóa chấm công");
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDelete.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDelete.setBackground(Color.WHITE);
+			}
+		});
+		btnDelete.setBorder(new LineBorder(COLOR, 2, false));
+		btnDelete.setForeground(COLOR);
+		btnDelete.setBackground(Color.WHITE);
 		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
-		btnDelete.setEnabled(false);
 		btnDelete.setFocusable(false);
 		pnOperations.add(btnDelete);
 
 		btnUpdate = new JButton("Cập nhật chấm công");
+		btnUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdate.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdate.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdate.setBorder(new LineBorder(COLOR, 2, false));
+		btnUpdate.setForeground(COLOR);
+		btnUpdate.setBackground(Color.WHITE);
 		btnUpdate.setIcon(new ImageIcon("images\\operations\\update.png"));
 		btnUpdate.setFocusable(false);
 		btnUpdate.addActionListener(this);
@@ -269,8 +310,22 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		dateSearch.setMinimumSize(new Dimension(150, 20));
 		pnSearch.add(dateSearch, "cell 1 0,grow");
 
-		btnSearch = new JButton("Tìm");
+		btnSearch = new JButton();
+		btnSearch.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSearch.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSearch.setBackground(Color.WHITE);
+			}
+		});
+		btnSearch.setBorder(new LineBorder(COLOR, 2, false));
+		btnSearch.setForeground(COLOR);
 		btnSearch.setBackground(Color.WHITE);
+		btnSearch.setIcon(new ImageIcon("images\\operations\\filter.png"));
 		btnSearch.setFocusable(false);
 		pnSearch.add(btnSearch, "cell 2 0");
 

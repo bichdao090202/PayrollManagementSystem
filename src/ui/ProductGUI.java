@@ -48,8 +48,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollBar;
 
 public class ProductGUI extends JFrame implements ActionListener, MouseListener {
-//	public ProductGUI() {
-//	}
+	public ProductGUI() {
+		getUI();
+	}
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtIdProduct;
@@ -88,8 +89,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	private JTable tblListDetail;
 	private DefaultTableModel dtmListDetail;
 
-//	public Component getUI() {
-	public ProductGUI() {
+	public Component getUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
 //		getContentPane().setBackground(new Color(0,140,140));
@@ -547,7 +547,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		txtIdProduct.setEditable(false);
 		txtIdProcedure.setEditable(false);
 		
-//		return getContentPane();
+		return getContentPane();
 	}
 	
 
