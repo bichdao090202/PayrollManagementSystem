@@ -3,7 +3,6 @@ package ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -42,6 +41,19 @@ import model.ProdureDAO;
 import model.WorkerDAO;
 
 public class AssignmentGUI extends JFrame implements ActionListener, MouseListener {
+	
+	private static final long serialVersionUID = 1L;
+	private static final Color COLOR = new Color(14, 85, 78);
+//	private static final Color COLOR_HOVER = new Color(36, 217, 199);
+	private final ImageIcon imgFirst = new ImageIcon("images\\jump page\\size15\\first.png");
+	private final ImageIcon imgPrevious = new ImageIcon("images\\jump page\\size15\\previous.png");
+	private final ImageIcon imgNext = new ImageIcon("images\\jump page\\size15\\next.png");
+	private final ImageIcon imgLast = new ImageIcon("images\\jump page\\size15\\last.png");
+	private final ImageIcon imgFirst1 = new ImageIcon("images\\jump page\\first.png");
+	private final ImageIcon imgPrevious1 = new ImageIcon("images\\jump page\\previous.png");
+	private final ImageIcon imgNext1 = new ImageIcon("images\\jump page\\next.png");
+	private final ImageIcon imgLast1 = new ImageIcon("images\\jump page\\last.png");
+	private final Date currentDate = new Date();
 	private JTable tblWorker, tblProduct, tblProdure, tblAssignment;
 	private DefaultTableModel modelWorker, modelProduct, modelProdure, modelAssignment;
 	private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
@@ -98,13 +110,17 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 		JPanel pnWorker = new JPanel();
 		pnWorker.setBounds(0, 0, 381, 288);
-		pnWorker.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Công nhân"));
+		pnWorker.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Công nhân"));
 		tblWorker = new JTable();
 		String[] row1 = { "Mã", "Họ tên", "Tổ" };
 		pn1.setLayout(null);
 		pn1.add(pnWorker);
 		tblWorker = new JTable(modelWorker = new DefaultTableModel(row1, 0));
 		JScrollPane sp1 = new JScrollPane(tblWorker);
+		tblWorker.setFillsViewportHeight(true);
+		tblWorker.getTableHeader().setOpaque(false);
+		tblWorker.getTableHeader().setBackground(COLOR);
+		tblWorker.getTableHeader().setForeground(Color.WHITE);
 		tblWorker.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tblWorker.getColumnModel().getColumn(1).setPreferredWidth(170);
 		tblWorker.getColumnModel().getColumn(2).setPreferredWidth(80);
@@ -122,25 +138,18 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pnWorker.setLayout(null);
 		pnChangePage_1.add(btnGoFirstPage1 = new JButton());
 		btnGoFirstPage1.setLocation(0, 0);
-		Image imgFirst = new ImageIcon("images\\jump page\\first.png").getImage().getScaledInstance(15, 15,
-				Image.SCALE_DEFAULT);
-		btnGoFirstPage1.setIcon(new ImageIcon(imgFirst));
+		btnGoFirstPage1.setIcon(imgFirst);
 		pnChangePage_1.add(btnPreviousPage1 = new JButton());
-		Image imgPrevious = new ImageIcon("images\\jump page\\previous.png").getImage().getScaledInstance(15, 15,
-				Image.SCALE_DEFAULT);
-		btnPreviousPage1.setIcon(new ImageIcon(imgPrevious));
+		
+		btnPreviousPage1.setIcon(imgPrevious);
 		pnChangePage_1.add(btnNextPage1 = new JButton());
-		Image imgNext = new ImageIcon("images\\jump page\\next.png").getImage().getScaledInstance(15, 15,
-				Image.SCALE_DEFAULT);
-		btnNextPage1.setIcon(new ImageIcon(imgNext));
-		pnChangePage_1.add(btnGoLastPage1 = new JButton(""));
-		Image imgLast = new ImageIcon("images\\jump page\\last.png").getImage().getScaledInstance(15, 15,
-				Image.SCALE_DEFAULT);
-		btnGoLastPage1.setIcon(new ImageIcon(imgLast));
-
+		
+		btnNextPage1.setIcon(imgNext);
+		pnChangePage_1.add(btnGoLastPage1 = new JButton());
+		btnGoLastPage1.setIcon(imgLast);
 		JPanel pnProduct = new JPanel();
 		pnProduct.setBounds(391, 0, 427, 288);
-		pnProduct.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Sản phẩm"));
+		pnProduct.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Sản phẩm"));
 		tblProduct = new JTable();
 		String[] row2 = { "Mã", "Tên sản phẩm","SLQT", "SLSX", "SLHT" };
 		tblProduct = new JTable(modelProduct = new DefaultTableModel(row2, 0));
@@ -149,6 +158,10 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pnProduct.add(sp2);
 		sp2.setLocation(10, 21);
 		sp2.setSize(406, 231);
+		tblProduct.setFillsViewportHeight(true);
+		tblProduct.getTableHeader().setOpaque(false);
+		tblProduct.getTableHeader().setBackground(COLOR);
+		tblProduct.getTableHeader().setForeground(Color.WHITE);
 		tblProduct.getColumnModel().getColumn(0).setPreferredWidth(70);
 		tblProduct.getColumnModel().getColumn(1).setPreferredWidth(200);
 		tblProduct.getColumnModel().getColumn(2).setPreferredWidth(80);
@@ -163,17 +176,17 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 		pnChangePage_2.add(btnGoFirstPage2 = new JButton());
 		btnGoFirstPage2.setLocation(0, 0);
-		btnGoFirstPage2.setIcon(new ImageIcon(imgFirst));
+		btnGoFirstPage2.setIcon(imgFirst);
 		pnChangePage_2.add(btnPreviousPage2 = new JButton());
-		btnPreviousPage2.setIcon(new ImageIcon(imgPrevious));
+		btnPreviousPage2.setIcon(imgPrevious);
 		pnChangePage_2.add(btnNextPage2 = new JButton());
-		btnNextPage2.setIcon(new ImageIcon(imgNext));
+		btnNextPage2.setIcon(imgNext);
 		pnChangePage_2.add(btnGoLastPage2 = new JButton(""));
-		btnGoLastPage2.setIcon(new ImageIcon(imgLast));
+		btnGoLastPage2.setIcon(imgLast);
 
 		JPanel pnProdure = new JPanel();
 		pnProdure.setBounds(828, 0, 346, 288);
-		pnProdure.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Quy trình"));
+		pnProdure.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Quy trình"));
 		tblProdure = new JTable();
 		String[] row3 = { "Mã", "Tên quy trình", "Thứ tự" };
 		tblProdure = new JTable(modelProdure = new DefaultTableModel(row3, 0));
@@ -182,6 +195,10 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pnProdure.add(sp3);
 		sp3.setLocation(10, 21);
 		sp3.setSize(326, 231);
+		tblProdure.setFillsViewportHeight(true);
+		tblProdure.getTableHeader().setOpaque(false);
+		tblProdure.getTableHeader().setBackground(COLOR);
+		tblProdure.getTableHeader().setForeground(Color.WHITE);
 		tblProdure.getColumnModel().getColumn(0).setPreferredWidth(80);
 		tblProdure.getColumnModel().getColumn(1).setPreferredWidth(200);
 		tblProdure.getColumnModel().getColumn(2).setPreferredWidth(60);
@@ -194,25 +211,18 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 		pnChangePage_3.add(btnGoFirstPage3 = new JButton());
 		btnGoFirstPage3.setLocation(0, 0);
-		btnGoFirstPage3.setIcon(new ImageIcon(imgFirst));
+		btnGoFirstPage3.setIcon(imgFirst);
 		pnChangePage_3.add(btnPreviousPage3 = new JButton());
-		btnPreviousPage3.setIcon(new ImageIcon(imgPrevious));
+		
+		btnPreviousPage3.setIcon(imgPrevious);
 		pnChangePage_3.add(btnNextPage3 = new JButton());
-		btnNextPage3.setIcon(new ImageIcon(imgNext));
-		pnChangePage_3.add(btnGoLastPage3 = new JButton(""));
-		btnGoLastPage3.setIcon(new ImageIcon(imgLast));
-		Image imgFirst1 = new ImageIcon("images\\jump page\\first.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		Image imgPrevious1 = new ImageIcon("images\\jump page\\previous.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		Image imgNext1 = new ImageIcon("images\\jump page\\next.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
-		Image imgLast1 = new ImageIcon("images\\jump page\\last.png").getImage().getScaledInstance(20, 20,
-				Image.SCALE_DEFAULT);
+		btnNextPage3.setIcon(imgNext);
+		pnChangePage_3.add(btnGoLastPage3 = new JButton());
+		btnGoLastPage3.setIcon(imgLast);
 
 		JPanel pn3 = new JPanel();
 		pn3.setBounds(0, 291, 1033, 356);
-		pn3.setBorder(new TitledBorder(new LineBorder(Color.getColor("Color"), 1, true), "Danh sách Phân công"));
+		pn3.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Phân công"));
 		tblAssignment = new JTable();
 		String[] row4 = { "Mã", "Công nhân", "Sản phẩm", "Quy trình", "Ngày bắt đầu" };
 		pn3.setLayout(null);
@@ -221,6 +231,10 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		sp4.setBounds(10, 21, 1013, 297);
 		pn3.add(sp4);
 		sp4.setPreferredSize(new Dimension(1150, 300));
+		tblAssignment.setFillsViewportHeight(true);
+		tblAssignment.getTableHeader().setOpaque(false);
+		tblAssignment.getTableHeader().setBackground(COLOR);
+		tblAssignment.getTableHeader().setForeground(Color.WHITE);
 		tblAssignment.getColumnModel().getColumn(0).setPreferredWidth(20);
 		tblAssignment.getColumnModel().getColumn(1).setPreferredWidth(250);
 		tblAssignment.getColumnModel().getColumn(2).setPreferredWidth(180);
@@ -232,13 +246,13 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pnChangePage.setBounds(30, 315, 992, 36);
 		pn3.add(pnChangePage);
 		pnChangePage.add(btnGoFirstPage = new JButton());
-		btnGoFirstPage.setIcon(new ImageIcon(imgFirst1));
+		btnGoFirstPage.setIcon(imgFirst1);
 		pnChangePage.add(btnPreviousPage = new JButton());
-		btnPreviousPage.setIcon(new ImageIcon(imgPrevious1));
+		btnPreviousPage.setIcon(imgPrevious1);
 		pnChangePage.add(btnNextPage = new JButton());
-		btnNextPage.setIcon(new ImageIcon(imgNext1));
-		pnChangePage.add(btnGoLastPage = new JButton(""));
-		btnGoLastPage.setIcon(new ImageIcon(imgLast1));
+		btnNextPage.setIcon(imgNext1);
+		pnChangePage.add(btnGoLastPage = new JButton());
+		btnGoLastPage.setIcon(imgLast1);
 
 		btnGoFirstPage.setFocusable(false);
 		btnGoLastPage.setFocusable(false);
@@ -255,6 +269,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		lbDate.setSize(129, 20);
 
 		pnButton.add(calendar = new JDateChooser(new Date()));
+//		calendar.setMinSelectableDate(currentDate);
 		calendar.setLocation(10, 23);
 		calendar.setSize(129, 20);
 		calendar.setDateFormatString("dd-MM-yyyy");
@@ -554,7 +569,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		loadTable3("");
 		listAssignment = daoAssignment.getAllAssignments(worker.getTeamID());
 		loadTable4();
-		calendar.setDate(new Date());
+		calendar.setDate(currentDate);
 	}
 
 	public Assignment getAssignment() {
@@ -652,26 +667,18 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
