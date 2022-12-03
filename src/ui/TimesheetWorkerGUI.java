@@ -52,22 +52,14 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 	private static final Date CURRENT_DATE = new Date();
 	private final String[] headerTableTimesheet = new String[] { "Mã chấm công", "Nhân viên", "Sản phẩm", "Quy trình",
 			"Ngày chấm công", "Số lượng thành phẩm" };
-	private final String[] headerTableAssignment = new String[] { "Mã phân công", "Nhân viên", "Sản phẩm", "Quy trình",
-			"Ngày tham gia" };
+	private final String[] headerTableAssignment = new String[] { "Mã phân công", "Nhân viên", "Sản phẩm", "Quy trình", "Ngày tham gia", "Mã hợp đồng", "Hoàn thành", "Chưa hoàn thành"};
 	private JPanel contentPane;
-	private DefaultTableModel dtmAssignment;
-	private DefaultTableModel dtmWorker;
+	private DefaultTableModel dtmAssignment, dtmWorker;
 	private TimesheetFactoryDAO timesheetFactoryDAO;
-	private JTable tblAssignment;
-	private JTable tblTimesheet;
-	private JButton btnSearch;
-	private JButton btnDelete;
-	private JButton btnUpdate;
-	private JButton btnAdd;
+	private JTable tblAssignment, tblTimesheet;
+	private JButton btnAdd, btnUpdate, btnDelete, btnSearch;
 	private JSpinField spinAmountCompleted;
-	private JTextField txtWorker;
-	private JTextField txtProduct;
-	private JTextField txtProduce;
+	private JTextField txtWorker, txtProduct, txtProduce;
 	private JDateChooser dateTimesheet;
 
 	public static void main(String[] args) {
@@ -85,7 +77,6 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 
 	public Component getUI() {
 
-//		timesheetDAO = new TimesheetDAO();
 		timesheetFactoryDAO = new TimesheetFactoryDAO();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

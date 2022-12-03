@@ -23,7 +23,7 @@ public class TimesheetFactoryDAO {
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM VIEW_PHANCONG");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				String assignment = rs.getInt("MaPhanCong") +";"+ rs.getString("NhanVien") + ";" + rs.getString("SanPham")+ ";" + rs.getString("QuyTrinh") + ";" + rs.getDate("NgayThamGia");
+				String assignment = rs.getInt("MaPhanCong") +";"+ rs.getString("NhanVien") + ";" + rs.getString("SanPham")+ ";" + rs.getString("QuyTrinh") + ";" + rs.getDate("NgayThamGia") + ";" + rs.getInt("MaHopDong") + ";" + rs.getInt("SoLuongSanXuat") + ";" + rs.getInt("SoLuongCanHoanThanh");
 				listAssignment.add(assignment);
 			}
 		} catch (Exception e) {

@@ -22,7 +22,7 @@ public class DetailPRoductionDAO {
 	
 	public List<DetailProduction> getListDetailbyIdProduct(String idProduct){
 		List<DetailProduction> listDetail = new ArrayList<DetailProduction>();
-		String sql = "select * from ChiTietSanXuat where MaSanPham = ?";
+		String sql = "select * from HopDongSanXuat where MaSanPham = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, idProduct);
@@ -51,7 +51,7 @@ public class DetailPRoductionDAO {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		String sql = "insert into ChiTietSanXuat values(?,?,?,?,?,?)";
+		String sql = "insert into HopDongSanXuat values(?,?,?,?,?,?)";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setInt(1, detail.getDetailProductionID());
@@ -84,7 +84,7 @@ public class DetailPRoductionDAO {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		String sql = "update ChiTietSanXuat set MaCTSX = ?, SoLuongSanXuat = ?, TinhTrang = ?, ThoiGian = ? where MaCTSX = ?";
+		String sql = "update HopDongSanXuat set MaHopDong = ?, SoLuongSanXuat = ?, TinhTrang = ?, ThoiGian = ? where MaHopDong = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setInt(1, detail.getDetailProductionID());
@@ -104,7 +104,7 @@ public class DetailPRoductionDAO {
 	}
 	
 	public boolean updateDetailNotDate(DetailProduction detail) {
-		String sql = "update ChiTietSanXuat set MaCTSX = ?, SoLuongSanXuat = ?, TinhTrang = ? where MaCTSX = ?";
+		String sql = "update HopDongSanXuat set MaHopDong = ?, SoLuongSanXuat = ?, TinhTrang = ? where MaHopDong = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setInt(1, detail.getDetailProductionID());
@@ -123,7 +123,7 @@ public class DetailPRoductionDAO {
 	}
 	
 	public boolean updateQuantityFinishDetail(int quantityFinish, int detailID) {
-		String sql = "update ChiTietSanXuat set SoLuongHoanThanh = ? where MaCTSX = ?";
+		String sql = "update HopDongSanXuat set SoLuongHoanThanh = ? where MaHopDong = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setInt(1, quantityFinish);
@@ -140,7 +140,7 @@ public class DetailPRoductionDAO {
 	}
 	
 	public boolean updateStateFinishDetailProduct(int detailID ) {
-		String sql = "update ChiTietSanXuat set TinhTrang = ? where MaCTSX = ?";
+		String sql = "update HopDongSanXuat set TinhTrang = ? where MaHopDong = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, "Hoàn Thành");
@@ -158,14 +158,14 @@ public class DetailPRoductionDAO {
 	
 	public void updateState(String idProduct){
 		List<DetailProduction> listDetail = new ArrayList<DetailProduction>();
-		String sql = "select * from ChiTietSanXuat where MaSanPham = ?";
+		String sql = "select * from HopDongSanXuat where MaSanPham = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, idProduct);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
 				if(rs.getInt("SoLuongSanXuat") == rs.getInt("SoLuongHoanThanh")) {
-					updateStateFinishDetailProduct(rs.getInt("MaCTSx"));
+					updateStateFinishDetailProduct(rs.getInt("MaHopDong"));
 				}
 			}
 		} catch (Exception e) {
@@ -175,7 +175,7 @@ public class DetailPRoductionDAO {
 	}
 	
 	public boolean deleteDetail(int detailID) {
-		String sql = "delete from ChiTietSanXuat where MaCTSX = ?";
+		String sql = "delete from HopDongSanXuat where MaHopDong = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setInt(1, detailID);
@@ -191,7 +191,7 @@ public class DetailPRoductionDAO {
 	}
 	
 	public boolean deleteListDetail(String productID) {
-		String sql = "delete from ChiTietSanXuat where MaSanPham = ?";
+		String sql = "delete from HopDongSanXuat where MaSanPham = ?";
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setString(1, productID);
@@ -208,7 +208,7 @@ public class DetailPRoductionDAO {
 	
 	public DetailProduction searchDetailProductionById(String productID) {
 //		int order = searchOrderDetailByProductionById(productID);
-		String sql = "select * from ChiTietSanXuat where MaSanPham = ?";
+		String sql = "select * from HopDongSanXuat where MaSanPham = ?";
 		List<DetailProduction> listDetail = new ArrayList<DetailProduction>();
 		DetailProduction detail = null;
 		try {
@@ -216,7 +216,7 @@ public class DetailPRoductionDAO {
 			prstm.setString(1, productID);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				detail = new DetailProduction(rs.getInt("MaCTSX"), rs.getInt("SoLuongSanXuat"), rs.getString("TinhTrang"), rs.getString("MaSanPham"), rs.getDate("ThoiGian"));
+				detail = new DetailProduction(rs.getInt("MaHopDong"), rs.getInt("SoLuongSanXuat"), rs.getString("TinhTrang"), rs.getString("MaSanPham"), rs.getDate("ThoiGian"));
 				listDetail.add(detail);
 			}
 		} catch (Exception e) {
@@ -238,7 +238,7 @@ public class DetailPRoductionDAO {
 	}
 	
 	public int searchOrderDetailByProductionById(String productID) {
-		String sql = "select * from ChiTietSanXuat where MaSanPham = ?";
+		String sql = "select * from HopDongSanXuat where MaSanPham = ?";
 		List<DetailProduction> listDetail = new ArrayList<DetailProduction>();
 		DetailProduction detail = null;
 		try {
@@ -246,7 +246,7 @@ public class DetailPRoductionDAO {
 			prstm.setString(1, productID);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				detail = new DetailProduction(rs.getInt("MaCTSX"), rs.getInt("SoLuongSanXuat"), rs.getString("TinhTrang"), rs.getString("MaSanPham"), rs.getDate("ThoiGian"));
+				detail = new DetailProduction(rs.getInt("MaHopDong"), rs.getInt("SoLuongSanXuat"), rs.getString("TinhTrang"), rs.getString("MaSanPham"), rs.getDate("ThoiGian"));
 				listDetail.add(detail);
 			}
 		} catch (Exception e) {
@@ -267,7 +267,7 @@ public class DetailPRoductionDAO {
 	}
 	
 	public int getOrderDetailPresent() {
-		String sql = "select MAX(MaCTSX) as 'MaLonNhat' from ChiTietSanXuat";
+		String sql = "select MAX(MaHopDong) as 'MaLonNhat' from HopDongSanXuat";
 //		List<DetailProduction> listDetail = new ArrayList<DetailProduction>();
 //		DetailProduction detail = null;
 		int order = 0;

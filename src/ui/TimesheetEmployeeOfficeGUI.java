@@ -60,24 +60,14 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 	private DefaultTableModel dtmEmp;
 	private TimesheetDAO timesheetDAO;
 	private EmployeeOfficeDAO employeeOfficeDAO;
-	private JButton btnUpdate;
-	private JButton btnAdd;
-	private JButton btnDelete;
-	private JButton btnSearch;
-	private JComboBox<String> cboEmp;
-	private JComboBox<String> cboSearchEmp;
-	private JDateChooser dateCheck;
-	private JSpinField spinHourCheckInAM;
-	private JSpinField spinMinuteCheckInAM;
-	private JSpinField spinHourCheckOutAM;
-	private JSpinField spinMinuteCheckOutAM;
-	private JSpinField spinHourCheckOutPM;
-	private JSpinField spinMinuteCheckOutPM;
-	private JSpinField spinMinuteCheckInPM;
-	private JSpinField spinHourCheckInPM;
-	private JCheckBox chkAbsentPM;
-	private JCheckBox chkAbsentAM;
-	private JDateChooser dateSearchEmp;
+	private JButton btnAdd, btnUpdate, btnDelete, btnSearch;
+	private JComboBox<String> cboEmp, cboSearchEmp;
+	private JDateChooser dateCheck, dateSearchEmp;
+	private JSpinField spinHourCheckInAM, spinMinuteCheckInAM;
+	private JSpinField spinHourCheckOutAM, spinMinuteCheckOutAM;
+	private JSpinField spinHourCheckOutPM, spinMinuteCheckOutPM;
+	private JSpinField spinMinuteCheckInPM, spinHourCheckInPM;
+	private JCheckBox chkAbsentPM, chkAbsentAM;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

@@ -9,7 +9,7 @@ public class ConnectDB {
 	private static ConnectDB instance;
 	
 	public ConnectDB() {
-		String url = "jdbc:sqlserver://localhost:1433;databaseName=PayrollManagementSystem2";
+		String url = "jdbc:sqlserver://localhost:1433;databaseName=PayrollManagementSystem";
 		String user = "sa";
 		String pwd = "sa";
 //		String pwd = "123456789";
