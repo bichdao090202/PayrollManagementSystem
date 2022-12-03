@@ -8,6 +8,7 @@ public class Assignment {
 	private String produreID;
 	private String workerID;
 	private LocalDate date;
+	private String detailProductionID;
 
 	public Assignment() {
 		super();
@@ -26,6 +27,15 @@ public class Assignment {
 		this.produreID = produreID;
 		this.workerID = workerID;
 		this.date = date;
+	}
+	
+	public Assignment(String assignmentID, String produreID, String workerID, LocalDate date, String detailProductionID) {
+		super();
+		this.assignmentID = assignmentID;
+		this.produreID = produreID;
+		this.workerID = workerID;
+		this.date = date;
+		this.detailProductionID = detailProductionID;
 	}
 
 	public String getAssignmentID() {
@@ -58,6 +68,14 @@ public class Assignment {
 
 	public void setDate(LocalDate date) {
 		this.date = date;
+	}
+
+	public String getDetailProductionID() {
+		return detailProductionID;
+	}
+
+	public void setDetailProductionID(String detailProductionID) {
+		this.detailProductionID = detailProductionID;
 	}
 
 	@Override

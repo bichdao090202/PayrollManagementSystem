@@ -41,7 +41,7 @@ import model.ProdureDAO;
 import model.WorkerDAO;
 
 public class AssignmentGUI extends JFrame implements ActionListener, MouseListener {
-	
+
 	private static final long serialVersionUID = 1L;
 	private static final Color COLOR = new Color(14, 85, 78);
 //	private static final Color COLOR_HOVER = new Color(36, 217, 199);
@@ -92,7 +92,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		index = indexProduct = indexWorker = indexProdure = 0;
 		numWorker = numProduct = numProdure = 13;
 		this.worker = daoWorker.getWorkerByID(worker.getEmployeeID());
-		if (this.worker == null){
+		if (this.worker == null) {
 			this.worker = new Worker();
 			this.worker.setTeamID("admin");
 		}
@@ -112,7 +112,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pnWorker.setBounds(0, 0, 381, 288);
 		pnWorker.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Công nhân"));
 		tblWorker = new JTable();
-		String[] row1 = { "Mã", "Họ tên", "Tổ" };
+		String[] row1 = { "Mã CN", "Họ tên", "Tổ" };
 		pn1.setLayout(null);
 		pn1.add(pnWorker);
 		tblWorker = new JTable(modelWorker = new DefaultTableModel(row1, 0));
@@ -140,18 +140,18 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		btnGoFirstPage1.setLocation(0, 0);
 		btnGoFirstPage1.setIcon(imgFirst);
 		pnChangePage_1.add(btnPreviousPage1 = new JButton());
-		
+
 		btnPreviousPage1.setIcon(imgPrevious);
 		pnChangePage_1.add(btnNextPage1 = new JButton());
-		
+
 		btnNextPage1.setIcon(imgNext);
 		pnChangePage_1.add(btnGoLastPage1 = new JButton());
 		btnGoLastPage1.setIcon(imgLast);
 		JPanel pnProduct = new JPanel();
 		pnProduct.setBounds(391, 0, 427, 288);
-		pnProduct.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Sản phẩm"));
+		pnProduct.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Hợp đồng"));
 		tblProduct = new JTable();
-		String[] row2 = { "Mã", "Tên sản phẩm","SLQT", "SLSX", "SLHT" };
+		String[] row2 = { "Mã HĐ", "Mã SP", "Tên sản phẩm", "SLQT", "SLSX", "SLHT" };
 		tblProduct = new JTable(modelProduct = new DefaultTableModel(row2, 0));
 		JScrollPane sp2 = new JScrollPane(tblProduct);
 		pnProduct.setLayout(null);
@@ -163,10 +163,11 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		tblProduct.getTableHeader().setBackground(COLOR);
 		tblProduct.getTableHeader().setForeground(Color.WHITE);
 		tblProduct.getColumnModel().getColumn(0).setPreferredWidth(70);
-		tblProduct.getColumnModel().getColumn(1).setPreferredWidth(200);
-		tblProduct.getColumnModel().getColumn(2).setPreferredWidth(80);
+		tblProduct.getColumnModel().getColumn(1).setPreferredWidth(70);
+		tblProduct.getColumnModel().getColumn(2).setPreferredWidth(200);
 		tblProduct.getColumnModel().getColumn(3).setPreferredWidth(80);
 		tblProduct.getColumnModel().getColumn(4).setPreferredWidth(80);
+		tblProduct.getColumnModel().getColumn(5).setPreferredWidth(80);
 		pn1.add(pnProduct);
 
 		JPanel pnChangePage_2 = new JPanel();
@@ -188,7 +189,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pnProdure.setBounds(828, 0, 346, 288);
 		pnProdure.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Quy trình"));
 		tblProdure = new JTable();
-		String[] row3 = { "Mã", "Tên quy trình", "Thứ tự" };
+		String[] row3 = { "Mã QT", "Tên quy trình", "Thứ tự" };
 		tblProdure = new JTable(modelProdure = new DefaultTableModel(row3, 0));
 		JScrollPane sp3 = new JScrollPane(tblProdure);
 		pnProdure.setLayout(null);
@@ -213,7 +214,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		btnGoFirstPage3.setLocation(0, 0);
 		btnGoFirstPage3.setIcon(imgFirst);
 		pnChangePage_3.add(btnPreviousPage3 = new JButton());
-		
+
 		btnPreviousPage3.setIcon(imgPrevious);
 		pnChangePage_3.add(btnNextPage3 = new JButton());
 		btnNextPage3.setIcon(imgNext);
@@ -224,7 +225,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pn3.setBounds(0, 291, 1033, 356);
 		pn3.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Phân công"));
 		tblAssignment = new JTable();
-		String[] row4 = { "Mã", "Công nhân", "Sản phẩm", "Quy trình", "Ngày bắt đầu" };
+		String[] row4 = { "Mã PC", "Công nhân", "Hợp đồng", "Quy trình", "Ngày bắt đầu" };
 		pn3.setLayout(null);
 		tblAssignment = new JTable(modelAssignment = new DefaultTableModel(row4, 0));
 		JScrollPane sp4 = new JScrollPane(tblAssignment);
@@ -354,35 +355,82 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 				return;
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			String stringDate = formatter.format(calendar.getDate());
+			//create many record
+			int rows[] = tblWorker.getSelectedRows();
+			if (rows.length > 1 && JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phân công này?", "Thông báo",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				int success = 0;
+				String error = "";
+				for (int i = 0; i < rows.length; i++) {
+					if (daoAssignment.checkExistDateOfWorker((String)tblWorker.getValueAt(rows[i], 0), stringDate)){
+						assignment.setAssignmentID(daoAssignment.getNewAssignmentID() + "");
+						assignment.setWorkerID((String)tblWorker.getValueAt(rows[i], 0));
+						
+						daoAssignment.createAssignment(assignment);
+						success++;
+					} else
+						error+=(String)tblWorker.getValueAt(rows[i], 0)+',';
+				}
+				refresh();
+				loadTable4();
+				String mess = "";
+				mess += success==0?"":"[" + success + "] phân công thành công" + "\n";
+				mess += error.equals("")?"":"Các nhân viên phân công thất bại: [" + error.substring(0, error.length()-1) + "]";
+				JOptionPane.showMessageDialog(this,mess);
+				return;
+			}
+			//create 1 record
 			if (!daoAssignment.checkExistDateOfWorker(assignment.getWorkerID(), stringDate)) {
 				JOptionPane.showMessageDialog(this,
 						"Vào ngày này, nhân viên này đã được phân công. Hãy xóa hoặc sửa Phân công trước đó");
 				return;
 			}
+			
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phân công này?", "Thông báo",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 				if (daoAssignment.createAssignment(assignment) == false) {
 					JOptionPane.showMessageDialog(this, "Phân công thất bại, vui lòng thử lại sau");
 					return;
 				}
-				JOptionPane.showMessageDialog(this, "Phân công thành công");
 				refresh();
 				loadTable4();
-			}	
+				JOptionPane.showMessageDialog(this, "Phân công thành công");
+			}
 		}
-		if (o.equals(btnDelete)) {			
+		if (o.equals(btnDelete)) {
 			int row = tblAssignment.getSelectedRow();
 			if (row == -1) {
 				JOptionPane.showMessageDialog(this, "Chưa chọn phân công để xóa");
 				return;
 			}
-			if (daoAssignment.checkExistsAssignmenDetail((String)tblAssignment.getValueAt(row, 0))) {
+			//delete many record
+			int rows[] = tblAssignment.getSelectedRows();
+			if (rows.length>1) {
+				int success = 0;
+				String error = "";
+				for (int i = 0; i < rows.length; i++) {
+					if (!daoAssignment.checkExistsAssignmenDetail((String)tblAssignment.getValueAt(rows[i], 0))) {
+						success++;
+						daoAssignment.deleteAssignment((String)tblAssignment.getValueAt(rows[i], 0));
+					} else
+						error = error + (String)tblAssignment.getValueAt(rows[i], 0) + ",";
+				}
+				refresh();
+				loadTable4();
+				String mess = "";
+				mess += success==0?"":"[" + success + "/" +rows.length + "] phân công xóa thành công" + "\n";
+				mess += error.equals("")?"":"Mã phân công xóa thất bại: [" + error.substring(0, error.length()-1) + "]";
+				JOptionPane.showMessageDialog(this,mess);
+				return;
+			}
+			//delete 1 record
+			if (daoAssignment.checkExistsAssignmenDetail((String) tblAssignment.getValueAt(row, 0))) {
 				JOptionPane.showMessageDialog(this, "Phân công này đã được chấm công, không thể xóa");
 				return;
 			}
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn xóa phân công này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				daoAssignment.deleteAssignment((String)tblAssignment.getValueAt(row, 0));
+				daoAssignment.deleteAssignment((String) tblAssignment.getValueAt(row, 0));
 				refresh();
 				JOptionPane.showMessageDialog(this, "Xóa phân công thành công");
 			}
@@ -391,6 +439,10 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			int rowAssignment = tblAssignment.getSelectedRow();
 			if (rowAssignment == -1) {
 				JOptionPane.showMessageDialog(this, "Chưa chọn phân công để phân công lại");
+				return;
+			}
+			if (daoAssignment.checkExistsAssignmenDetail((String) tblAssignment.getValueAt(rowAssignment, 0))) {
+				JOptionPane.showMessageDialog(this, "Phân công này đã được chấm công, không thể cập nhật");
 				return;
 			}
 			assignment = getAssignment();
@@ -483,7 +535,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		if (o.equals(btnGoFirstPage3)) {
 			indexProdure = 0;
 			String id = tblProduct.getSelectedRow() == -1 ? ""
-					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 0).toString();
+					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 1).toString();
 			loadTable3(id);
 		}
 		if (o.equals(btnPreviousPage3)) {
@@ -492,7 +544,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			else
 				indexProdure -= numProdure;
 			String id = tblProduct.getSelectedRow() == -1 ? ""
-					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 0).toString();
+					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 1).toString();
 			loadTable3(id);
 		}
 		if (o.equals(btnNextPage3)) {
@@ -501,13 +553,13 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			else
 				indexProdure += numProdure;
 			String id = tblProduct.getSelectedRow() == -1 ? ""
-					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 0).toString();
+					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 1).toString();
 			loadTable3(id);
 		}
 		if (o.equals(btnGoLastPage3)) {
 			indexProdure = (listProdure.size() - 1) / numProdure * numProdure;
 			String id = tblProduct.getSelectedRow() == -1 ? ""
-					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 0).toString();
+					: tblProduct.getValueAt(tblProduct.getSelectedRow(), 1).toString();
 			loadTable3(id);
 		}
 
@@ -529,7 +581,10 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		while (tblProduct.getRowCount() != 0)
 			modelProduct.removeRow(0);
 		for (Product x : subListProduct) {
-			String[] row = { x.getProductID(), x.getName(), daoProdure.getAllProdureByProductID(x.getProductID()).size() + "", daoAssignment.getQuanProduct(x.getProductID())+"", daoAssignment.getQuanDoneProduct(x.getProductID())+"" };
+			String[] row = { daoProduct.getProductionDetailID(x.getProductID()), x.getProductID(), x.getName(),
+					daoProdure.getAllProdureByProductID(x.getProductID()).size() + "",
+					daoAssignment.getQuanProduct(x.getProductID()) + "",
+					daoAssignment.getQuanDoneProduct(x.getProductID()) + "" };
 			modelProduct.addRow(row);
 
 		}
@@ -554,7 +609,9 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 			String[] row = { x.getAssignmentID(),
 					"(" + x.getWorkerID() + ")  " + daoWorker.getWorkerNameByID(x.getWorkerID()),
-					daoProduct.getProductByProdureID(x.getProdureID()).getName(),
+					" (" + daoProduct
+							.getProductionDetailID(daoProduct.getProductByProdureID(x.getProdureID()).getProductID())
+							+ ") " + daoProduct.getProductByProdureID(x.getProdureID()).getName(),
 					daoProdure.getProdureByID(x.getProdureID()).getName(), formatter.format(x.getDate()) };
 			modelAssignment.addRow(row);
 		}
@@ -597,6 +654,8 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			return null;
 		}
 		assignment = new Assignment(daoAssignment.getNewAssignmentID() + "", idProdure, idWorker, local);
+		assignment.setDetailProductionID(
+				daoProduct.getProductionDetailID((String) tblProduct.getValueAt(tblProduct.getSelectedRow(), 1)));
 		return assignment;
 	}
 
@@ -612,6 +671,8 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		if (o.equals(tblWorker)) {
 			listAssignment = daoAssignment.getAllAssignments(worker.getTeamID());
 			int row = tblWorker.getSelectedRow();
+			if (row == -1)
+				return;
 			String id = tblWorker.getValueAt(row, 0).toString();
 			for (int i = 0; i < listAssignment.size(); i++) {
 				if (!listAssignment.get(i).getWorkerID().equals(id)) {
@@ -624,16 +685,21 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		}
 		if (o.equals(tblProduct)) {
 			int row = tblProduct.getSelectedRow();
+			if (row == -1)
+				return;
 			indexProdure = 0;
-			loadTable3((String) tblProduct.getValueAt(row, 0));
+			loadTable3((String) tblProduct.getValueAt(row, 1));
 		}
 		if (o.equals(tblAssignment)) {
+			int row = tblAssignment.getSelectedRow();
+			if (row == -1)
+				return;
 			String id = (String) tblAssignment.getValueAt(tblAssignment.getSelectedRow(), 0);
 			Assignment assignment = daoAssignment.getAssignmentByID(id);
 
 			Worker w = new Worker();
 			w.setEmployeeID(assignment.getWorkerID());
-			indexWorker = listWorker.indexOf(w)/numWorker*numWorker;
+			indexWorker = listWorker.indexOf(w) / numWorker * numWorker;
 			loadTable1();
 			for (int i = 0; i <= tblWorker.getRowCount(); i++)
 				if (tblWorker.getValueAt(i, 0).equals(assignment.getWorkerID())) {
@@ -642,17 +708,17 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 				}
 			String idProduct = daoProduct.getProductByProdureID(assignment.getProdureID()).getProductID();
 			Product p = new Product(idProduct);
-			indexProduct = listProduct.indexOf(p)/numProduct*numProduct;
+			indexProduct = listProduct.indexOf(p) / numProduct * numProduct;
 			loadTable2();
 			for (int i = 0; i <= tblProduct.getRowCount(); i++)
-				if (tblProduct.getValueAt(i, 0).equals(idProduct)) {
+				if (tblProduct.getValueAt(i, 1).equals(idProduct)) {
 					tblProduct.setRowSelectionInterval(i, i);
 					break;
 				}
 			Produre pe = new Produre(assignment.getProdureID());
 			indexProdure = 0;
 			listProdure = daoProdure.getAllProdureByProductID(idProduct);
-			indexProdure = listProdure.indexOf(pe)/numProdure*numProdure;
+			indexProdure = listProdure.indexOf(pe) / numProdure * numProdure;
 			loadTable3(idProduct);
 			for (int i = 0; i <= tblProdure.getRowCount(); i++)
 				if (tblProdure.getValueAt(i, 0).equals(assignment.getProdureID())) {

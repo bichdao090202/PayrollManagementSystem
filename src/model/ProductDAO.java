@@ -34,7 +34,7 @@ public class ProductDAO {
 	public List<Product> getAllProduct() {
 		List<Product> listProduct = new ArrayList<Product>();
 		try {
-			PreparedStatement stmt = con.prepareStatement("select * from  SanPham sp join ChiTietSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất'");
+			PreparedStatement stmt = con.prepareStatement("select * from  SanPham sp join HopDongSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất'");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Product product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"));
@@ -454,6 +454,21 @@ public class ProductDAO {
 			e.printStackTrace();
 		}
 		return num;
+	}
+	
+	public String getProductionDetailID(String idProduct) {
+		String id="";
+		try {
+			PreparedStatement stmt = con.prepareStatement("select * from HopDongSanXuat ctsx join SanPham sp on ctsx.MaSanPham = sp.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and sp.MaSanPham = ?");
+			stmt.setString(1, idProduct);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				id = rs.getString("MaHopDong");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 }
 
