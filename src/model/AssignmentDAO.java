@@ -41,11 +41,12 @@ public class AssignmentDAO {
 	public boolean createAssignment(Assignment assignment) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
-					"INSERT INTO PhanCong(MaPhanCong,MaQuyTrinh,MaNhanVien,NgayThamGia) values(?,?,?,?)");
+					"INSERT INTO PhanCong(MaPhanCong,MaQuyTrinh,MaNhanVien,NgayThamGia,MaHopDong) values(?,?,?,?,?)");
 			stmt.setString(1, assignment.getAssignmentID());
 			stmt.setString(2, assignment.getProdureID());
 			stmt.setString(3, assignment.getWorkerID());
 			stmt.setString(4, assignment.getDate().toString());
+			stmt.setString(5, assignment.getDetailProductionID());
 			int insertResult = stmt.executeUpdate();
 			if (insertResult > 0) {
 				return true;
