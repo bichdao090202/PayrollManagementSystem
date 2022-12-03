@@ -150,13 +150,13 @@ public class WorkerDAO {
 			PreparedStatement stmt = connection.prepareStatement("DELETE FROM NHANVIENSANXUAT WHERE MaNhanVien = ?");
 			stmt.setString(1, empID);
 			int result = stmt.executeUpdate();
-			if (result < 0) {
-				return false;
+			if (result >= 0) {
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 
 	public Worker getWorkerByID(String empID) {

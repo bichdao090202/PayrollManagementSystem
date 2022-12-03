@@ -34,7 +34,7 @@ public class ProductDAO {
 	public List<Product> getAllProduct() {
 		List<Product> listProduct = new ArrayList<Product>();
 		try {
-			PreparedStatement stmt = con.prepareStatement("select * from  SanPham sp join ChiTietSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất'");
+			PreparedStatement stmt = con.prepareStatement("select * from  SanPham sp join HopDongSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất'");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Product product = new Product(rs.getString("MaSanPham"), rs.getString("TenSanPham"));

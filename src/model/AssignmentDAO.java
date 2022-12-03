@@ -21,9 +21,9 @@ public class AssignmentDAO {
 		try {
 			PreparedStatement stmt = null;
 			if (teamID.equals("admin"))
-				stmt = connection.prepareStatement("select * from PhanCong WHERE EXISTS (select * from NhanVienSanXuat where NhanVienSanXuat.MaNhanVien = PhanCong.MaNhanVien) and EXISTS (select * from  SanPham sp join ChiTietSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and ctsx.MaSanPham = SUBSTRING(PhanCong.MaQuyTrinh,1,5)) and not EXISTS (select * from PhanXuong where PhanXuong.MaQuanDoc = PhanCong.MaNhanVien) ORDER BY NgayThamGia ASC");
+				stmt = connection.prepareStatement("select * from PhanCong WHERE EXISTS (select * from NhanVienSanXuat where NhanVienSanXuat.MaNhanVien = PhanCong.MaNhanVien) and EXISTS (select * from  SanPham sp join HopDongSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and ctsx.MaSanPham = SUBSTRING(PhanCong.MaQuyTrinh,1,5)) and not EXISTS (select * from PhanXuong where PhanXuong.MaQuanDoc = PhanCong.MaNhanVien) ORDER BY NgayThamGia ASC");
 			else {
-				stmt = connection.prepareStatement("select * from PhanCong WHERE EXISTS (select * from NhanVienSanXuat where MaTo = ? and NhanVienSanXuat.MaNhanVien = PhanCong.MaNhanVien) and EXISTS (select * from  SanPham sp join ChiTietSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and ctsx.MaSanPham = SUBSTRING(PhanCong.MaQuyTrinh,1,5)) and not EXISTS (select * from PhanXuong where PhanXuong.MaQuanDoc = PhanCong.MaNhanVien) ORDER BY NgayThamGia ASC");
+				stmt = connection.prepareStatement("select * from PhanCong WHERE EXISTS (select * from NhanVienSanXuat where MaTo = ? and NhanVienSanXuat.MaNhanVien = PhanCong.MaNhanVien) and EXISTS (select * from  SanPham sp join HopDongSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and ctsx.MaSanPham = SUBSTRING(PhanCong.MaQuyTrinh,1,5)) and not EXISTS (select * from PhanXuong where PhanXuong.MaQuanDoc = PhanCong.MaNhanVien) ORDER BY NgayThamGia ASC");
 				stmt.setString(1, teamID);
 			}
 			ResultSet rs = stmt.executeQuery();
@@ -145,7 +145,7 @@ public class AssignmentDAO {
 		int num = 0;
 		try {
 			PreparedStatement stmt = connection
-					.prepareStatement("select ctsx.SoLuongSanXuat from ChiTietSanXuat ctsx join SanPham sp on ctsx.MaSanPham = sp.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and sp.MaSanPham = ?");
+					.prepareStatement("select ctsx.SoLuongSanXuat from HopDongSanXuat ctsx join SanPham sp on ctsx.MaSanPham = sp.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and sp.MaSanPham = ?");
 			stmt.setString(1, productID);
 			ResultSet rs = stmt.executeQuery();
 			if (!rs.next())
@@ -162,7 +162,7 @@ public class AssignmentDAO {
 		int num = 0;
 		try {
 			PreparedStatement stmt = connection
-					.prepareStatement("select ctsx.SoLuongHoanThanh from ChiTietSanXuat ctsx join SanPham sp on ctsx.MaSanPham = sp.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and sp.MaSanPham = ?");
+					.prepareStatement("select ctsx.SoLuongHoanThanh from HopDongSanXuat ctsx join SanPham sp on ctsx.MaSanPham = sp.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and sp.MaSanPham = ?");
 			stmt.setString(1, productID);
 			ResultSet rs = stmt.executeQuery();
 			if (!rs.next())
