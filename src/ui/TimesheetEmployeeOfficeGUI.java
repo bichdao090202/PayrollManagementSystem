@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
@@ -149,6 +150,8 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 		pnInput.add(spinHourCheckOutAM, "flowx,cell 7 0,alignx left,aligny center");
 
 		btnAdd = new JButton("Thêm   ");
+		btnAdd.setMnemonic(KeyEvent.VK_A);
+		btnAdd.setToolTipText("Thêm chấm công (Alt + A)");
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -248,10 +251,15 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 				btnUpdate.setBackground(Color.WHITE);
 			}
 		});
+		btnUpdate.setMnemonic(KeyEvent.VK_U);
+		btnUpdate.setToolTipText("Cập nhật chấm công (Alt + U)");
 		btnUpdate.setBorder(new LineBorder(COLOR, 2, false));
 		btnUpdate.setForeground(COLOR);
 		btnUpdate.setBackground(Color.WHITE);
 		btnUpdate.addActionListener(this);
+		btnUpdate.setIcon(new ImageIcon("images\\operations\\update.png"));
+		btnUpdate.setFocusable(false);
+		pnInput.add(btnUpdate, "cell 10 1,growx");
 
 		chkAbsentPM = new JCheckBox("Vắng chiều");
 		chkAbsentPM.setBackground(new Color(255, 255, 255));
@@ -275,11 +283,10 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 		});
 		chkAbsentPM.setFocusable(false);
 		pnInput.add(chkAbsentPM, "cell 9 1");
-		btnUpdate.setIcon(new ImageIcon("images\\operations\\update.png"));
-		btnUpdate.setFocusable(false);
-		pnInput.add(btnUpdate, "cell 10 1,growx");
 
 		btnDelete = new JButton("Xóa   ");
+		btnDelete.setMnemonic(KeyEvent.VK_D);
+		btnDelete.setToolTipText("Xóa chấm công (Alt + D)");
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -365,6 +372,8 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 				btnSearch.setBackground(Color.WHITE);
 			}
 		});
+		btnSearch.setMnemonic(KeyEvent.VK_S);
+		btnSearch.setToolTipText("Lọc chấm công (Alt + S)");
 		btnSearch.setBorder(new LineBorder(COLOR, 2, false));
 		btnSearch.setForeground(COLOR);
 		btnSearch.setBackground(Color.WHITE);

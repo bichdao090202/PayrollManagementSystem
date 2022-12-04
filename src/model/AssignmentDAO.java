@@ -41,12 +41,11 @@ public class AssignmentDAO {
 	public boolean createAssignment(Assignment assignment) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
-					"INSERT INTO PhanCong(MaPhanCong,MaQuyTrinh,MaNhanVien,NgayThamGia,MaHopDong) values(?,?,?,?,?)");
-			stmt.setString(1, assignment.getAssignmentID());
-			stmt.setString(2, assignment.getProdureID());
-			stmt.setString(3, assignment.getWorkerID());
-			stmt.setString(4, assignment.getDate().toString());
-			stmt.setString(5, assignment.getDetailProductionID());
+					"INSERT INTO PhanCong(MaQuyTrinh,MaNhanVien,NgayThamGia,MaHopDong) values(?,?,?,?)");
+			stmt.setString(1, assignment.getProdureID());
+			stmt.setString(2, assignment.getWorkerID());
+			stmt.setString(3, assignment.getDate().toString());
+			stmt.setString(4, assignment.getDetailProductionID());
 			int insertResult = stmt.executeUpdate();
 			if (insertResult > 0) {
 				return true;
@@ -56,23 +55,6 @@ public class AssignmentDAO {
 			return false;
 		}
 		return false;
-	}
-
-	public int getNewAssignmentID() {
-		int id = 0;
-		try {
-			PreparedStatement stmt = connection
-					.prepareStatement("SELECT TOP 1 MaPhanCong FROM PhanCong ORDER BY cast(MaPhanCong as int) DESC");
-			ResultSet rs = stmt.executeQuery();
-			if (!rs.next())
-				return 1;
-			else
-				id = rs.getInt("MaPhanCong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		id++;
-		return id;
 	}
 
 	public boolean checkExistDateOfWorker(String idWorker, String stringDate) {
