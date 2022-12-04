@@ -8,6 +8,7 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
@@ -35,7 +36,7 @@ import com.toedter.components.JSpinField;
 import custom_field.JTextFieldHint;
 import entity.TimesheetFactory;
 //import model.TimesheetDAO;
-import model.TimesheetFactoryDAO;
+import model.TimesheetWorkerDAO;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.ListSelectionModel;
 
@@ -52,15 +53,16 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 	private static final Date CURRENT_DATE = new Date();
 	private final String[] headerTableTimesheet = new String[] { "Mã chấm công", "Nhân viên", "Sản phẩm", "Quy trình",
 			"Ngày chấm công", "Số lượng thành phẩm" };
-	private final String[] headerTableAssignment = new String[] { "Mã phân công", "Nhân viên", "Sản phẩm", "Quy trình", "Ngày tham gia", "Mã hợp đồng", "Hoàn thành", "Chưa hoàn thành"};
+	private final String[] headerTableAssignment = new String[] { "Mã phân công", "Nhân viên", "Sản phẩm", "Quy trình",
+			"Ngày tham gia", "Mã hợp đồng", "Hoàn thành", "Chưa hoàn thành" };
 	private JPanel contentPane;
 	private DefaultTableModel dtmAssignment, dtmWorker;
-	private TimesheetFactoryDAO timesheetFactoryDAO;
+	private TimesheetWorkerDAO timsheetWorkerDAO;
 	private JTable tblAssignment, tblTimesheet;
 	private JButton btnAdd, btnUpdate, btnDelete, btnSearch;
 	private JSpinField spinAmountCompleted;
-	private JTextField txtWorker, txtProduct, txtProduce;
-	private JDateChooser dateTimesheet;
+	private JTextField txtWorker, txtProduct, txtProduce, txtSearch;
+	private JDateChooser dateTimesheet, dateSearch;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -77,7 +79,7 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 
 	public Component getUI() {
 
-		timesheetFactoryDAO = new TimesheetFactoryDAO();
+		timsheetWorkerDAO = new TimesheetWorkerDAO();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 690);
@@ -160,6 +162,8 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 				btnAdd.setBackground(Color.WHITE);
 			}
 		});
+		btnAdd.setMnemonic(KeyEvent.VK_A);
+		btnAdd.setToolTipText("Thêm chấm công (Alt + A)");
 		btnAdd.setBorder(new LineBorder(COLOR, 2, false));
 		btnAdd.setForeground(COLOR);
 		btnAdd.setBackground(Color.WHITE);
@@ -180,11 +184,14 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 				btnDelete.setBackground(Color.WHITE);
 			}
 		});
+		btnDelete.setMnemonic(KeyEvent.VK_D);
+		btnDelete.setToolTipText("Xóa chấm công (Alt + D)");
 		btnDelete.setBorder(new LineBorder(COLOR, 2, false));
 		btnDelete.setForeground(COLOR);
 		btnDelete.setBackground(Color.WHITE);
 		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
 		btnDelete.setFocusable(false);
+		btnDelete.addActionListener(this);
 		pnOperations.add(btnDelete);
 
 		btnUpdate = new JButton("Cập nhật chấm công");
@@ -199,6 +206,8 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 				btnUpdate.setBackground(Color.WHITE);
 			}
 		});
+		btnUpdate.setMnemonic(KeyEvent.VK_U);
+		btnUpdate.setToolTipText("Cập nhật chấm công (Alt + U)");
 		btnUpdate.setBorder(new LineBorder(COLOR, 2, false));
 		btnUpdate.setForeground(COLOR);
 		btnUpdate.setBackground(Color.WHITE);
@@ -232,6 +241,8 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 					txtProduce.setText(tblAssignment.getValueAt(rowSelected, 3).toString());
 					dateTimesheet.setDate(CURRENT_DATE);
 					spinAmountCompleted.setValue(1);
+					spinAmountCompleted
+							.setMaximum(Integer.parseInt(tblAssignment.getValueAt(rowSelected, 7).toString()));
 				}
 			}
 		});
@@ -278,8 +289,7 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 					} catch (ParseException e1) {
 						e1.printStackTrace();
 					}
-					spinAmountCompleted
-							.setValue(Integer.parseInt(tblTimesheet.getValueAt(rowSelected, 5).toString()));
+					spinAmountCompleted.setValue(Integer.parseInt(tblTimesheet.getValueAt(rowSelected, 5).toString()));
 				}
 			}
 		});
@@ -290,18 +300,20 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		pnTable.add(pnSearch, BorderLayout.NORTH);
 		pnSearch.setLayout(new MigLayout("", "[7px][][]", "[20px,grow]"));
 
-		JTextFieldHint txtSearch = new JTextFieldHint("Nhập mã nhân viên");
+		txtSearch = new JTextFieldHint("Nhập mã nhân viên");
 		txtSearch.setBackground(Color.WHITE);
 		txtSearch.setMinimumSize(new Dimension(150, 20));
 		pnSearch.add(txtSearch, "cell 0 0,grow");
 
-		JDateChooser dateSearch = new JDateChooser();
+		dateSearch = new JDateChooser();
 		dateSearch.setDateFormatString("yyyy-MM-dd");
 		dateSearch.getCalendarButton().setBackground(Color.WHITE);
 		dateSearch.setMinimumSize(new Dimension(150, 20));
 		pnSearch.add(dateSearch, "cell 1 0,grow");
 
 		btnSearch = new JButton();
+		btnSearch.setMnemonic(KeyEvent.VK_S);
+		btnSearch.setToolTipText("Lọc chấm công (Alt + S)");
 		btnSearch.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -318,11 +330,11 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		btnSearch.setBackground(Color.WHITE);
 		btnSearch.setIcon(new ImageIcon("images\\operations\\filter.png"));
 		btnSearch.setFocusable(false);
+		btnSearch.addActionListener(this);
 		pnSearch.add(btnSearch, "cell 2 0");
 
-
 		loadDateToTableAssignment();
-		loadDateToTableTimesheet();
+		loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
 		return contentPane;
 	}
 
@@ -336,13 +348,13 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 			}
 		};
 		tblAssignment.setModel(dtmAssignment);
-		List<String> listAssignment = timesheetFactoryDAO.getAllAssignment();
+		List<String> listAssignment = timsheetWorkerDAO.getAllAssignment();
 		for (String assignment : listAssignment) {
 			dtmAssignment.addRow(assignment.split(";"));
 		}
 	}
 
-	public void loadDateToTableTimesheet() {
+	public void loadDateToTableTimesheet(List<String> listTimesheet) {
 		dtmWorker = new DefaultTableModel(headerTableTimesheet, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -352,7 +364,6 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 			}
 		};
 		tblTimesheet.setModel(dtmWorker);
-		List<String> listTimesheet = timesheetFactoryDAO.getAllTimesheetFactory();
 		for (String timesheet : listTimesheet) {
 			dtmWorker.addRow(timesheet.split(";"));
 		}
@@ -373,20 +384,29 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		if (e.getSource() == btnAdd) {
 			int rowSelected = tblAssignment.getSelectedRow();
 			int assignmentID = Integer.parseInt(tblAssignment.getValueAt(rowSelected, 0).toString());
+			System.out.println(assignmentID);
 			int quantity = spinAmountCompleted.getValue();
-			String emp = txtWorker.getText();
-			Date date = dateTimesheet.getDate();
-			TimesheetFactory timesheetsFactory = new TimesheetFactory(date, quantity, assignmentID);
-			if (JOptionPane.showConfirmDialog(this,
-					"Bạn có chắn chắn muốn thêm chấm công cho nhân viên " + emp + " không?", "Thông báo",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				if (timesheetFactoryDAO.addTimesheetsFactory(timesheetsFactory)) {
-					loadDateToTableTimesheet();
-					JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo",
-							JOptionPane.NO_OPTION, null);
-				} else {
-					JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
-							JOptionPane.NO_OPTION, null);
+			System.out.println(quantity);
+			int maxQuantity = Integer.parseInt(tblAssignment.getValueAt(rowSelected, 7).toString());
+			if (quantity > maxQuantity) {
+				JOptionPane.showMessageDialog(this, "Số lượng thành phẩm vượt quá số lượng cần sản xuất", "Thông báo",
+						JOptionPane.NO_OPTION, null);
+			} else {
+				String emp = txtWorker.getText();
+				Date date = dateTimesheet.getDate();
+				TimesheetFactory timesheetsFactory = new TimesheetFactory(date, quantity, assignmentID);
+				if (JOptionPane.showConfirmDialog(this,
+						"Bạn có chắn chắn muốn thêm chấm công cho nhân viên " + emp + " không?", "Thông báo",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					if (timsheetWorkerDAO.addTimesheetsFactory(timesheetsFactory)) {
+						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
+						loadDateToTableAssignment();
+						JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo",
+								JOptionPane.NO_OPTION, null);
+					} else {
+						JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
+								JOptionPane.NO_OPTION, null);
+					}
 				}
 			}
 		}
@@ -401,8 +421,9 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 				if (JOptionPane.showConfirmDialog(this,
 						"Bạn có chắn chắn muốn cập nhật chấm công cho nhân viên " + emp + " không?", "Thông báo",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (timesheetFactoryDAO.updateTimesheetsFactory(timesheetsFactory)) {
-						loadDateToTableTimesheet();
+					if (timsheetWorkerDAO.updateTimesheetsFactory(timesheetsFactory)) {
+						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
+						loadDateToTableAssignment();
 						JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);
 					} else {
@@ -410,11 +431,38 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 								JOptionPane.NO_OPTION, null);
 					}
 				}
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên cần cập nhật chấm công trước", "Thông báo",
 						JOptionPane.NO_OPTION, null);
 			}
-			
+		}
+		if (e.getSource() == btnDelete) {
+			int rowSelected = tblTimesheet.getSelectedRow();
+			if (rowSelected >= 0) {
+				int timesheetID = Integer.parseInt(tblTimesheet.getValueAt(rowSelected, 0).toString());
+				String emp = txtWorker.getText();
+				if (JOptionPane.showConfirmDialog(this,
+						"Bạn có chắn chắn muốn xóa chấm công cho nhân viên " + emp + " không?", "Thông báo",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					if (timsheetWorkerDAO.deleteTimesheet(timesheetID)) {
+						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
+						loadDateToTableAssignment();
+						JOptionPane.showMessageDialog(this, "Xóa chấm công thành công.", "Thông báo",
+								JOptionPane.NO_OPTION, null);
+					} else {
+						JOptionPane.showMessageDialog(this, "Xóa chấm công không thành công.", "Thông báo",
+								JOptionPane.NO_OPTION, null);
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên cần xóa chấm công trước", "Thông báo",
+						JOptionPane.NO_OPTION, null);
+			}
+		}
+		if (e.getSource() == btnSearch) {
+			String emp = txtSearch.getText();
+			Date date = dateSearch.getDate();
+			loadDateToTableTimesheet(timsheetWorkerDAO.searchTimesheet(emp, date));
 		}
 	}
 }

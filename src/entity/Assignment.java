@@ -37,6 +37,13 @@ public class Assignment {
 		this.date = date;
 		this.detailProductionID = detailProductionID;
 	}
+	
+	public Assignment(String produreID, String workerID, LocalDate date) {
+		super();
+		this.produreID = produreID;
+		this.workerID = workerID;
+		this.date = date;
+	}
 
 	public String getAssignmentID() {
 		return assignmentID;

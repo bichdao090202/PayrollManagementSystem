@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -38,10 +39,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private final String stringCb[] = { "Nhân viên hành chính", "Nhân viên sản xuất" };
 	private final String[] row0 = { "Mã nhân viên", "Họ tên", "Phòng ban/phân xưởng", "Chức vụ", "Tài khoản" };
-	private JButton btnCreateAccount;
-	private JButton btnDeleteAccount;
-	private JButton btnSetDefaultPassword;
-	private JButton btnSearch;
+	private JButton btnCreateAccount, btnDeleteAccount, btnSetDefaultPassword, btnSearch;
 	private JTextField txtSearch;
 	private JTable tblAccount;
 	private DefaultTableModel tblModel;
@@ -86,6 +84,8 @@ public class AccountGUI extends JFrame implements ActionListener {
 		pnSearch.add(txtSearch = new JTextField());
 		txtSearch.setColumns(30);
 		pnSearch.add(btnSearch = new JButton());
+		btnSearch.setMnemonic(KeyEvent.VK_S);
+		btnSearch.setToolTipText("Tìm kiếm (Alt + S)");
 		btnSearch.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -108,6 +108,8 @@ public class AccountGUI extends JFrame implements ActionListener {
 		pnButton.setSize(401, 50);
 		pnButton.setLayout(null);
 		pnButton.add(btnCreateAccount = new JButton("Cấp tài khoản"));
+		btnCreateAccount.setMnemonic(KeyEvent.VK_A);
+		btnCreateAccount.setToolTipText("Cấp tài khoản cho nhân viên (Alt + A)");
 		btnCreateAccount.setBounds(14, 11, 114, 28);
 		btnCreateAccount.addMouseListener(new MouseAdapter() {
 			@Override
@@ -125,6 +127,8 @@ public class AccountGUI extends JFrame implements ActionListener {
 		btnCreateAccount.setBackground(Color.WHITE);
 		
 		pnButton.add(btnDeleteAccount = new JButton("Xóa tài khoản"));
+		btnDeleteAccount.setMnemonic(KeyEvent.VK_D);
+		btnDeleteAccount.setToolTipText("Xóa tài khoản của nhân viên (Alt + D)");
 		btnDeleteAccount.setLocation(142, 11);
 		btnDeleteAccount.setSize(114, 28);
 		btnDeleteAccount.addMouseListener(new MouseAdapter() {
@@ -141,7 +145,10 @@ public class AccountGUI extends JFrame implements ActionListener {
 		btnDeleteAccount.setBorder(new LineBorder(COLOR, 3, false));
 		btnDeleteAccount.setForeground(COLOR);
 		btnDeleteAccount.setBackground(Color.WHITE);
+		
 		pnButton.add(btnSetDefaultPassword = new JButton("Đặt lại mật khẩu"));
+		btnSetDefaultPassword.setMnemonic(KeyEvent.VK_U);
+		btnSetDefaultPassword.setToolTipText("Đặt lại mật khẩu mặc định 123456789 (Alt + U)");
 		btnSetDefaultPassword.setLocation(270, 11);
 		btnSetDefaultPassword.setSize(114, 28);
 		btnSetDefaultPassword.addMouseListener(new MouseAdapter() {

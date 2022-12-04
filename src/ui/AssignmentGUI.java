@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -44,7 +46,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 	private static final long serialVersionUID = 1L;
 	private static final Color COLOR = new Color(14, 85, 78);
-//	private static final Color COLOR_HOVER = new Color(36, 217, 199);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private final ImageIcon imgFirst = new ImageIcon("images\\jump page\\size15\\first.png");
 	private final ImageIcon imgPrevious = new ImageIcon("images\\jump page\\size15\\previous.png");
 	private final ImageIcon imgNext = new ImageIcon("images\\jump page\\size15\\next.png");
@@ -79,6 +81,8 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 	private JButton btnCreate, btnUpdate, btnDelete, btnRefresh;
 
 	public AssignmentGUI(Employee worker) {
+		setBackground(Color.WHITE);
+		getContentPane().setBackground(Color.WHITE);
 		setSize(1200, 690);
 		daoAssignment = new AssignmentDAO();
 		listAssignment = new ArrayList<>();
@@ -107,8 +111,10 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		System.setProperty("Color", "0X000099");
 
 		JPanel pn1 = new JPanel();
+		pn1.setBackground(Color.WHITE);
 
 		JPanel pnWorker = new JPanel();
+		pnWorker.setBackground(Color.WHITE);
 		pnWorker.setBounds(0, 0, 381, 288);
 		pnWorker.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Công nhân"));
 		tblWorker = new JTable();
@@ -131,23 +137,29 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		sp1.setPreferredSize(new Dimension(415, 200));
 
 		JPanel pnChangePage_1 = new JPanel();
+		pnChangePage_1.setBackground(Color.WHITE);
 		pnChangePage_1.setLocation(10, 249);
 		pnChangePage_1.setSize(359, 34);
 		pnWorker.add(pnChangePage_1);
 
 		pnWorker.setLayout(null);
 		pnChangePage_1.add(btnGoFirstPage1 = new JButton());
+		btnGoFirstPage1.setBackground(Color.WHITE);
 		btnGoFirstPage1.setLocation(0, 0);
 		btnGoFirstPage1.setIcon(imgFirst);
 		pnChangePage_1.add(btnPreviousPage1 = new JButton());
+		btnPreviousPage1.setBackground(Color.WHITE);
 
 		btnPreviousPage1.setIcon(imgPrevious);
 		pnChangePage_1.add(btnNextPage1 = new JButton());
+		btnNextPage1.setBackground(Color.WHITE);
 
 		btnNextPage1.setIcon(imgNext);
 		pnChangePage_1.add(btnGoLastPage1 = new JButton());
+		btnGoLastPage1.setBackground(Color.WHITE);
 		btnGoLastPage1.setIcon(imgLast);
 		JPanel pnProduct = new JPanel();
+		pnProduct.setBackground(Color.WHITE);
 		pnProduct.setBounds(391, 0, 427, 288);
 		pnProduct.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Hợp đồng"));
 		tblProduct = new JTable();
@@ -171,21 +183,27 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pn1.add(pnProduct);
 
 		JPanel pnChangePage_2 = new JPanel();
+		pnChangePage_2.setBackground(Color.WHITE);
 		pnChangePage_2.setLocation(10, 249);
 		pnChangePage_2.setSize(380, 34);
 		pnProduct.add(pnChangePage_2);
 
 		pnChangePage_2.add(btnGoFirstPage2 = new JButton());
+		btnGoFirstPage2.setBackground(Color.WHITE);
 		btnGoFirstPage2.setLocation(0, 0);
 		btnGoFirstPage2.setIcon(imgFirst);
 		pnChangePage_2.add(btnPreviousPage2 = new JButton());
+		btnPreviousPage2.setBackground(Color.WHITE);
 		btnPreviousPage2.setIcon(imgPrevious);
 		pnChangePage_2.add(btnNextPage2 = new JButton());
+		btnNextPage2.setBackground(Color.WHITE);
 		btnNextPage2.setIcon(imgNext);
 		pnChangePage_2.add(btnGoLastPage2 = new JButton(""));
+		btnGoLastPage2.setBackground(Color.WHITE);
 		btnGoLastPage2.setIcon(imgLast);
 
 		JPanel pnProdure = new JPanel();
+		pnProdure.setBackground(Color.WHITE);
 		pnProdure.setBounds(828, 0, 346, 288);
 		pnProdure.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Quy trình"));
 		tblProdure = new JTable();
@@ -206,22 +224,28 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pn1.add(pnProdure);
 
 		JPanel pnChangePage_3 = new JPanel();
+		pnChangePage_3.setBackground(Color.WHITE);
 		pnChangePage_3.setLocation(10, 249);
 		pnChangePage_3.setSize(326, 34);
 		pnProdure.add(pnChangePage_3);
 
 		pnChangePage_3.add(btnGoFirstPage3 = new JButton());
+		btnGoFirstPage3.setBackground(Color.WHITE);
 		btnGoFirstPage3.setLocation(0, 0);
 		btnGoFirstPage3.setIcon(imgFirst);
 		pnChangePage_3.add(btnPreviousPage3 = new JButton());
+		btnPreviousPage3.setBackground(Color.WHITE);
 
 		btnPreviousPage3.setIcon(imgPrevious);
 		pnChangePage_3.add(btnNextPage3 = new JButton());
+		btnNextPage3.setBackground(Color.WHITE);
 		btnNextPage3.setIcon(imgNext);
 		pnChangePage_3.add(btnGoLastPage3 = new JButton());
+		btnGoLastPage3.setBackground(Color.WHITE);
 		btnGoLastPage3.setIcon(imgLast);
 
 		JPanel pn3 = new JPanel();
+		pn3.setBackground(Color.WHITE);
 		pn3.setBounds(0, 291, 1033, 356);
 		pn3.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Phân công"));
 		tblAssignment = new JTable();
@@ -244,15 +268,20 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pn1.add(pn3);
 
 		JPanel pnChangePage = new JPanel();
+		pnChangePage.setBackground(Color.WHITE);
 		pnChangePage.setBounds(30, 315, 992, 36);
 		pn3.add(pnChangePage);
 		pnChangePage.add(btnGoFirstPage = new JButton());
+		btnGoFirstPage.setBackground(Color.WHITE);
 		btnGoFirstPage.setIcon(imgFirst1);
 		pnChangePage.add(btnPreviousPage = new JButton());
+		btnPreviousPage.setBackground(Color.WHITE);
 		btnPreviousPage.setIcon(imgPrevious1);
 		pnChangePage.add(btnNextPage = new JButton());
+		btnNextPage.setBackground(Color.WHITE);
 		btnNextPage.setIcon(imgNext1);
 		pnChangePage.add(btnGoLastPage = new JButton());
+		btnGoLastPage.setBackground(Color.WHITE);
 		btnGoLastPage.setIcon(imgLast1);
 
 		btnGoFirstPage.setFocusable(false);
@@ -261,6 +290,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		btnPreviousPage.setFocusable(false);
 
 		JPanel pnButton = new JPanel();
+		pnButton.setBackground(Color.WHITE);
 		pnButton.setBounds(1035, 299, 149, 348);
 		pn1.add(pnButton);
 		pnButton.setLayout(null);
@@ -276,15 +306,82 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		calendar.setDateFormatString("dd-MM-yyyy");
 
 		pnButton.add(btnCreate = new JButton("Phân công"));
+		btnCreate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnCreate.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnCreate.setBackground(Color.WHITE);
+			}
+		});
+		btnCreate.setBorder(new LineBorder(COLOR, 3, false));
+		btnCreate.setForeground(COLOR);
+		btnCreate.setBackground(Color.WHITE);
+		btnCreate.setMnemonic(KeyEvent.VK_A);
+		btnCreate.setToolTipText("Phân công nhân viên (Alt + A)");
 		btnCreate.setSize(129, 36);
 		btnCreate.setLocation(10, 54);
+		
 		pnButton.add(btnUpdate = new JButton("Phân công lại"));
+		btnUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdate.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdate.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdate.setBorder(new LineBorder(COLOR, 3, false));
+		btnUpdate.setForeground(COLOR);
+		btnUpdate.setBackground(Color.WHITE);
+		btnUpdate.setMnemonic(KeyEvent.VK_U);
+		btnUpdate.setToolTipText("Phân công lại (Alt + U)");
 		btnUpdate.setLocation(10, 104);
 		btnUpdate.setSize(129, 36);
+		
 		pnButton.add(btnDelete = new JButton("Xóa phân công"));
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDelete.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDelete.setBackground(Color.WHITE);
+			}
+		});
+		btnDelete.setBorder(new LineBorder(COLOR, 3, false));
+		btnDelete.setForeground(COLOR);
+		btnDelete.setBackground(Color.WHITE);
+		btnDelete.setMnemonic(KeyEvent.VK_D);
+		btnDelete.setToolTipText("Xóa phân công (Alt + D)");
 		btnDelete.setLocation(10, 154);
 		btnDelete.setSize(129, 36);
+		
 		pnButton.add(btnRefresh = new JButton("Làm mới"));
+		btnRefresh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnRefresh.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnRefresh.setBackground(Color.WHITE);
+			}
+		});
+		btnRefresh.setBorder(new LineBorder(COLOR, 3, false));
+		btnRefresh.setForeground(COLOR);
+		btnRefresh.setBackground(Color.WHITE);
+		btnRefresh.setMnemonic(KeyEvent.VK_N);
+		btnRefresh.setToolTipText("Làm mới (Alt + N)");
 		btnRefresh.setLocation(10, 204);
 		btnRefresh.setSize(129, 36);
 		JLabel lbTeam = new JLabel(worker.getTeamID());
@@ -363,9 +460,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 				String error = "";
 				for (int i = 0; i < rows.length; i++) {
 					if (daoAssignment.checkExistDateOfWorker((String)tblWorker.getValueAt(rows[i], 0), stringDate)){
-						assignment.setAssignmentID(daoAssignment.getNewAssignmentID() + "");
 						assignment.setWorkerID((String)tblWorker.getValueAt(rows[i], 0));
-						
 						daoAssignment.createAssignment(assignment);
 						success++;
 					} else
@@ -653,7 +748,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			JOptionPane.showMessageDialog(this, "Ngày được chọn không thể trước ngày hiện tại");
 			return null;
 		}
-		assignment = new Assignment(daoAssignment.getNewAssignmentID() + "", idProdure, idWorker, local);
+		assignment = new Assignment(idProdure, idWorker, local);
 		assignment.setDetailProductionID(
 				daoProduct.getProductionDetailID((String) tblProduct.getValueAt(tblProduct.getSelectedRow(), 1)));
 		return assignment;
