@@ -3,6 +3,8 @@ package ui;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
@@ -15,7 +17,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -39,9 +41,6 @@ import entity.TeamProducing;
 import javax.swing.ImageIcon;
 
 public class FactoryGUI extends JFrame implements ActionListener, MouseListener {
-	public FactoryGUI() {
-//		getUI();
-	}
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtIdFactory;
@@ -49,8 +48,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	private JTextField txtIdTeam;
 	private JTextField txtNameTeam;
 	private JTextField txtSearchIdFactory;
-	private JTable tblListFactory;
 	private JTextField txtSearchIdTeam;
+	private JTable tblListFactory;
 	private JTable tblListTeam;
 	private JTable tblEmployeeByTeam;
 	private JTable tblTeam;
@@ -66,18 +65,21 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	private JButton btnSearchIdTeam;
 	private JButton btnDeleteTeam;
 	private JButton btnUpdateTeam;
-	private FactoryDAO Dao_Factory = new FactoryDAO();
-	private List<TeamProducing> ListTeam = new ArrayList<TeamProducing>();
 	private JButton btnChange;
 	private JButton btnClean;
+	private FactoryDAO Dao_Factory = new FactoryDAO();
+	private List<TeamProducing> ListTeam = new ArrayList<TeamProducing>();
+	private List<TeamProducing> ListTeamSearch = new ArrayList<TeamProducing>();
+	private List<Factory> listFactorySearch = new ArrayList<Factory>();
 
+	public FactoryGUI() {
+		getUI();
+	}
 	public Component getUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
-//		getContentPane().setBackground(new Color(0,140,140));
 
 		JPanel pnlFactory = new JPanel();
-//		pnlFactory.setBackground(new Color(0,140,140));
 		pnlFactory.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Phân xưởng", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlFactory.setBounds(10, 10, 460, 191);
@@ -129,7 +131,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlFactory.add(btnClean);
 
 		JPanel pnlTeam = new JPanel();
-//		pnlTeam.setBackground(new Color(0,140,140));
 		pnlTeam.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Tổ", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlTeam.setBounds(513, 10, 485, 191);
@@ -204,7 +205,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlTeam.add(scrTeam);
 
 		tblTeam = new JTable();
-//		tblTeam.setBackground(new Color(0,140,140));
 		tblTeam.setForeground(Color.BLACK);
 		tblTeam.setGridColor(new Color(0,140,140));
 		tblTeam.setBorder(new LineBorder(new Color(0,140,140)));
@@ -228,13 +228,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		getContentPane().add(btnInsertFactory);
 
 		JPanel pnlListFactories = new JPanel();
-//		pnlListFactories.setBackground(new Color(0,140,140));
 		pnlListFactories.setBounds(-10, 211, 1186, 442);
 		getContentPane().add(pnlListFactories);
 		pnlListFactories.setLayout(null);
 
 		JPanel pnlListFactory = new JPanel();
-//		pnlListFactory.setBackground(new Color(0,140,140));
 		pnlListFactory.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Danh sách phân xưởng",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlListFactory.setBounds(10, 10, 580, 432);
@@ -277,7 +275,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListFactory.add(scrListFactory);
 
 		tblListFactory = new JTable();
-//		tblListFactory.setBackground(new Color(0,140,140));
 		tblListFactory.setForeground(Color.BLACK);
 		tblListFactory.setGridColor(new Color(0,140,140));
 		tblListFactory.setRowHeight(25);
@@ -298,7 +295,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		scrListFactory.setViewportView(tblListFactory);
 
 		JPanel pnlListTeam = new JPanel();
-//		pnlListTeam.setBackground(new Color(0,140,140));
 		pnlListTeam.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Danh sách tổ", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlListTeam.setBounds(596, 10, 580, 211);
@@ -310,7 +306,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListTeam.add(scrListTeam);
 
 		tblListTeam = new JTable();
-//		tblListTeam.setBackground(new Color(0,140,140));
 		tblListTeam.setForeground(Color.BLACK);
 		tblListTeam.setBorder(new LineBorder(new Color(0,140,140)));
 		tblListTeam.setGridColor(new Color(0,140,140));
@@ -362,7 +357,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListTeam.add(btnUpdateTeam);
 
 		JPanel pnlListEmployeeByTeam = new JPanel();
-//		pnlListEmployeeByTeam.setBackground(new Color(0,140,140));
 		pnlListEmployeeByTeam.setLayout(null);
 		pnlListEmployeeByTeam.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Danh sách nhân viên",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
@@ -374,7 +368,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListEmployeeByTeam.add(scrListEmployeeByTeam);
 
 		tblEmployeeByTeam = new JTable();
-//		tblEmployeeByTeam.setBackground(new Color(0,140,140));
 		tblEmployeeByTeam.setForeground(Color.BLACK);
 		tblEmployeeByTeam.setBorder(new LineBorder(new Color(0,140,140)));
 		tblEmployeeByTeam.setGridColor(new Color(0,140,140));
@@ -404,6 +397,59 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		btnChange.setFocusPainted(false);
 		btnChange.setBounds(386, 67, 50, 21);
 		pnlTeam.add(btnChange);
+		
+		DocumentListener enventChangeSearchFactory = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				listFactorySearch = Dao_Factory.searchListFactory(txtSearchIdFactory.getText());
+				deleteDataOnTableModel(dtmListFactory);
+				loadListFactoryWithFactoried(listFactorySearch);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				listFactorySearch = Dao_Factory.searchListFactory(txtSearchIdFactory.getText());
+				deleteDataOnTableModel(dtmListFactory);
+				loadListFactoryWithFactoried(listFactorySearch);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				listFactorySearch = Dao_Factory.searchListFactory(txtSearchIdFactory.getText());
+				deleteDataOnTableModel(dtmListFactory);
+				loadListFactoryWithFactoried(listFactorySearch);
+			}
+
+        };
+        
+        DocumentListener enventChangeSearchTeam = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				ListTeamSearch = Dao_Factory.searchListTeam(txtSearchIdTeam.getText());
+				deleteDataOnTableModel(dtmListTeam);
+				loadListTeamByWithTeam(ListTeamSearch, dtmListTeam);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				ListTeamSearch = Dao_Factory.searchListTeam(txtSearchIdTeam.getText());
+				deleteDataOnTableModel(dtmListTeam);
+				loadListTeamByWithTeam(ListTeamSearch, dtmListTeam);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				ListTeamSearch = Dao_Factory.searchListTeam(txtSearchIdTeam.getText());
+				deleteDataOnTableModel(dtmListTeam);
+				loadListTeamByWithTeam(ListTeamSearch, dtmListTeam);
+			}
+
+        };
+        
+        txtSearchIdFactory.getDocument().addDocumentListener(enventChangeSearchFactory);
+        txtSearchIdTeam.getDocument().addDocumentListener(enventChangeSearchTeam);
 		
 		btnClean.setBorder(new LineBorder(new Color(14,85,78), 2));
 		btnChange.setBorder(new LineBorder(new Color(14,85,78), 2));
@@ -453,8 +499,20 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		btnDeleteTeam.setFocusPainted(false);
 		btnUpdateFactory.setFocusPainted(false);
 		btnUpdateTeam.setFocusPainted(false);
+		
+		btnClean.setMnemonic(KeyEvent.VK_C);
+		btnClean.setToolTipText("Phím tắt : Alt + C");
+		btnInsertFactory.setMnemonic(KeyEvent.VK_A);
+		btnInsertFactory.setToolTipText("Phím tắt : Alt + A");
+		btnSearchIdFactory.setMnemonic(KeyEvent.VK_S);
+		btnSearchIdFactory.setToolTipText("Phím tắt : Alt + S");
+		btnDeleteFactory.setMnemonic(KeyEvent.VK_D);
+		btnDeleteFactory.setToolTipText("Phím tắt : Alt + D");
+		btnUpdateFactory.setMnemonic(KeyEvent.VK_U);
+		btnUpdateFactory.setToolTipText("Phím tắt : Alt + U");
 
 		loadListFactory();
+		loadListTeam();
 		randomIdFactory();
 		txtIdFactory.setEditable(false);
 		txtIdTeam.setEditable(false);
@@ -462,6 +520,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		return getContentPane();
 	}
 
+	// Lấy và hiển thị tất cả phân xưởng
 	public void loadListFactory() {
 		List<entity.Factory> listFactory;
 		listFactory = Dao_Factory.getListFactory();
@@ -469,7 +528,24 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			addRowFactory(factory);
 		}
 	}
+	
+	//Lấy và hiển thị danh sách phân xưởng với phân xưởng đã có
+	public void loadListFactoryWithFactoried(List<Factory> listFactory) {
+		for (entity.Factory factory : listFactory) {
+			addRowFactory(factory);
+		}
+	}
 
+	// Lấy và hiển thị tất cả tổ
+	public void loadListTeam() {
+		List<entity.TeamProducing> listTeam;
+		listTeam = Dao_Factory.getListTeam();
+		for (entity.TeamProducing team : listTeam) {
+			addRowListTeam(team, dtmListTeam);
+		}
+	}
+	
+	// Lấy và hiển thị danh sách tổ theo mã phân xưởng
 	public void loadListTeamByIdFactory(String idFactory, DefaultTableModel dtm) {
 		List<TeamProducing> listTeam;
 		listTeam = Dao_Factory.getListTeamByIdFactory(idFactory);
@@ -477,7 +553,15 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			addRowListTeam(team, dtm);
 		}
 	}
+	
+	// Lấy và hiển thị danh sách tổ với tổ đã có
+	public void loadListTeamByWithTeam(List<TeamProducing> listTeam , DefaultTableModel dtm) {
+		for (TeamProducing team : listTeam) {
+			addRowListTeam(team, dtm);
+		}
+	}
 
+	// Lấy và hiển thị nhân viên theo mã tổ
 	public void loadListEmployeeByIdTeam(String idTeam) {
 		List<Worker> listEmployee;
 		listEmployee = Dao_Factory.getListEmployeeByIdTeam(idTeam);
@@ -486,16 +570,19 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		}
 	}
 
+	// Thêm tổ vào bảng tổ
 	public void addRowListTeam(TeamProducing team, DefaultTableModel dtm) {
 		String[] row = { team.getTeamID(), team.getName(), team.getLeaderID(), team.getFactoryID() };
 		dtm.addRow(row);
 	}
 
+	// Thêm phân xưởng vào bảng phân xưởng
 	public void addRowFactory(entity.Factory factory) {
 		String[] row = { factory.getFactoryID(), factory.getName(), factory.getHeadForemanID() };
 		dtmListFactory.addRow(row);
 	}
 
+	// Thêm nhân viên vào bảng nhân viên
 	public void addRowEmployee(Worker employee) {
 		SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
 		String[] row = { employee.getEmployeeID(), employee.getName(), employee.isGender() ? "Nam" : "Nữ",
@@ -503,11 +590,12 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		dtmListEmployee.addRow(row);
 	}
 
-	public boolean checkTeamOnTable(String idProcedure) {
+	// Kiểm tra tổ có được thêm vào bảng
+	public boolean checkTeamOnTable(String idTeam) {
 		int rowCount = dtmTeam.getRowCount();
 		if (rowCount > 0) {
 			for (int i = 0; i < rowCount; i++) {
-				if (dtmTeam.getValueAt(i, 0).toString().equals(idProcedure)) {
+				if (dtmTeam.getValueAt(i, 0).toString().equals(idTeam)) {
 					return true;
 				}
 			}
@@ -515,8 +603,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		return false;
 	}
 
+	// Tạo mã phân xưởng
 	public void randomIdFactory() {
-//		int order = (int) (Math.random() * (99 - 1 + 1) + 1);
 		int order = Dao_Factory.checkOrderFactoryPresent() + 1;
 		String idFactory = "PX";
 		if (order < 10) {
@@ -536,6 +624,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		}
 	}
 
+	// Tạo mã tổ
 	public void randomIdTeam() {
 		int quantity = dtmTeam.getRowCount();
 		int order = 0;
@@ -551,8 +640,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		else {
 			order += 1;
 		}
-//		int order = (int) (Math.random() * (99 - 1 + 1) + 1);
-//		int order = Dao_Factory.checkOrderTeamOfFactory(txtIdFactory.getText()) + 1;
 		String idTeam = "";
 		if (order >= 10) {
 			idTeam = txtIdFactory.getText() + order + "";
@@ -566,10 +653,12 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		}
 	}
 
+	// Xóa dữ liệu trên bảng
 	private void deleteDataOnTableModel(DefaultTableModel dtm) {
 		dtm.setRowCount(0);
 	}
 
+	// Kiểm tra phân xưởng có tồn tại
 	private boolean checkContainFactory(entity.Factory factory) {
 		List<entity.Factory> listFactory = Dao_Factory.getListFactory();
 		if (listFactory.contains(factory)) {
@@ -578,17 +667,20 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		return false;
 	}
 
+	// Cập nhật textField của tổ về rỗng
 	public void cleanTextFieldTeam() {
 		txtIdTeam.setText("");
 		txtNameTeam.setText("");
 	}
 
+	// Cập nhật textField của phân xưởng về rỗng và tạo mã mới
 	public void cleanFactory() {
 		deleteDataOnTableModel(dtmListFactory);
 		deleteDataOnTableModel(dtmListTeam);
 		deleteDataOnTableModel(dtmTeam);
 		deleteDataOnTableModel(dtmListEmployee);
 		loadListFactory();
+		loadListTeam();
 		txtIdFactory.setText("");
 		txtNameFactory.setText("");
 		cleanTextFieldTeam();
@@ -600,6 +692,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		btnInsertFactory.setText("Thêm phân xưởng");
 	}
 
+	// Cập nhật các nút của tổ về trạng thái ban đầu
 	public void resetTeam() {
 		btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
 		btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
@@ -845,35 +938,45 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				}
 			}
 		} else if (o.equals(btnDeleteFactory)) {
-			int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc xóa Phân Xưởng này không?");
-			if(confirm == JOptionPane.YES_OPTION) {
-				if (Dao_Factory.deleteFactory(txtIdFactory.getText())) {
-					JOptionPane.showMessageDialog(this, "Xóa phân xưởng thành công!!!");
-					deleteDataOnTableModel(dtmListFactory);
-					deleteDataOnTableModel(dtmListTeam);
-					loadListFactory();
-				} else {
-					JOptionPane.showMessageDialog(this, "Phân xưởng hiện đang có tổ thực hiện, không thể xóa!!! ");
+			if(tblListFactory.getSelectedRow() >= 0) {
+				int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc xóa Phân Xưởng này không?");
+				if(confirm == JOptionPane.YES_OPTION) {
+					if (Dao_Factory.deleteFactory(txtIdFactory.getText())) {
+						JOptionPane.showMessageDialog(this, "Xóa phân xưởng thành công!!!");
+						deleteDataOnTableModel(dtmListFactory);
+						deleteDataOnTableModel(dtmListTeam);
+						loadListFactory();
+					} else {
+						JOptionPane.showMessageDialog(this, "Phân xưởng hiện đang có tổ thực hiện, không thể xóa!!! ");
+					}
+				}
+				else if(confirm == JOptionPane.NO_OPTION) {
+					JOptionPane.showMessageDialog(this, "Hủy xóa Phân Xưởng thành công!!!");
 				}
 			}
-			else if(confirm == JOptionPane.NO_OPTION) {
-				JOptionPane.showMessageDialog(this, "Hủy xóa Phân Xưởng thành công!!!");
+			else {
+				JOptionPane.showMessageDialog(this, "Chọn phân xưởng cần xóa");
 			}
 		} else if (o.equals(btnDeleteTeam)) {
-			int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc xóa Tổ này không?");
-			if(confirm == JOptionPane.YES_OPTION) {
-				if (Dao_Factory.deleteTeam(txtIdTeam.getText()) && !Dao_Factory.checkEmployeeOfTeam(txtIdTeam.getText())) {
-					JOptionPane.showMessageDialog(this, "Xóa tổ thành công!!!");
-					deleteDataOnTableModel(dtmListTeam);
-					deleteDataOnTableModel(dtmTeam);
-					loadListTeamByIdFactory(txtIdFactory.getText(), dtmListTeam);
-					loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
-				} else {
-					JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc, không thể xóa");
+			if(tblListTeam.getSelectedRow() >= 0) {
+				int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc xóa Tổ này không?");
+				if(confirm == JOptionPane.YES_OPTION) {
+					if (Dao_Factory.deleteTeam(txtIdTeam.getText()) && !Dao_Factory.checkEmployeeOfTeam(txtIdTeam.getText())) {
+						JOptionPane.showMessageDialog(this, "Xóa tổ thành công!!!");
+						deleteDataOnTableModel(dtmListTeam);
+						deleteDataOnTableModel(dtmTeam);
+						loadListTeamByIdFactory(txtIdFactory.getText(), dtmListTeam);
+						loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
+					} else {
+						JOptionPane.showMessageDialog(this, "Tổ hiện đang có nhân viên làm việc, không thể xóa");
+					}
+				}
+				else if(confirm == JOptionPane.NO_OPTION) {
+					JOptionPane.showMessageDialog(this, "Hủy xóa Tổ thành công");
 				}
 			}
-			else if(confirm == JOptionPane.NO_OPTION) {
-				JOptionPane.showMessageDialog(this, "Hủy xóa Tổ thành công");
+			else {
+				JOptionPane.showMessageDialog(this, "Chọn tổ cần xóa");
 			}
 		} else if (o.equals(btnUpdateFactory)) {
 			if (btnUpdateFactory.getIcon().toString().equals("images\\Text-Edit-icon.png")) {
@@ -915,7 +1018,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		} else if (o.equals(btnSearchIdTeam)) {
 			if (txtSearchIdTeam.getText().isEmpty()) {
 				dtmListTeam.setRowCount(0);
-				loadListTeamByIdFactory(txtIdFactory.getText(), dtmListTeam);
+				loadListTeam();
 			} else {
 				TeamProducing team = Dao_Factory.searchTeamByIdTeam(txtSearchIdTeam.getText());
 				if (team != null) {
@@ -929,10 +1032,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 
 	}
 
+	// Kiểm tra thông tin nhập của phân xưởng
 	public boolean regexFactory() {
 		String announce = "";
 		String regexIdFactory = "^(PX)[0-9]{2}$";
-		String regexIdLeadFactory = "^(NVSX)[0-9]{5}$";
+		String regexNameFactory = "^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$";
 		if (txtIdFactory.getText().isEmpty() || txtNameFactory.getText().isEmpty()) {
 			announce += "Vui lòng nhập đầy đủ thông tin phân xưởng";
 		} else {
@@ -940,6 +1044,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				announce += "Mã phân xưởng phải bắt đầu bằng PX và theo sau là 2 chữ số \n";
 				txtIdFactory.requestFocus();
 				txtIdFactory.selectAll();
+			}
+			else if(!txtNameFactory.getText().matches(regexNameFactory)) {
+				announce += "Tên phân xưởng không chứa kí tự đặc biệt \n";
+				txtNameFactory.requestFocus();
+				txtNameFactory.selectAll();
 			}
 		}
 		if (announce.isEmpty()) {
@@ -950,10 +1059,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		}
 	}
 
+	// Kiểm tra thông tin nhập của tổ
 	public boolean regexTeam() {
 		String announce = "";
 		String regexIdTeam = "^" + txtIdFactory.getText() + "[0-9]{2}$";
-		String regexIdLeadTeam = "^(NVSX)[0-9]{5}$";
+		String regexNameTeam = "^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$";
 		if (txtIdTeam.getText().isEmpty() || txtNameTeam.getText().isEmpty()) {
 			announce += "Vui lòng nhập đầy đủ thông tin tổ";
 		} else {
@@ -961,6 +1071,11 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 				announce += "Mã tổ phải bắt đầu bằng mã phân xưởng và theo sau 2 chữ số \n";
 				txtIdTeam.requestFocus();
 				txtIdTeam.selectAll();
+			}
+			else if(!txtNameTeam.getText().matches(regexNameTeam)) {
+				announce += "Tên tổ không chứa kí tự đặc biệt \n";
+				txtNameTeam.requestFocus();
+				txtNameTeam.selectAll();
 			}
 		}
 		if (announce.isEmpty()) {

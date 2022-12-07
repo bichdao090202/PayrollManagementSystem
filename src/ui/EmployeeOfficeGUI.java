@@ -8,7 +8,6 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.Format;
@@ -29,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -55,20 +53,32 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static final Color COLOR = new Color(14, 85, 78);
 	private static final Color COLOR_HOVER = new Color(36, 217, 199);
-	private final String[] gender = new String[] { "Nam", "Nữ" };
-	private final String[] bankName = new String[] { "BIDV" };
-	private final String[] headerTable = new String[] { "Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ", "SDT" };
+	private String[] gender = new String[] { "Nam", "Nữ" };
+	private String[] bankName = new String[] { "BIDV" };
+	private String[] headerTable = new String[] { "Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ", "SDT" };
 	private JPanel contentPane;
-	private JTextField txtName, txtPhone, txtAddress, txtAccountNumber, txtBeneficiany;
+	private JTextField txtName;
+	private JTextField txtPhone;
+	private JTextField txtAddress;
+	private JTextField txtAccountNumber;
+	private JTextField txtBeneficiany;
 	private JTextFieldHint txtSearch;
 	private JFormattedTextField txtSalary;
 	private EmployeeOfficeDAO employeeOfficeDAO;
 	private DepartmentDAO departmentDAO;
 	private DefaultTableModel dtmEmp;
-	private DefaultComboBoxModel<String> dcmDepartment, dcmPosition;
-	private JButton btnAdd, btnUpdate, btnDelete, btnReset, btnSearch;
+	private DefaultComboBoxModel<String> dcmDepartment;
+	private DefaultComboBoxModel<String> dcmPosition;
+	private JButton btnUpdate;
+	private JButton btnAdd;
+	private JButton btnReset;
+	private JButton btnDelete;
+	private JButton btnSearch;
 	private JDateChooser txtDob;
-	private JComboBox<String> cboGender, cboBankName, cboDept, cboPosition;
+	private JComboBox<String> cboGender;
+	private JComboBox<String> cboBankName;
+	private JComboBox<String> cboDept;
+	private JComboBox<String> cboPosition;
 	private JTable tblEmp;
 	private Date maxSelectedDate;
 
@@ -205,8 +215,6 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		pnOutputInfo.add(pnOperations, BorderLayout.NORTH);
 
 		btnAdd = new JButton("Thêm");
-		btnAdd.setMnemonic(KeyEvent.VK_A);
-		btnAdd.setToolTipText("Thêm nhân viên (Alt + A)");
 		btnAdd.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
@@ -223,12 +231,11 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnAdd.setForeground(COLOR);
 		btnAdd.setBackground(Color.WHITE);
 		btnAdd.addActionListener(this);
+		btnAdd.setToolTipText("Thêm nhân viên");
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAdd.setFocusable(false);
 
 		btnUpdate = new JButton("Cập nhật");
-		btnUpdate.setMnemonic(KeyEvent.VK_U);
-		btnUpdate.setToolTipText("Cập nhật nhân viên (Alt + U)");
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -248,8 +255,6 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnUpdate.setFocusable(false);
 
 		btnDelete = new JButton("Xóa");
-		btnDelete.setMnemonic(KeyEvent.VK_D);
-		btnDelete.setToolTipText("Xóa nhân viên (Alt + D)");
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -269,8 +274,6 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
 
 		btnReset = new JButton("Làm mới");
-		btnReset.setMnemonic(KeyEvent.VK_N);
-		btnReset.setToolTipText("Làm mới ô nhập liệu (Alt + N)");
 		btnReset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -332,7 +335,6 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				return false;
 			}
 		};
-		tblEmp.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblEmp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -340,12 +342,12 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				if (rowSelected >= 0) {
 					String employeeID = tblEmp.getValueAt(rowSelected, 0).toString();
 					Employee emp = employeeOfficeDAO.getEmployeeOffice(employeeID);
-					txtName.setText(emp.getName().trim());
+					txtName.setText(emp.getName());
 					txtDob.setDate(emp.getBirthday());
-					txtPhone.setText(emp.getPhone().trim());
-					txtAddress.setText(emp.getAddress().trim());
-					txtAccountNumber.setText(emp.getAccountNumber().trim());
-					txtBeneficiany.setText(emp.getBeneficiany().trim());
+					txtPhone.setText(emp.getPhone());
+					txtAddress.setText(emp.getAddress());
+					txtAccountNumber.setText(emp.getAccountNumber());
+					txtBeneficiany.setText(emp.getBeneficiany());
 					txtSalary.setValue(((EmployeeOffice) emp).getSalary());
 					if (emp.isGender()) {
 						cboGender.setSelectedIndex(0);
@@ -358,7 +360,6 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				}
 			}
 		});
-		tblEmp.setFillsViewportHeight(true);
 		tblEmp.getTableHeader().setOpaque(false);
 		tblEmp.getTableHeader().setBackground(COLOR);
 		tblEmp.getTableHeader().setForeground(Color.WHITE);
@@ -377,8 +378,6 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		pnSearch.add(txtSearch);
 
 		btnSearch = new JButton();
-		btnSearch.setMnemonic(KeyEvent.VK_S);
-		btnSearch.setToolTipText("Tìm kiếm nhân viên (Alt + S)");
 		btnSearch.setBackground(Color.WHITE);
 		btnSearch.setFocusable(false);
 		btnSearch.setIcon(new ImageIcon("images\\operations\\search.png"));
@@ -473,6 +472,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				e2.printStackTrace();
 			}
 			String position = (String) cboPosition.getSelectedItem();
+			System.out.println(position);
 			String departmentID = ((String) cboDept.getSelectedItem()).substring(0, 4);
 			if (validInput(name, birthday, address, phone, accountNumber, beneficiany, salary)) {
 				Employee employee = new EmployeeOffice(name, gender, birthday, address, phone, bankName, accountNumber,

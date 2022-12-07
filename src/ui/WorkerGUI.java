@@ -8,7 +8,6 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -25,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -53,18 +51,33 @@ public class WorkerGUI extends JFrame implements ActionListener {
 	private static final Color COLOR = new Color(14, 85, 78);
 	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private JPanel contentPane;
-	private final String[] gender = new String[] { "Nam", "Nữ" };
-	private final String[] bankName = new String[] { "BIDV" };
-	private final String[] headerTable = new String[] { "Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ", "SDT" };
-	private JTextField txtName, txtPhone, txtAddress, txtAccountNumber, txtBeneficiany, txtSpeciality;
+	private String[] gender = new String[] { "Nam", "Nữ" };
+	private String[] bankName = new String[] { "BIDV" };
+	private String[] headerTable = new String[] { "Mã NV", "Tên NV", "Giới tính", "Ngày sinh", "Địa chỉ", "SDT" };
+	private JTextField txtName;
+	private JTextField txtPhone;
+	private JTextField txtAddress;
+	private JTextField txtAccountNumber;
+	private JTextField txtBeneficiany;
+	private JTextField txtSpeciality;
 	private WorkerDAO workerDAO;
 	private FactoryDAO factoryDAO;
 	private TeamDAO teamDAO;
 	private DefaultTableModel dtmWorker;
-	private DefaultComboBoxModel<String> dcmNameFactory, dcmPosition, dcmNameTeam;
-	private JButton btnAdd, btnUpdate, btnDelete, btnReset, btnSearch;
+	private DefaultComboBoxModel<String> dcmNameFactory;
+	private DefaultComboBoxModel<String> dcmNameTeam;
+	private DefaultComboBoxModel<String> dcmPosition;
+	private JButton btnUpdate;
+	private JButton btnAdd;
+	private JButton btnDelete;
+	private JButton btnReset;
+	private JButton btnSearch;
 	private JDateChooser txtDob;
-	private JComboBox<String> cboGender, cboTeam, cboBankName, cboFactory, cboPosition;
+	private JComboBox<String> cboGender;
+	private JComboBox<String> cboTeam;
+	private JComboBox<String> cboBankName;
+	private JComboBox<String> cboFactory;
+	private JComboBox<String> cboPosition;
 	private JTable tblWorker;
 	private Date minSelectedDate;
 	private JTextFieldHint txtSearch;
@@ -210,8 +223,6 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		pnOutputInfo.add(pnOperations, BorderLayout.NORTH);
 
 		btnAdd = new JButton("Thêm");
-		btnAdd.setMnemonic(KeyEvent.VK_A);
-		btnAdd.setToolTipText("Thêm nhân viên (Alt + A)");
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -227,12 +238,11 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		btnAdd.setForeground(COLOR);
 		btnAdd.setBackground(Color.WHITE);
 		btnAdd.addActionListener(this);
+		btnAdd.setToolTipText("Thêm nhân viên");
 		btnAdd.setIcon(new ImageIcon("images\\operations\\new.png"));
 		btnAdd.setFocusable(false);
 
 		btnUpdate = new JButton("Cập nhật");
-		btnUpdate.setMnemonic(KeyEvent.VK_U);
-		btnUpdate.setToolTipText("Cập nhật nhân viên (Alt + U)");
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -252,8 +262,6 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		btnUpdate.setFocusable(false);
 
 		btnDelete = new JButton("Xóa");
-		btnDelete.setMnemonic(KeyEvent.VK_D);
-		btnDelete.setToolTipText("Xóa nhân viên (Alt + D)");
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -273,8 +281,6 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
 
 		btnReset = new JButton("Làm mới");
-		btnReset.setMnemonic(KeyEvent.VK_N);
-		btnReset.setToolTipText("Làm mới ô nhập liệu (Alt + N)");
 		btnReset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -328,7 +334,6 @@ public class WorkerGUI extends JFrame implements ActionListener {
 				return false;
 			}
 		};
-		tblWorker.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblWorker.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -341,7 +346,7 @@ public class WorkerGUI extends JFrame implements ActionListener {
 							teamDAO.getAllNameTeam(factory).toArray(String[]::new));
 					cboTeam.setModel(dcmNameTeam);
 
-					txtName.setText(emp.getName().trim());
+					txtName.setText(emp.getName());
 					txtDob.setDate(emp.getBirthday());
 					if (emp.isGender()) {
 						cboGender.setSelectedIndex(0);
@@ -380,8 +385,6 @@ public class WorkerGUI extends JFrame implements ActionListener {
 		pnSearch.add(txtSearch);
 
 		btnSearch = new JButton();
-		btnSearch.setMnemonic(KeyEvent.VK_S);
-		btnSearch.setToolTipText("Tìm kiếm nhân viên (Alt + S)");
 		btnSearch.setBackground(Color.WHITE);
 		btnSearch.setFocusable(false);
 		btnSearch.setIcon(new ImageIcon("images\\operations\\search.png"));

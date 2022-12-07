@@ -6,6 +6,7 @@ import java.util.Objects;
 public class DetailProduction {
 	private int detailProductionID;
 	private int quantityProduction;
+	private int quantityfinished;
 	private String state;
 	private String productId;
 	private Date date;
@@ -38,6 +39,14 @@ public class DetailProduction {
 
 	public void setQuantityProduction(int quantityProduction) {
 		this.quantityProduction = quantityProduction;
+	}
+	
+	public int getQuantityFinished() {
+		return quantityfinished;
+	}
+
+	public void setQuantityFinished(int quantityProduction) {
+		this.quantityfinished = quantityProduction;
 	}
 
 	public String getState() {

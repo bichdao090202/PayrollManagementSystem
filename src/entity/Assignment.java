@@ -4,32 +4,17 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Assignment {
-	private String assignmentID;
+	private int assignmentID;
 	private String produreID;
 	private String workerID;
 	private LocalDate date;
-	private String detailProductionID;
+	private int detailProductionID;
 
 	public Assignment() {
 		super();
 	}
-	
-	public Assignment(String assignmentID, String produreID, String workerID) {
-		super();
-		this.assignmentID = assignmentID;
-		this.produreID = produreID;
-		this.workerID = workerID;
-	}
 
-	public Assignment(String assignmentID, String produreID, String workerID, LocalDate date) {
-		super();
-		this.assignmentID = assignmentID;
-		this.produreID = produreID;
-		this.workerID = workerID;
-		this.date = date;
-	}
-	
-	public Assignment(String assignmentID, String produreID, String workerID, LocalDate date, String detailProductionID) {
+	public Assignment(int assignmentID, String produreID, String workerID, LocalDate date, int detailProductionID) {
 		super();
 		this.assignmentID = assignmentID;
 		this.produreID = produreID;
@@ -37,19 +22,12 @@ public class Assignment {
 		this.date = date;
 		this.detailProductionID = detailProductionID;
 	}
-	
-	public Assignment(String produreID, String workerID, LocalDate date) {
-		super();
-		this.produreID = produreID;
-		this.workerID = workerID;
-		this.date = date;
-	}
 
-	public String getAssignmentID() {
+	public int getAssignmentID() {
 		return assignmentID;
 	}
 
-	public void setAssignmentID(String assignmentID) {
+	public void setAssignmentID(int assignmentID) {
 		this.assignmentID = assignmentID;
 	}
 
@@ -77,11 +55,11 @@ public class Assignment {
 		this.date = date;
 	}
 
-	public String getDetailProductionID() {
+	public int getDetailProductionID() {
 		return detailProductionID;
 	}
 
-	public void setDetailProductionID(String detailProductionID) {
+	public void setDetailProductionID(int detailProductionID) {
 		this.detailProductionID = detailProductionID;
 	}
 
@@ -105,7 +83,8 @@ public class Assignment {
 	@Override
 	public String toString() {
 		return "Assignment [assignmentID=" + assignmentID + ", produreID=" + produreID + ", workerID=" + workerID
-				+ ", date=" + date + "]";
+				+ ", date=" + date + ", detailProductionID=" + detailProductionID + "]";
 	}
-
+	
+	
 }
