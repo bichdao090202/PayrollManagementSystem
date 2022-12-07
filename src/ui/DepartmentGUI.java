@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -36,14 +37,9 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 	private static final Color COLOR = new Color(14, 85, 78);
 	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private final String[] row1 = { "Mã nhân viên", "Tên nhân viên"};
-	private JButton btnCreate;
-	private JButton btnDelete;
-	private JButton btnUpdate;
-	private JButton btnRefresh;
-	private JTable tblDepartment;
-	private DefaultTableModel tblModel;
-	private JTable tblEmp;
-	private DefaultTableModel tblModelEmp;
+	private JButton btnCreate, btnDelete, btnUpdate, btnRefresh;
+	private JTable tblDepartment, tblEmp;
+	private DefaultTableModel tblModel, tblModelEmp;
 	private JButton btnGoFirstPage, btnGoLastPage, btnNextPage, btnPreviousPage;
 	private DepartmentDAO depDAO;
 	private JTextField txtName;
@@ -89,6 +85,8 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		pnButton.setLayout(null);
 
 		btnCreate = new JButton("Thêm");
+		btnCreate.setMnemonic(KeyEvent.VK_A);
+		btnCreate.setToolTipText("Thêm phòng ban (Alt + A)");
 		btnCreate.setBounds(20, 14, 83, 34);
 		btnCreate.addMouseListener(new MouseAdapter() {
 			@Override
@@ -113,6 +111,8 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		pnDepartment.add(pnButton);
 
 		pnButton.add(btnDelete = new JButton("Xóa"));
+		btnDelete.setMnemonic(KeyEvent.VK_D);
+		btnDelete.setToolTipText("Xóa phòng ban (Alt + D)");
 		btnDelete.setBounds(123, 14, 83, 34);
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
@@ -132,6 +132,8 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		btnDelete.setIcon(new ImageIcon("images\\operations\\delete.png"));
 		
 		pnButton.add(btnUpdate = new JButton("Cập nhật"));
+		btnUpdate.setMnemonic(KeyEvent.VK_U);
+		btnUpdate.setToolTipText("Cập nhật phòng ban (Alt + U)");
 		btnUpdate.setBounds(226, 14, 83, 34);
 		btnUpdate.addMouseListener(new MouseAdapter() {
 			@Override
@@ -151,6 +153,8 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		btnUpdate.setIcon(new ImageIcon("images\\operations\\update.png"));
 		
 		pnButton.add(btnRefresh = new JButton("Làm mới"));
+		btnRefresh.setMnemonic(KeyEvent.VK_N);
+		btnRefresh.setToolTipText("Làm mới ô nhập liệu (Alt + N)");
 		btnRefresh.setBounds(329, 14, 83, 34);
 		btnRefresh.addMouseListener(new MouseAdapter() {
 			@Override
@@ -177,6 +181,7 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		String[] row0 = { "Mã", "Tên phòng ban", "Tên trưởng phòng", "Số lượng nhân viên" };
 		pnTable.setLayout(new BorderLayout(0, 0));
 		tblDepartment = new JTable(tblModel = new DefaultTableModel(row0, 0));
+		tblDepartment.setFillsViewportHeight(true);
 		tblDepartment.getTableHeader().setOpaque(false);
 		tblDepartment.getTableHeader().setBackground(COLOR);
 		tblDepartment.getTableHeader().setForeground(Color.WHITE);
@@ -215,6 +220,7 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		pnTableEmp.setLayout(new BorderLayout(0, 0));
 		
 		tblEmp = new JTable(tblModelEmp = new DefaultTableModel(row1, 0));
+		tblEmp.setFillsViewportHeight(true);
 		tblEmp.getTableHeader().setOpaque(false);
 		tblEmp.getTableHeader().setBackground(COLOR);
 		tblEmp.getTableHeader().setForeground(Color.WHITE);

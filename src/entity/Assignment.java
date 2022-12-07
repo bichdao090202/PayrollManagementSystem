@@ -13,7 +13,22 @@ public class Assignment {
 	public Assignment() {
 		super();
 	}
+	
+	public Assignment(int assignmentID, String produreID, String workerID) {
+		super();
+		this.assignmentID = assignmentID;
+		this.produreID = produreID;
+		this.workerID = workerID;
+	}
 
+	public Assignment(int assignmentID, String produreID, String workerID, LocalDate date) {
+		super();
+		this.assignmentID = assignmentID;
+		this.produreID = produreID;
+		this.workerID = workerID;
+		this.date = date;
+	}
+	
 	public Assignment(int assignmentID, String produreID, String workerID, LocalDate date, int detailProductionID) {
 		super();
 		this.assignmentID = assignmentID;
@@ -21,6 +36,13 @@ public class Assignment {
 		this.workerID = workerID;
 		this.date = date;
 		this.detailProductionID = detailProductionID;
+	}
+	
+	public Assignment(String produreID, String workerID, LocalDate date) {
+		super();
+		this.produreID = produreID;
+		this.workerID = workerID;
+		this.date = date;
 	}
 
 	public int getAssignmentID() {
@@ -83,8 +105,7 @@ public class Assignment {
 	@Override
 	public String toString() {
 		return "Assignment [assignmentID=" + assignmentID + ", produreID=" + produreID + ", workerID=" + workerID
-				+ ", date=" + date + ", detailProductionID=" + detailProductionID + "]";
+				+ ", date=" + date + "]";
 	}
-	
-	
+
 }

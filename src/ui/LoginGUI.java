@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.awt.Color;
@@ -50,18 +51,18 @@ public class LoginGUI extends JFrame implements ActionListener {
 		accountDAO = new AccountDAO();
 		employeeOfficeDAO = new EmployeeOfficeDAO();
 		workerDAO = new WorkerDAO();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(ICON_APPLICATION);
 		setTitle("Đăng nhập");
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 1001, 566);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-
-		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 
 		JPanel pnMainLeft = new JPanel();
 		pnMainLeft.setBackground(new Color(16, 84, 129));
@@ -91,11 +92,13 @@ public class LoginGUI extends JFrame implements ActionListener {
 			public void mouseEntered(MouseEvent e) {
 				btnLogin.setBackground(new Color(173, 217, 245));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnLogin.setBackground(Color.WHITE);
 			}
 		});
+		btnLogin.setMnemonic(KeyEvent.VK_ENTER);
 		btnLogin.setForeground(new Color(16, 84, 129));
 		btnLogin.setBackground(new Color(255, 255, 255));
 		btnLogin.setBorder(new LineBorder(new Color(16, 84, 129), 3, true));
@@ -164,11 +167,12 @@ public class LoginGUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống", "Lỗi", JOptionPane.NO_OPTION, null);
 			} else {
 				HashMap<String, String> account = accountDAO.getPasswordEncryption(username);
-				if (!account.isEmpty() & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"), account.get("salt"))) {
+				if (!account.isEmpty() & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"),
+						account.get("salt"))) {
 					emp = null;
 					if (username.contains("NVHC")) {
 						emp = employeeOfficeDAO.getEmployeeOffice(username);
-					}else {
+					} else {
 						emp = workerDAO.getWorker(username);
 					}
 					EventQueue.invokeLater(new Runnable() {
@@ -186,8 +190,9 @@ public class LoginGUI extends JFrame implements ActionListener {
 							}
 						}
 					});
-				}else {
-					JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu không chính xác! Vui lòng nhập lại.", "Đăng nhập thất bại", JOptionPane.NO_OPTION, null);
+				} else {
+					JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu không chính xác! Vui lòng nhập lại.",
+							"Đăng nhập thất bại", JOptionPane.NO_OPTION, null);
 				}
 			}
 		}

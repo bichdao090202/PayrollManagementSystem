@@ -73,7 +73,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	private List<Factory> listFactorySearch = new ArrayList<Factory>();
 
 	public FactoryGUI() {
-		getUI();
+//		getUI();
 	}
 	public Component getUI() {
 		setSize(1200, 690);

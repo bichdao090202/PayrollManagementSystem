@@ -511,5 +511,19 @@ public class ProductDAO {
 		return false;
 	}
 
+	public int getProductionDetailID(String idProduct) {
+		int id = 0;
+		try {
+			PreparedStatement stmt = con.prepareStatement("select * from HopDongSanXuat ctsx join SanPham sp on ctsx.MaSanPham = sp.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and sp.MaSanPham = ?");
+			stmt.setString(1, idProduct);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				id = rs.getInt("MaHopDong");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
 }
 

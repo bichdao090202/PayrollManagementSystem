@@ -35,10 +35,16 @@ public class WorkerDAO {
 		return listEmp;
 	}
 	
-	public List<Worker> getListWorker() {
+	public List<Worker> getListWorker(String teamID) {
 		List<Worker> list = new ArrayList<Worker>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select * from NhanVienSanXuat");
+			PreparedStatement stmt = null;
+			if (teamID.equals("admin"))
+				stmt = connection.prepareStatement("select * from NhanVienSanXuat where not EXISTS (select * from PhanXuong where PhanXuong.MaQuanDoc = NhanVienSanXuat.MaNhanVien)");
+			else {
+				stmt = connection.prepareStatement("select * from NhanVienSanXuat where MaTo =? and not EXISTS (select * from PhanXuong where PhanXuong.MaQuanDoc = NhanVienSanXuat.MaNhanVien) ");
+				stmt.setString(1, teamID);
+			}
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Worker emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
