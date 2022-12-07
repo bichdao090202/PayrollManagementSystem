@@ -262,7 +262,7 @@ public class SalaryDAO {
 			prstm.setString(3, idEmployee);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				assignment = new Assignment(rs.getInt("MaPhanCong"), rs.getString("MaQuyTrinh"), rs.getString("MaNhanVien"), rs.getDate("NgayThamGia").toLocalDate(), rs.getInt("MaHopDong"));;
+				assignment = new Assignment(rs.getInt("MaPhanCong"), rs.getString("MaQuyTrinh"), rs.getString("MaNhanVien"), rs.getDate("NgayThamGia").toLocalDate(), rs.getInt("MaHopDong"));
 				if(assignment != null) {
 					listAssignment.add(assignment);
 				}

@@ -421,4 +421,18 @@ public class FactoryDAO {
 		}
 		return listTeam;
 	}
+	
+	public String getNameFactoryByTeamID(String teamID) {
+    	String name = null;
+		try {
+			prstm = con.prepareStatement("SELECT PX.TenPhanXuong, PX.MaPhanXuong FROM PhanXuong AS PX INNER JOIN ToSanXuat AS TSX ON PX.MaPhanXuong = TSX.MaPhanXuong WHERE MaTo= ?");
+			prstm.setString(1, teamID);
+			ResultSet rs = prstm.executeQuery();
+			if (rs.next())
+            	name = rs.getString("MaPhanXuong") + " - "+ rs.getString("TenPhanXuong");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return name;
+    }
 }
