@@ -6,13 +6,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,6 +31,8 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Component;
@@ -61,12 +67,13 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.toedter.calendar.JDateChooser;
 
 import model.SalaryDAO;
-import entity.TimesheetOffice;
+import entity.TimesheetsOffice;
 import entity.Department;
+import entity.Employee;
 import entity.EmployeeOffice;
 import entity.Worker;
 import entity.Factory;
-import entity.TimesheetFactory;
+import entity.TimesheetsFactory;
 import entity.Bonus_Discipline;
 import entity.TeamProducing;
 
@@ -79,8 +86,6 @@ import custom_field.JTextFieldHint;
 import javax.swing.ImageIcon;
 
 public class SalaryGUI extends JFrame implements ActionListener, MouseListener, ItemListener {
-	
-	
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtSearchIdEmployee;
@@ -118,14 +123,17 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private JButton btnExportSalary;
 	public static final String fontString = "C:\\Windows\\Fonts\\times.ttf";
+	private List<Employee> listEmployee = new ArrayList<Employee>();
 
+	public SalaryGUI() {
+		getUI();
+	}
+	
 	public Component getUI() {
 		setSize(1200, 690);
 		getContentPane().setLayout(null);
-//		getContentPane().setBackground(new Color(0,140,140));
 
 		JPanel pnlTopSalary = new JPanel();
-//		pnlTopSalary.setBackground(new Color(0,140,140));
 		pnlTopSalary.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Nhập thôn tin",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlTopSalary.setBounds(10, 10, 924, 150);
@@ -153,7 +161,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTopSalary.add(btnSearchIdEmployee);
 
 		JPanel pnlFilterInformation = new JPanel();
-//		pnlFilterInformation.setBackground(new Color(0,140,140));
 		pnlFilterInformation.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Lọc", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlFilterInformation.setBounds(10, 53, 904, 87);
@@ -211,7 +218,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTopSalary.add(yChYear);
 
 		JPanel pnlTableSalary = new JPanel();
-//		pnlTableSalary.setBackground(new Color(0,140,140));
 		pnlTableSalary.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Bảng lương",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlTableSalary.setBounds(10, 170, 1166, 473);
@@ -223,7 +229,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		pnlTableSalary.add(scrListEmployee);
 
 		tblListEmployee = new JTable();
-//		tblListEmployee.setBackground(new Color(0,140,140));
 		tblListEmployee.setForeground(Color.BLACK);
 		tblListEmployee.setGridColor(new Color(0,140,140));
 		tblListEmployee.setRowHeight(25);
@@ -244,7 +249,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		scrListEmployee.setViewportView(tblListEmployee);
 
 		JPanel pnlDetailSalary = new JPanel();
-//		pnlDetailSalary.setBackground(new Color(0,140,140));
 		pnlDetailSalary.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Thông tin bảng lương",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlDetailSalary.setBounds(604, 27, 552, 436);
@@ -496,6 +500,60 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		btnExportSalary.setBounds(422, 380, 120, 30);
 		pnlDetailSalary.add(btnExportSalary);
 		
+		DocumentListener enventChangeSearchEmployee = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				listEmployee = Dao_Salary.searchListEmployee(txtSearchIdEmployee.getText());
+				if(txtSearchIdEmployee.getText().isEmpty()) {
+					deleteDataOnTableModel();
+					loadListEmployee();
+				}
+				else if(!txtSearchIdEmployee.getText().isEmpty() && listEmployee != null) {
+					deleteDataOnTableModel();
+					loadListEmployeeWithListEmployee(listEmployee);
+				}
+				else {
+					deleteDataOnTableModel();
+				}
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				listEmployee = Dao_Salary.searchListEmployee(txtSearchIdEmployee.getText());
+				if(txtSearchIdEmployee.getText().isEmpty()) {
+					deleteDataOnTableModel();
+					loadListEmployee();
+				}
+				else if(!txtSearchIdEmployee.getText().isEmpty() && listEmployee != null) {
+					deleteDataOnTableModel();
+					loadListEmployeeWithListEmployee(listEmployee);
+				}
+				else {
+					deleteDataOnTableModel();
+				}
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				listEmployee = Dao_Salary.searchListEmployee(txtSearchIdEmployee.getText());
+				if(txtSearchIdEmployee.getText().isEmpty()) {
+					deleteDataOnTableModel();
+					loadListEmployee();
+				}
+				else if(!txtSearchIdEmployee.getText().isEmpty() && listEmployee != null) {
+					deleteDataOnTableModel();
+					loadListEmployeeWithListEmployee(listEmployee);
+				}
+				else {
+					deleteDataOnTableModel();
+				}
+			}
+
+        };
+        
+        txtSearchIdEmployee.getDocument().addDocumentListener(enventChangeSearchEmployee);
+		
 		txtIdEmployee.setEditable(false);
 		txtNameEmployee.setEditable(false);
 		txtGenderEmployee.setEditable(false);
@@ -662,6 +720,13 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				}
 			}
 		});
+		
+		btnSearchIdEmployee.setMnemonic(KeyEvent.VK_S);
+		btnSearchIdEmployee.setToolTipText("Phím tắt : Alt + S");
+		btnExportListSalary.setMnemonic(KeyEvent.VK_E);
+		btnExportListSalary.setToolTipText("Phím tắt : Alt + E");
+		btnExportSalary.setMnemonic(KeyEvent.VK_X);
+		btnExportSalary.setToolTipText("Phím tắt : Alt + X");
 
 		loadListEmployee();
 		return getContentPane();
@@ -671,6 +736,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		new SalaryGUI().setVisible(true);
 	}
 
+	// Lấy và hiển thị tất cả nhân viên
 	public void loadListEmployee() {
 		List<Worker> ListEmployeeProductive = Dao_Salary.getListEmployeeProductive();
 		List<EmployeeOffice> ListEmployeeAdministrative = Dao_Salary.getListEmployeeAdministrative();
@@ -688,23 +754,31 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 			dtmListEmployee.addRow(row);
 		}
 	}
+	
+	// Lấy và hiển thị danh sách nhân viên đã cho
+	public void loadListEmployeeWithListEmployee(List<Employee> listEmployee) {
+		for(Employee employee : listEmployee) {
+			if(employee instanceof Worker) {
+				String[] row = { employee.getEmployeeID(), employee.getName(), employee.isGender() ? "Nam" : "Nữ",
+						employee.getBirthday().toGMTString(), employee.getPhone(), employee.getAddress() };
+				dtmListEmployee.addRow(row);
+			}
+			else {
+				String[] row = { employee.getEmployeeID(), employee.getName(),
+						employee.isGender() ? "Nam" : "Nữ", employee.getBirthday().toGMTString(),
+								employee.getPhone(), employee.getAddress() };
+				dtmListEmployee.addRow(row);
+			}
+		}
+	}
 
+	// hiển thị thông tin nhân viên sản xuất vào form
 	public void formSalaryEmployeeProductive(Worker eProductive) {
-		List<TimesheetFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
-		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<TimesheetsFactory> listTimeKeep = Dao_Salary.getWorkDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int targets = 0;
 		int numberDayOfMonth = 0;
-		double bonus = 0;
-		double fine = 0;
-		for (Bonus_Discipline rd : listRD) {
-			if (rd.getAmountMoney() >= 0) {
-				bonus += rd.getAmountMoney();
-			} else {
-				fine += rd.getAmountMoney();
-			}
-		}
-		for (TimesheetFactory time : listTimeKeep) {
+		for (TimesheetsFactory time : listTimeKeep) {
 			targets += time.getQuantity();
 		}
 		LocalDate date = LocalDate.now();
@@ -722,7 +796,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNameEmployee.setText(eProductive.getName().trim());
 		txtGenderEmployee.setText(eProductive.isGender() ? "Nam" : "Nữ");
 		dateBirthDayEmployee.setText(dateFormat.format(eProductive.getBirthday()));
-		txtPhonenumberEmployee.setText("0" + eProductive.getPhone().trim());
+		txtPhonenumberEmployee.setText(eProductive.getPhone().trim());
 		txtAddressEmployee.setText(eProductive.getAddress().trim());
 		txtNameBank.setText(eProductive.getBankName().trim());
 		txtSTKBank.setText(eProductive.getAccountNumber().trim());
@@ -733,36 +807,26 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNumberOfDayOff.setText(numberDayOfMonth - listTimeKeep.size() + "");
 		txtTargets.setText(targets >= 15000 ? "Đạt" : "Không đạt");
 		txtReason.setText(txtTargets.getText().equals("Không đạt") ? "Số lượng không đạt yêu cầu" : "");
-		txtBonus.setText(formatter.format(bonus)+"");
-		txtFine.setText(formatter.format(fine)+"");
+		txtBonus.setText("0");
+		txtFine.setText("0");
 		
-		double salary = Double.parseDouble(Dao_Salary.totalSalaryOfE(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear())+ bonus + fine + "");
+		double salary = Double.parseDouble(Dao_Salary.calculateTotalSalaryOfE(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear()) + "");
 		String totalSalary = formatter.format(salary);
 		txtTotalSalary.setText(totalSalary);
 	}
 
+	// Xóa dữ liệu trên bảng
 	public void deleteDataOnTableModel() {
 		dtmListEmployee.setRowCount(0);
 	}
 
+	// Hiển thị thông tin nhân viên hành chính trên form
 	@SuppressWarnings("deprecation")
 	public void FormSalaryEmployeeAdministrative(EmployeeOffice eAdministrative) {
-		List<TimesheetOffice> listTimeKeep = Dao_Salary.numberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
-
-		List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<TimesheetsOffice> listTimeKeep = Dao_Salary.getNumberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int numberWorkOfMonth = listTimeKeep.size();
 		int numberDayOfMonth = 0;
-		double bonus = 0;
-		double fine = 0;
-		for (Bonus_Discipline rd : listRD) {
-			if (rd.getAmountMoney() >= 0) {
-				bonus += rd.getAmountMoney();
-			} else {
-				fine += rd.getAmountMoney();
-			}
-		}
-
 		LocalDate date = LocalDate.now();
 		if (date.getMonthValue() == 1 || date.getMonthValue() == 3 || date.getMonthValue() == 5
 				|| date.getMonthValue() == 7 || date.getMonthValue() == 8 || date.getMonthValue() == 10
@@ -777,7 +841,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNameEmployee.setText(eAdministrative.getName().trim());
 		txtGenderEmployee.setText(eAdministrative.isGender() ? "Nam" : "Nữ");
 		dateBirthDayEmployee.setText(dateFormat.format(eAdministrative.getBirthday()));
-		txtPhonenumberEmployee.setText("0" + eAdministrative.getPhone().trim());
+		txtPhonenumberEmployee.setText(eAdministrative.getPhone().trim());
 		txtAddressEmployee.setText(eAdministrative.getAddress().trim());
 		if(eAdministrative.getBankName() != null) {
 			txtNameBank.setText(eAdministrative.getBankName().trim());
@@ -802,11 +866,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtNumberOfWorkDay.setText(listTimeKeep.size() + "");
 		txtNumberOfDayOff.setText(numberDayOfMonth - listTimeKeep.size() + "");
 		txtTargets.setText(numberWorkOfMonth > 26 ? "Đạt" : "Không đạt");
-		txtReason.setText(txtTargets.getText().equals("Không đạt") ? "Số giờ làm không đạt yêu cầu" : "");
-		txtBonus.setText(formatter.format(bonus) + "");
-		txtFine.setText(formatter.format(fine) + "");
+		txtReason.setText(txtTargets.getText().equals("Không đạt") ? "Số ngày làm không đạt yêu cầu" : "");
+		txtBonus.setText("0");
+		txtFine.setText("0");
 		
-		double salary = ((eAdministrative.getSalary()/26) * numberWorkOfMonth) + bonus + fine;
+		double salary = ((eAdministrative.getSalary()/26) * numberWorkOfMonth);
 		String totalSalary = formatter.format(salary);
 		
 		txtTotalSalary.setText(totalSalary);
@@ -882,7 +946,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		} else if (o.equals(btnExportSalary)) {
 			
 			try {
-				String path = "tableSalaryEployee/salary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + "." + txtIdEmployee.getText() + ".pdf";
+				
+				String path = "exportSalaryOfEmployee/salary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + "." + txtIdEmployee.getText() + ".pdf";
 				PdfWriter pdfWriter = new PdfWriter(path);
 				PdfDocument pdfDocument = new PdfDocument(pdfWriter);
 				pdfDocument.addNewPage();
@@ -1192,9 +1257,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 
 		}
 		else if(o.equals(btnExportListSalary)) {
-
 			try {
-				String path = "tableSalaryEployee/listSalary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + ".pdf";
+				String path = "exportSalaryOfEmployee/listSalary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + ".pdf";
 				PdfWriter pdfWriter = new PdfWriter(path);
 				PdfDocument pdfDocument = new PdfDocument(pdfWriter);
 				pdfDocument.addNewPage();
@@ -1266,21 +1330,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				double totalSalaryOfWorker = 0;
 				for(Worker worker : ListEmployeeProductive) {
-					List<TimesheetFactory> listTimeKeep = Dao_Salary.workDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
-					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetsFactory> listTimeKeep = Dao_Salary.getWorkDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					int targets = 0;
 					int numberDayOfMonth = 0;
-					double bonus = 0;
-					double fine = 0;
-					for (Bonus_Discipline rd : listRD) {
-						if (rd.getAmountMoney() >= 0) {
-							bonus += rd.getAmountMoney();
-						} else {
-							fine += rd.getAmountMoney();
-						}
-					}
-
-					double salary = Double.parseDouble(Dao_Salary.totalSalaryOfE(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear())+ bonus + fine + "");
+					
+					double salary = Double.parseDouble(Dao_Salary.calculateTotalSalaryOfE(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear()) + "");
 					totalSalaryOfWorker += salary;
 					String totalSalary = formatter.format(salary);
 					
@@ -1307,7 +1361,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 							.setHorizontalAlignment(HorizontalAlignment.CENTER)
 					);
 				}
-
 				String nameTotalSalaryOfWorker = "Tổng Lương : " + formatter.format(totalSalaryOfWorker) ;
 				Paragraph paragraphNameTotalSalaryOfWorker = new Paragraph(nameTotalSalaryOfWorker);
 				paragraphNameTotalSalaryOfWorker.setTextAlignment(TextAlignment.RIGHT);
@@ -1359,22 +1412,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				double totalSalaryOfEOffice = 0;
 				for(EmployeeOffice eAdministrative : ListEmployeeAdministrative) {
-					List<TimesheetOffice> listTimeKeep = Dao_Salary.numberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
-
-					List<Bonus_Discipline> listRD = Dao_Salary.listRDEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetsOffice> listTimeKeep = Dao_Salary.getNumberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					int numberWorkOfMonth = listTimeKeep.size();
 					int numberDayOfMonth = 0;
-					double bonus = 0;
-					double fine = 0;
-					for (Bonus_Discipline rd : listRD) {
-						if (rd.getAmountMoney() >= 0) {
-							bonus += rd.getAmountMoney();
-						} else {
-							fine += rd.getAmountMoney();
-						}
-					}
-
-					double salary = ((eAdministrative.getSalary()/26) * numberWorkOfMonth) + bonus + fine;
+					
+					double salary = ((eAdministrative.getSalary()/26) * numberWorkOfMonth);
 					totalSalaryOfEOffice += salary;
 					String totalSalary = formatter.format(salary);
 					//row

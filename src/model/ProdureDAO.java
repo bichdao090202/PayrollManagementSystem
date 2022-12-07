@@ -15,10 +15,11 @@ public class ProdureDAO {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 
+	// Lấy tất cả quy trình theo mã sản phẩm
 	public List<Produre> getAllProdureByProductID(String id) {
 		List<Produre> listProdure = new ArrayList<Produre>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select * from QuyTrinh where MaSanPham = ? ORDER BY ThuTuSanXuat ASC");
+			PreparedStatement stmt = connection.prepareStatement("select * from QuyTrinh where MaSanPham = ?");
 			stmt.setString(1, id);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -32,6 +33,7 @@ public class ProdureDAO {
 		return listProdure;
 	}
 
+	// Lấy quy trình theo mã quy trình
 	public Produre getProdureByID(String id) {
 		Produre p = new Produre();
 		try {

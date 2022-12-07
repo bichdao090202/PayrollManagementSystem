@@ -13,6 +13,7 @@ public class TeamDAO {
 		connection = ConnectDB.getInstance().getConnection();
 	}
 	
+	// Lấy tất cả tên của tổ theo mã phân xưởng
 	public List<String> getAllNameTeam(String factoryID) {
 		List<String> listName = new ArrayList<String>();
 		try {
@@ -29,6 +30,7 @@ public class TeamDAO {
 		return listName;
 	}
 	
+	// lấy tên của tổ theo mã tổ
 	public String getNameTeamByID(String teamID) {
 		String name = null;
 		try {

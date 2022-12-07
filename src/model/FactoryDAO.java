@@ -10,6 +10,8 @@ import java.util.List;
 
 import entity.Worker;
 import entity.Factory;
+import entity.Product;
+import entity.Produre;
 import entity.TeamProducing;
 
 public class FactoryDAO {
@@ -21,6 +23,7 @@ public class FactoryDAO {
 		con = ConnectDB.getInstance().getConnection();
 	}
 	
+	// Lấy tất cả phân xưởng hiện có
 	public List<Factory> getListFactory(){
 		List<Factory> listFactory = new ArrayList<Factory>();
 		String sql = "select * from PhanXuong";
@@ -38,16 +41,16 @@ public class FactoryDAO {
 		return listFactory;
 	}
 	
-	public List<TeamProducing> getListTeamByIdFactory(String idFactory){
+	// Lấy tất cả tổ hiện có
+	public List<TeamProducing> getListTeam(){
 		List<TeamProducing> listTeam = new ArrayList<TeamProducing>();
-		String sql = "select * from ToSanXuat where MaPhanXuong = ?";
+		String sql = "select * from ToSanXuat";
 		try {
 			prstm = con.prepareStatement(sql);
-			prstm.setString(1, idFactory);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				TeamProducing px = new TeamProducing(rs.getString("MaTo"), rs.getString("TenTo"), rs.getString("MaToTruong"), rs.getString("MaPhanXuong"));
-				listTeam.add(px);
+				TeamProducing team = new TeamProducing(rs.getString("MaTo"), rs.getString("TenTo"), rs.getString("MaToTruong"), rs.getString("MaPhanXuong"));
+				listTeam.add(team);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -56,6 +59,26 @@ public class FactoryDAO {
 		return listTeam;
 	}
 	
+	// Lấy danh sách tổ theo mã phân xưởng
+	public List<TeamProducing> getListTeamByIdFactory(String idFactory){
+		List<TeamProducing> listTeam = new ArrayList<TeamProducing>();
+		String sql = "select * from ToSanXuat where MaPhanXuong = ?";
+		try {
+			prstm = con.prepareStatement(sql);
+			prstm.setString(1, idFactory);
+			rs = prstm.executeQuery();
+			while(rs.next()) {
+				TeamProducing team = new TeamProducing(rs.getString("MaTo"), rs.getString("TenTo"), rs.getString("MaToTruong"), rs.getString("MaPhanXuong"));
+				listTeam.add(team);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return listTeam;
+	}
+	
+	// Lấy danh sách nhân viên theo mã tổ
 	public List<Worker> getListEmployeeByIdTeam(String idTeam){
 		List<Worker> listEmployee = new ArrayList<Worker>();
 		String sql = "select * from NhanVienSanXuat where MaTo = ?";
@@ -74,6 +97,7 @@ public class FactoryDAO {
 		return listEmployee;
 	}
 	
+	// Thêm phân xưởng vào server
 	public boolean insertFactory(Factory factory) {
 		String sql = "insert into PhanXuong values(?,?,?)";
 		try {
@@ -92,6 +116,7 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// Thêm danh sách tổ vào server
 	public boolean insertListTeam(List<TeamProducing> listTeam) {
 		String sql = "insert into ToSanXuat values(?,?,?,?)";
 		String announce = "";
@@ -119,6 +144,7 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// thêm tổ vào server
 	public boolean insertTeam(TeamProducing team) {
 		String sql = "insert into ToSanXuat values(?,?,?,?)";
 		try {
@@ -138,6 +164,7 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// Xóa phân xưởng hiện có trên server
 	public boolean deleteFactory(String idFactory) {
 		String sql = "delete from PhanXuong where MaPhanXuong = ?";
 		List<TeamProducing> listTeam = getListTeamByIdFactory(idFactory);
@@ -157,6 +184,7 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// Xóa tổ hiện có trên server
 	public boolean deleteTeam(String idTeam) {
 		String sql = "delete from ToSanXuat where MaTo = ?";
 		boolean checkEmployeeOfTeam = checkEmployeeOfTeam(idTeam);
@@ -176,6 +204,7 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// Cập nhật phân xưởng
 	public boolean updateFactory(Factory factory) {
 		String sql = "update PhanXuong set MaPhanXuong = ?, TenPhanXuong = ?, MaQuanDoc = ? where MaPhanXuong = ?";
 		try {
@@ -194,8 +223,8 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// Cập nhật danh sách tổ theo mã phân xưởng
 	public boolean updateListTeam(List<TeamProducing> listTeam, String idFactory) {
-//		String sqlUpdate = "update ToSanXuat set MaTo = ?, TenTo = ?, MaToTruong = ?, MaPhanXuong = ? where MaTo = ?";
 		String announce = "";
 		List<TeamProducing> listTeamPresent = getListTeamByIdFactory(idFactory);
 		try {
@@ -229,6 +258,7 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// Cập nhật tổ theo mã tổ
 	public boolean updateTeam(TeamProducing team) {
 		if(team.getFactoryID().isEmpty()) {
 			TeamProducing teamById = searchTeamByIdTeam(team.getTeamID());
@@ -253,6 +283,7 @@ public class FactoryDAO {
 		return false;
 	}
 	
+	// Tìm kiếm phân xưởng theo mã phân xưởng
 	public Factory searchFactoryByIdFactory(String idFactory) {
 		String sql = "select * from PhanXuong where MaPhanXuong = ?";
 		Factory factory = null;
@@ -269,6 +300,7 @@ public class FactoryDAO {
 		return factory;
 	}
 	
+	// Tìm kiếm tổ theo mã tổ
 	public TeamProducing searchTeamByIdTeam(String idTeam) {
 		String sql = "select * from ToSanXuat where MaTo = ?";
 		TeamProducing team = null;
@@ -286,6 +318,7 @@ public class FactoryDAO {
 		return team;
 	}
 	
+	// Kiểm tra nhân viên có trong tổ
 	public boolean checkEmployeeOfTeam(String idTeam) {
 		String sql = "select * from NhanVienSanXuat where MaTo = ?";
 		Worker employee = new Worker();
@@ -309,7 +342,7 @@ public class FactoryDAO {
 		}
 	}
 
-	
+	// Lấy tất cả tên của phân xưởng
 	public List<String> getAllNameFactory(){
 		List<String> listName = new ArrayList<String>();
 		try {
@@ -325,35 +358,7 @@ public class FactoryDAO {
 		return listName;
 	}
 	
-	public String getNameFactoryByID(String factoryID){
-		String name = null;
-		try {
-			prstm = con.prepareStatement("SELECT TenPhanXuong FROM PHANXUONG WHERE MaPhanXuong = ?");
-			prstm.setString(1, name);
-			rs = prstm.executeQuery();
-			if(rs.next()) {
-				name = new String(rs.getString("TenPhanXuong"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return name;
-	}
-	
-	public String getNameFactoryByTeamID(String teamID) {
-    	String name = null;
-		try {
-			prstm = con.prepareStatement("SELECT PX.TenPhanXuong, PX.MaPhanXuong FROM PhanXuong AS PX INNER JOIN ToSanXuat AS TSX ON PX.MaPhanXuong = TSX.MaPhanXuong WHERE MaTo= ?");
-			prstm.setString(1, teamID);
-			ResultSet rs = prstm.executeQuery();
-			if (rs.next())
-            	name = rs.getString("MaPhanXuong") + " - "+ rs.getString("TenPhanXuong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return name;
-    }
-	
+	// Kiểm tra thứ tự phân xưởng hiện tại
 	public int checkOrderFactoryPresent() {
 		List<Factory> listFactory = getListFactory();
 		int order = 0;
@@ -366,6 +371,7 @@ public class FactoryDAO {
 		return order;
 	}
 	
+	// Kiểm tra thứ tự tổ hiện tại của phân xưởng
 	public int checkOrderTeamOfFactory(String factoryID) {
 		List<TeamProducing> listTeam = getListTeamByIdFactory(factoryID);
 		int order = 0;
@@ -376,5 +382,43 @@ public class FactoryDAO {
 			}
 		}
 		return order;
+	}
+	
+	// Tìm kiếm danh sách phân xưởng có mã phân xưởng gần giống với mã hiện có
+	public List<Factory> searchListFactory(String factoryID){
+		String sql = "select * from PhanXuong where MaPhanXuong like '%" + factoryID + "%'";
+		Factory factory = null;
+		List<Factory> listFactory = new ArrayList<Factory>();
+		try {
+			prstm = con.prepareStatement(sql);
+			rs = prstm.executeQuery();
+			while(rs.next()) {
+				factory = new Factory(rs.getString("MaPhanXuong"), rs.getString("TenPhanXuong"), rs.getString("MaQuanDoc"));
+				listFactory.add(factory);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return listFactory;
+	}
+	
+	// Tìm kiếm danh sách tổ có mã tổ gần giống với mã hiện có
+	public List<TeamProducing> searchListTeam(String TeamID){
+		String sql = "select * from ToSanXuat where MaTo like '%" + TeamID + "%'";
+		TeamProducing team = null;
+		List<TeamProducing> listTeam = new ArrayList<TeamProducing>();
+		try {
+			prstm = con.prepareStatement(sql);
+			rs = prstm.executeQuery();
+			while(rs.next()) {
+				team = new TeamProducing(rs.getString("MaTo"), rs.getString("TenTo"), rs.getString("MaToTruong"), rs.getString("MaPhanXuong"));
+				listTeam.add(team);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return listTeam;
 	}
 }
