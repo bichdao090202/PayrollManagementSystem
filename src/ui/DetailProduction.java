@@ -439,7 +439,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 					detailUpdate.setState(cmbState.getSelectedItem().toString());
 					boolean updateDetail = detail_DAO.updateDetail(detailUpdate);
 					if(updateDetail) {
-						if((preState.equals("Hoàn Thành") || preState.equals("Ngưng Sản Xuất")) && cmbState.getSelectedItem().toString().equals("Sản Xuất")) {
+						if(cmbState.getSelectedItem().toString().equals("Sản Xuất")) {
 							detail_DAO.updateQuantityFinishDetail(0, Integer.parseInt(dtmListDetail.getValueAt(tblListDetail.getSelectedRow(), 0).toString()));
 						}
 						JOptionPane.showMessageDialog(this, "Cập nhật sản xuất thành công!!!");

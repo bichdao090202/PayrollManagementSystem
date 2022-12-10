@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 
 
 import entity.Produre;
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 import entity.Assignment;
 import entity.DetailProduction;
 import entity.Product;
@@ -436,15 +436,15 @@ public class ProductDAO {
 	}
 	
 	// Tìm kiếm chấm công sản xuất theo mã chấm công
-	public TimesheetsFactory searchTimeSheetFactoryById(int assignmentID) {
+	public TimesheetFactory searchTimeSheetFactoryById(int assignmentID) {
 		String sql = "select * from ChamCongSanXuat where MaPhanCong = ?";
-		TimesheetsFactory timesheet = null;
+		TimesheetFactory timesheet = null;
 		try {
 			prstm = con.prepareStatement(sql);
 			prstm.setInt(1, assignmentID);
 			rs = prstm.executeQuery();
 			while(rs.next()) {
-				timesheet = new TimesheetsFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
+				timesheet = new TimesheetFactory(rs.getInt("MaChamCong"), rs.getDate("NgayChamCong"), rs.getInt("SoLuongThanhPham"), rs.getInt("MaPhanCong"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

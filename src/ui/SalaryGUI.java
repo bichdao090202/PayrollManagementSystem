@@ -67,13 +67,13 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.toedter.calendar.JDateChooser;
 
 import model.SalaryDAO;
-import entity.TimesheetsOffice;
+import entity.TimesheetOffice;
 import entity.Department;
 import entity.Employee;
 import entity.EmployeeOffice;
 import entity.Worker;
 import entity.Factory;
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 import entity.Bonus_Discipline;
 import entity.TeamProducing;
 
@@ -126,7 +126,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private List<Employee> listEmployee = new ArrayList<Employee>();
 
 	public SalaryGUI() {
-		getUI();
+//		getUI();
 	}
 	
 	public Component getUI() {
@@ -733,7 +733,9 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	}
 
 	public static void main(String[] args) {
-		new SalaryGUI().setVisible(true);
+		SalaryGUI salaryGui = new SalaryGUI();
+		salaryGui.getUI();
+		salaryGui.setVisible(true);
 	}
 
 	// Lấy và hiển thị tất cả nhân viên
@@ -774,11 +776,11 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 
 	// hiển thị thông tin nhân viên sản xuất vào form
 	public void formSalaryEmployeeProductive(Worker eProductive) {
-		List<TimesheetsFactory> listTimeKeep = Dao_Salary.getWorkDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<TimesheetFactory> listTimeKeep = Dao_Salary.getWorkDayOfEmployyProductive(eProductive.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int targets = 0;
 		int numberDayOfMonth = 0;
-		for (TimesheetsFactory time : listTimeKeep) {
+		for (TimesheetFactory time : listTimeKeep) {
 			targets += time.getQuantity();
 		}
 		LocalDate date = LocalDate.now();
@@ -823,7 +825,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	// Hiển thị thông tin nhân viên hành chính trên form
 	@SuppressWarnings("deprecation")
 	public void FormSalaryEmployeeAdministrative(EmployeeOffice eAdministrative) {
-		List<TimesheetsOffice> listTimeKeep = Dao_Salary.getNumberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+		List<TimesheetOffice> listTimeKeep = Dao_Salary.getNumberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 		DecimalFormat formatter = new DecimalFormat("###,###,### VND");
 		int numberWorkOfMonth = listTimeKeep.size();
 		int numberDayOfMonth = 0;
@@ -1330,7 +1332,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				double totalSalaryOfWorker = 0;
 				for(Worker worker : ListEmployeeProductive) {
-					List<TimesheetsFactory> listTimeKeep = Dao_Salary.getWorkDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetFactory> listTimeKeep = Dao_Salary.getWorkDayOfEmployyProductive(worker.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					int targets = 0;
 					int numberDayOfMonth = 0;
 					
@@ -1412,7 +1414,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				double totalSalaryOfEOffice = 0;
 				for(EmployeeOffice eAdministrative : ListEmployeeAdministrative) {
-					List<TimesheetsOffice> listTimeKeep = Dao_Salary.getNumberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
+					List<TimesheetOffice> listTimeKeep = Dao_Salary.getNumberWorkOfEmployeeAdministrative(eAdministrative.getEmployeeID(), mChMonth.getMonth()+1, yChYear.getYear());
 					int numberWorkOfMonth = listTimeKeep.size();
 					int numberDayOfMonth = 0;
 					
