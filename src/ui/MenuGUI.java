@@ -50,7 +50,7 @@ public class MenuGUI extends JFrame {
 		timesheetGUI = new TimesheetGUI();
 		employeeGUI = new EmployeeGUI();
 		departmentGUI = new DepartmentGUI();
-//		productGUI = new ProductGUI();
+		productGUI = new ProductGUI();
 		accountGUI = new AccountGUI();
 		assignmentGUI = new AssignmentGUI(employee);
 		salaryGUI = new SalaryGUI();
@@ -64,7 +64,7 @@ public class MenuGUI extends JFrame {
 		content[2] = factoryGUI.getUI();
 		content[3] = assignmentGUI.getUI();
 		content[4] = timesheetGUI.getUI();
-//		content[5] = productGUI.getUI();
+		content[5] = productGUI.getUI();
 		content[6] = salaryGUI.getUI();
 		content[7] = accountGUI.getUI();
 

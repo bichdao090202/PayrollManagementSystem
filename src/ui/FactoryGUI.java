@@ -239,35 +239,29 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListFactories.add(pnlListFactory);
 		pnlListFactory.setLayout(null);
 
-		JLabel lblNoteIdFactory = new JLabel("Nhập mã phân xưởng :");
-		lblNoteIdFactory.setForeground(Color.BLACK);
-		lblNoteIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNoteIdFactory.setBounds(10, 17, 134, 15);
-		pnlListFactory.add(lblNoteIdFactory);
-
 		txtSearchIdFactory = new JTextFieldHint("Nhập mã phân xưởng...");
 		txtSearchIdFactory.setPreferredSize(new Dimension(200,25));
 		txtSearchIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSearchIdFactory.setColumns(10);
-		txtSearchIdFactory.setBounds(142, 16, 145, 19);
+		txtSearchIdFactory.setBounds(10, 18, 277, 19);
 		pnlListFactory.add(txtSearchIdFactory);
 
 		btnSearchIdFactory = new JButton("");
 		btnSearchIdFactory.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnSearchIdFactory.setBounds(297, 15, 70, 21);
+		btnSearchIdFactory.setBounds(297, 18, 70, 21);
 		pnlListFactory.add(btnSearchIdFactory);
 
 		btnDeleteFactory = new JButton("");
 		btnDeleteFactory.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDeleteFactory.setBounds(382, 15, 70, 21);
+		btnDeleteFactory.setBounds(382, 18, 70, 21);
 		pnlListFactory.add(btnDeleteFactory);
 
 		btnUpdateFactory = new JButton("");
 		btnUpdateFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnUpdateFactory.setBounds(462, 15, 70, 21);
+		btnUpdateFactory.setBounds(462, 18, 70, 21);
 		pnlListFactory.add(btnUpdateFactory);
 
 		JScrollPane scrListFactory = new JScrollPane();
@@ -325,35 +319,29 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		});
 		scrListTeam.setViewportView(tblListTeam);
 
-		JLabel lblNoteIdTeam = new JLabel("Nhập mã tổ :");
-		lblNoteIdTeam.setForeground(Color.BLACK);
-		lblNoteIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNoteIdTeam.setBounds(10, 19, 85, 15);
-		pnlListTeam.add(lblNoteIdTeam);
-
 		txtSearchIdTeam = new JTextFieldHint("Nhập mã tổ...");
 		txtSearchIdTeam.setPreferredSize(new Dimension(200,25));
 		txtSearchIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSearchIdTeam.setColumns(10);
-		txtSearchIdTeam.setBounds(91, 18, 196, 19);
+		txtSearchIdTeam.setBounds(10, 18, 277, 19);
 		pnlListTeam.add(txtSearchIdTeam);
 
 		btnSearchIdTeam = new JButton("");
 		btnSearchIdTeam.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnSearchIdTeam.setBounds(297, 17, 70, 21);
+		btnSearchIdTeam.setBounds(297, 18, 70, 21);
 		pnlListTeam.add(btnSearchIdTeam);
 
 		btnDeleteTeam = new JButton("");
 		btnDeleteTeam.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDeleteTeam.setBounds(382, 17, 70, 21);
+		btnDeleteTeam.setBounds(382, 18, 70, 21);
 		pnlListTeam.add(btnDeleteTeam);
 
 		btnUpdateTeam = new JButton("");
 		btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnUpdateTeam.setBounds(462, 17, 70, 21);
+		btnUpdateTeam.setBounds(462, 18, 70, 21);
 		pnlListTeam.add(btnUpdateTeam);
 
 		JPanel pnlListEmployeeByTeam = new JPanel();
@@ -700,8 +688,9 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	}
 
 	public static void main(String[] args) {
-		new FactoryGUI().setVisible(true);
 		FactoryGUI factory = new FactoryGUI();
+		factory.getUI();
+		factory.setVisible(true);
 	}
 
 	@Override
@@ -739,11 +728,14 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			if (rowTeamSelected >= 0) {
 				txtIdTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
 				txtNameTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 1).toString());
-
+				TeamProducing teamSelected = Dao_Factory.searchTeamByIdTeam(txtIdTeam.getText());
+				Factory factory = Dao_Factory.searchFactoryByIdFactory(teamSelected.getFactoryID());
+				txtIdFactory.setText(factory.getFactoryID());
+				txtNameFactory.setText(factory.getName());
 				deleteDataOnTableModel(dtmListEmployee);
 				loadListEmployeeByIdTeam(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
 				deleteDataOnTableModel(dtmTeam);
-				loadListTeamByIdFactory(txtIdFactory.getText(), dtmTeam);
+				loadListTeamByIdFactory(factory.getFactoryID(), dtmTeam);
 
 				btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
 				btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
@@ -761,7 +753,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 
 				if(factory != null) {
 					deleteDataOnTableModel(dtmListEmployee);
-					tblListTeam.setRowSelectionInterval(rowTeamSelected, rowTeamSelected);
 					loadListEmployeeByIdTeam(dtmTeam.getValueAt(rowTeamSelected, 0).toString());
 				}
 			}
@@ -919,7 +910,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 					TeamProducing team = new TeamProducing();
 					for (int i = 0; i < rowCountTeam; i++) {
 						team = new TeamProducing(dtmTeam.getValueAt(i, 0).toString(),
-								dtmTeam.getValueAt(i, 1).toString(), dtmTeam.getValueAt(i, 2).toString(),
+								dtmTeam.getValueAt(i, 1).toString(), null,
 								txtIdFactory.getText());
 						ListTeam.add(team);
 					}

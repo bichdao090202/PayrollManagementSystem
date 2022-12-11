@@ -47,7 +47,7 @@ import entity.Assignment;
 import entity.Product;
 import entity.Produre;
 import entity.TeamProducing;
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 import entity.Worker;
 
 import javax.swing.ImageIcon;
@@ -96,7 +96,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	private String prevState;
 
 	public ProductGUI() {
-		getUI();
+//		getUI();
 	}
 	
 	public Component getUI() {
@@ -304,38 +304,32 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListProducts.add(pnlListProduct);
 		pnlListProduct.setLayout(null);
 
-		JLabel lblNoteIdProduct = new JLabel("Nhập mã sản phẩm :");
-		lblNoteIdProduct.setForeground(Color.BLACK);
-		lblNoteIdProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNoteIdProduct.setBounds(25, 17, 129, 15);
-		pnlListProduct.add(lblNoteIdProduct);
-
 		txtSearchProduct = new JTextFieldHint("Nhập mã sản phẩm...");
 		txtSearchProduct.setPreferredSize(new Dimension(200, 25));
 		txtSearchProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSearchProduct.setColumns(10);
-		txtSearchProduct.setBounds(164, 15, 176, 19);
+		txtSearchProduct.setBounds(10, 18, 277, 19);
 		pnlListProduct.add(txtSearchProduct);
 
 		btnSearchIdProduct = new JButton("");
 		btnSearchIdProduct.setFocusable(false);
 		btnSearchIdProduct.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnSearchIdProduct.setBounds(350, 15, 70, 21);
+		btnSearchIdProduct.setBounds(297, 18, 70, 21);
 		pnlListProduct.add(btnSearchIdProduct);
 
 		btnDeleteProduct = new JButton("");
 		btnDeleteProduct.setFocusable(false);
 		btnDeleteProduct.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDeleteProduct.setBounds(425, 15, 70, 21);
+		btnDeleteProduct.setBounds(382, 18, 70, 21);
 		pnlListProduct.add(btnDeleteProduct);
 
 		btnUpdateProduct = new JButton("");
 		btnUpdateProduct.setFocusable(false);
 		btnUpdateProduct.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnUpdateProduct.setBounds(500, 15, 70, 21);
+		btnUpdateProduct.setBounds(462, 18, 70, 21);
 		pnlListProduct.add(btnUpdateProduct);
 
 		JScrollPane scrProduct = new JScrollPane();
@@ -397,17 +391,11 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		tblListProcedure.getColumnModel().getColumn(3).setPreferredWidth(50);
 		scrListProcedure.setViewportView(tblListProcedure);
 
-		JLabel lblNoteIdProcedure = new JLabel("Nhập mã quy trình :");
-		lblNoteIdProcedure.setForeground(Color.BLACK);
-		lblNoteIdProcedure.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNoteIdProcedure.setBounds(25, 19, 118, 15);
-		pnlListProcedure.add(lblNoteIdProcedure);
-
 		txtSearchProcedure = new JTextFieldHint("Nhập mã quy trình...");
 		txtSearchProcedure.setPreferredSize(new Dimension(200, 25));
 		txtSearchProcedure.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtSearchProcedure.setColumns(10);
-		txtSearchProcedure.setBounds(153, 18, 134, 19);
+		txtSearchProcedure.setBounds(10, 18, 277, 19);
 		pnlListProcedure.add(txtSearchProcedure);
 
 		btnSearchIdProcedure = new JButton("");
@@ -483,7 +471,6 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		tblListDetail.getColumnModel().getColumn(2).setPreferredWidth(119);
 		scrListDetail.setViewportView(tblListDetail);
 		
-		updateQuantityFinish();
 		loadListProcedure();
 		randomIdProduct();
 		txtIdProduct.setEditable(false);
@@ -520,21 +507,21 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 			public void insertUpdate(DocumentEvent e) {
 				ListProcedureSearch = Dao_Product.searchListProdure(txtSearchProcedure.getText());
 				deleteDataOnTableModel(dtmListProcedure);
-				loadListProcedureWithListProdured(ListProcedureSearch);
+				loadListProcedureWithListProdured(ListProcedureSearch,dtmListProcedure);
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				ListProcedureSearch = Dao_Product.searchListProdure(txtSearchProcedure.getText());
 				deleteDataOnTableModel(dtmListProcedure);
-				loadListProcedureWithListProdured(ListProcedureSearch);
+				loadListProcedureWithListProdured(ListProcedureSearch,dtmListProcedure);
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				ListProcedureSearch = Dao_Product.searchListProdure(txtSearchProcedure.getText());
 				deleteDataOnTableModel(dtmListProcedure);
-				loadListProcedureWithListProdured(ListProcedureSearch);
+				loadListProcedureWithListProdured(ListProcedureSearch,dtmListProcedure);
 			}
 
         };
@@ -607,6 +594,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		}
 	}
 	
+	// Lấy và hiển thị danh sách sản phẩm với danh sách đã cho
 	public void loadListProductWithListProducted(List<Product> listProducted) {
 		for (entity.Product product : listProducted) {
 			addRowProduct(product);
@@ -629,9 +617,9 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	}
 	
 	// Lấy và hiển thị tất cả quy trình hiện có
-	public void loadListProcedureWithListProdured(List<Produre> listProdure) {
+	public void loadListProcedureWithListProdured(List<Produre> listProdure, DefaultTableModel dtm) {
 		for (Produre qt : listProdure) {
-			addRowListProcedure(qt, dtmListProcedure);
+			addRowListProcedure(qt, dtm);
 		}
 	}
 	
@@ -669,40 +657,6 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
 		String[] row = { detail.getDetailProductionID()+"", detail.getQuantityProduction()+"", detail.getQuantityFinished()+"",detail.getState(), DateFor.format(detail.getDate()) };
 		dtmListDetail.addRow(row);
-	}
-	
-	// Cập nhật số lượng hoàn thành của chi tiết sản xuất
-	public void updateQuantityFinish() {
-		List<Product> listProduct = Dao_Product.getListProduct();
-		for(Product pro : listProduct) {
-			List<entity.DetailProduction> listDetail = detailDAO.getListDetailbyIdProduct(pro.getProductID());
-			List<Produre> listProdure = Dao_Product.getListProcedurebyIdProduct(pro.getProductID());
-			if(listProdure.size() > 0) {
-				for(entity.DetailProduction detail : listDetail) {
-					List<Assignment> listAssignmentOfProdureFirst = Dao_Product.getListAssignment(listProdure.get(0).getProcedureID(), detail.getDetailProductionID(), detail.getDate());
-					int minQuantityFinished = 0;
-					for(Assignment assignment : listAssignmentOfProdureFirst) {
-						TimesheetsFactory timeSheets = Dao_Product.searchTimeSheetFactoryById(assignment.getAssignmentID());
-						minQuantityFinished += timeSheets.getQuantity();
-					}
-					for(Produre produre : listProdure) {
-						List<Assignment> listAssignment = Dao_Product.getListAssignment(produre.getProcedureID(), detail.getDetailProductionID(), detail.getDate());
-						int quantity = 0;
-						for(Assignment assignment : listAssignment) {
-							TimesheetsFactory timeSheets = Dao_Product.searchTimeSheetFactoryById(assignment.getAssignmentID());
-							quantity += timeSheets.getQuantity();
-						}
-						if(quantity < minQuantityFinished) {
-							minQuantityFinished = quantity;
-						}
-					}
-					boolean updateQuantityFinished = Dao_Product.updateQuantityFinished(minQuantityFinished, detail);
-				}
-			}
-			else {
-				continue;
-			}
-		}
 	}
 	
 	// Kiểm tra quy trình đã được thêm vào bảng quy trình
@@ -800,7 +754,6 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		deleteDataOnTableModel(dtmListProcedure);
 		deleteDataOnTableModel(dtmProcedure);
 		cleanTextFieldProcedure();
-		updateQuantityFinish();
 		loadListProduct();
 		loadListProcedure();
 		txtNameProduct.requestFocus();
@@ -824,6 +777,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	// Main
 	public static void main(String[] args) {
 		ProductGUI product = new ProductGUI();
+		product.getUI();
 		product.setVisible(true);
 		
 		
@@ -844,6 +798,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 			idProduct = dtmProduct.getValueAt(rowProductSelected, 0).toString();
 			loadListDetail(idProduct);
 			List<Produre> listProcedure = Dao_Product.getListProcedurebyIdProduct(idProduct);
+			ListProcedure = listProcedure;
 			if (rowProductSelected >= 0 && listProcedure.size() > 0) {
 				loadListProcedureByIdProduct(idProduct, dtmListProcedure);
 				loadListProcedureByIdProduct(idProduct, dtmProcedure);
@@ -881,6 +836,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 				if (rowProductSelected >= 0 && txtSearchProcedure.getText().compareToIgnoreCase("ALL") == 0) {
 					tblListProduct.removeRowSelectionInterval(rowProductSelected, rowProductSelected);
 				}
+				ListProcedure = Dao_Product.getListProcedurebyIdProduct(txtIdProduct.getText());
 			}
 		} else if (o.equals(tblProcedure)) {
 			int rowQTrinhSelected = tblProcedure.getSelectedRow();
@@ -888,7 +844,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 				txtIdProcedure.setText(dtmProcedure.getValueAt(rowQTrinhSelected, 0).toString());
 				txtNameProcedure.setText(dtmProcedure.getValueAt(rowQTrinhSelected, 1).toString());
 				txtPriceProcedure.setText(dtmProcedure.getValueAt(rowQTrinhSelected, 2).toString());
-				spnOrder.setValue(Integer.parseInt(dtmListProcedure.getValueAt(rowQTrinhSelected, 3).toString()));
+				spnOrder.setValue(Integer.parseInt(dtmProcedure.getValueAt(rowQTrinhSelected, 3).toString()));
 				btnInsertProcedure.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 				btnUpdateProcedure.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 				btnChange.setIcon(new ImageIcon("images\\exchange.png"));
@@ -996,21 +952,56 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 						if(confirm == JOptionPane.YES_OPTION) {
 							Product product = Dao_Product.searchProductByIdProduct(txtIdProduct.getText());
 							if(product != null) {
-								if(Dao_Product.isDeleteProdure(txtIdProcedure.getText())) {
-									if (Dao_Product.deleteProcedure(txtIdProcedure.getText())) {
-										JOptionPane.showMessageDialog(this, "Xóa quy trình thành công!!!");
-										deleteDataOnTableModel(dtmListProcedure);
-										deleteDataOnTableModel(dtmProcedure);
-										loadListProcedureByIdProduct(txtIdProduct.getText(), dtmListProcedure);
-										loadListProcedureByIdProduct(txtIdProduct.getText(), dtmProcedure);
-										btnInsertProcedure.setIcon(new ImageIcon("images\\math-add-icon.png"));
-										btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
-									} else {
-										JOptionPane.showMessageDialog(this, "Xóa quy trình thất bại!!! ");
+								List<Produre> listProdureOfProduct = Dao_Product.getListProcedurebyIdProduct(product.getProductID());
+								List<Produre> listProdureOnTableProdure = new ArrayList<Produre>();
+								for(int i = 0; i < dtmProcedure.getRowCount(); i++) {
+									listProdureOnTableProdure.add(new Produre(dtmProcedure.getValueAt(i, 0).toString(), dtmProcedure.getValueAt(i, 1).toString(), Double.parseDouble(dtmProcedure.getValueAt(i, 2).toString()), Integer.parseInt(dtmProcedure.getValueAt(i, 3).toString()), txtIdProduct.getText()));
+								}
+								if(listProdureOfProduct.containsAll(listProdureOnTableProdure)) {
+									if(Dao_Product.isDeleteProdure(txtIdProcedure.getText())) {
+										if (Dao_Product.deleteProcedure(txtIdProcedure.getText())) {
+											JOptionPane.showMessageDialog(this, "Xóa quy trình thành công!!!");
+											deleteDataOnTableModel(dtmListProcedure);
+											deleteDataOnTableModel(dtmProcedure);
+											loadListProcedureByIdProduct(txtIdProduct.getText(), dtmListProcedure);
+											loadListProcedureByIdProduct(txtIdProduct.getText(), dtmProcedure);
+											btnInsertProcedure.setIcon(new ImageIcon("images\\math-add-icon.png"));
+											btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
+										} else {
+											JOptionPane.showMessageDialog(this, "Xóa quy trình thất bại!!! ");
+										}
+									}
+									else {
+										JOptionPane.showMessageDialog(this, "Quy trình đã hoặc đang được thực hiện, không thể xóa ");
 									}
 								}
 								else {
-									JOptionPane.showMessageDialog(this, "Quy trình đã hoặc đang được thực hiện, không thể xóa ");
+									Produre p = Dao_Product.searchProcedureByIdProcedure(txtIdProcedure.getText());
+									if(p != null) {
+										if(Dao_Product.isDeleteProdure(txtIdProcedure.getText())) {
+											if (Dao_Product.deleteProcedure(txtIdProcedure.getText())) {
+												JOptionPane.showMessageDialog(this, "Xóa quy trình thành công!!!");
+												deleteDataOnTableModel(dtmListProcedure);
+												deleteDataOnTableModel(dtmProcedure);
+												loadListProcedureByIdProduct(txtIdProduct.getText(), dtmListProcedure);
+												listProdureOnTableProdure.remove(p);
+												loadListProcedureWithListProdured(listProdureOnTableProdure, dtmProcedure);
+												btnInsertProcedure.setIcon(new ImageIcon("images\\math-add-icon.png"));
+												btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
+											} else {
+												JOptionPane.showMessageDialog(this, "Xóa quy trình thất bại!!! ");
+											}
+										}
+										else {
+											JOptionPane.showMessageDialog(this, "Quy trình đã hoặc đang được thực hiện, không thể xóa ");
+										}
+									}
+									else {
+										JOptionPane.showMessageDialog(this, "Xóa quy trình thành công!!!");
+										listProdureOnTableProdure.remove(tblProcedure.getSelectedRow());
+										deleteDataOnTableModel(dtmProcedure);
+										loadListProcedureWithListProdured(listProdureOnTableProdure, dtmProcedure);
+									}
 								}
 							}
 							else {
@@ -1073,6 +1064,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 					}
 				} else {
 					int rowCountProcedure = dtmProcedure.getRowCount();
+					ListProcedure = new ArrayList<Produre>();
 					Produre procedure = new Produre();
 					for (int i = 0; i < rowCountProcedure; i++) {
 						procedure = new Produre(dtmProcedure.getValueAt(i, 0).toString(),

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.TimesheetsFactory;
+import entity.TimesheetFactory;
 
 
 public class TimesheetsFactoryDAO {
@@ -47,7 +47,7 @@ public class TimesheetsFactoryDAO {
 		return listTimesheets;
 	}
 	
-	public boolean addTimesheetsFactory(TimesheetsFactory timesheetsFactory) {
+	public boolean addTimesheetsFactory(TimesheetFactory timesheetsFactory) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
 					"INSERT INTO CHAMCONGSANXUAT (NgayChamCong, SoLuongThanhPham, MaPhanCong) values(?,?,?)");
@@ -64,7 +64,7 @@ public class TimesheetsFactoryDAO {
 		return false;
 	}
 	
-	public boolean updateTimesheetsFactory(TimesheetsFactory timesheetsFactory) {
+	public boolean updateTimesheetsFactory(TimesheetFactory timesheetsFactory) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
 					"UPDATE CHAMCONGSANXUAT SET NgayChamCong = ?, SoLuongThanhPham = ? WHERE MaChamCong = ?");
