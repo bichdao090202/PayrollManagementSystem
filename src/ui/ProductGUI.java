@@ -48,12 +48,25 @@ import entity.Product;
 import entity.Produre;
 import entity.TeamProducing;
 import entity.TimesheetFactory;
+import entity.TopProduct;
 import entity.Worker;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollBar;
+
+import java.io.*;
+
+import javax.swing.JFrame;
+
+import org.jfree.chart.ChartFactory; 
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot3D; 
+import org.jfree.data.general.DefaultPieDataset; 
+import org.jfree.chart.ChartUtilities;
 
 public class ProductGUI extends JFrame implements ActionListener, MouseListener {
 
@@ -81,10 +94,8 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	private JTable tblListProduct;
 	private JTable tblListProcedure;
 	private JTable tblProcedure;
-	private JTable tblListDetail;
 	private DefaultTableModel dtmProduct;
 	private DefaultTableModel dtmListProcedure;
-	private DefaultTableModel dtmListDetail;
 	private DefaultTableModel dtmProcedure;
 	private ProductDAO Dao_Product = new ProductDAO();
 	private DetailPRoductionDAO detailDAO = new DetailPRoductionDAO();
@@ -92,8 +103,10 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	private List<Produre> ListProcedure = new ArrayList<Produre>();
 	private List<Produre> ListProcedureSearch = new ArrayList<Produre>();
 	private List<entity.DetailProduction> listDetails = new ArrayList<entity.DetailProduction>();
+	private List<TopProduct> listTopProduct = Dao_Product.getTopFiveProduct();
 	private int rowCountTblProcedure = 0;
 	private String prevState;
+	private JLabel lblChart;
 
 	public ProductGUI() {
 //		getUI();
@@ -333,7 +346,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListProduct.add(btnUpdateProduct);
 
 		JScrollPane scrProduct = new JScrollPane();
-		scrProduct.setBounds(10, 57, 560, 365);
+		scrProduct.setBounds(10, 45, 560, 377);
 		pnlListProduct.add(scrProduct);
 
 		tblListProduct = new JTable();
@@ -365,7 +378,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListProcedure.setLayout(null);
 
 		JScrollPane scrListProcedure = new JScrollPane();
-		scrListProcedure.setBounds(10, 57, 560, 180);
+		scrListProcedure.setBounds(10, 45, 560, 150);
 		pnlListProcedure.add(scrListProcedure);
 
 		tblListProcedure = new JTable();
@@ -439,37 +452,10 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		spnOrder.setModel(new SpinnerNumberModel(1, 1, 10, 1));
 		spnOrder.setBounds(270, 67, 30, 20);
 		pnlProcedure.add(spnOrder);
-		
-		JScrollPane scrListDetail = new JScrollPane();
-		scrListDetail.setBounds(10, 247, 560, 175);
-		pnlListProcedure.add(scrListDetail);
-		
-		tblListDetail = new JTable();
-		tblListDetail.setForeground(Color.BLACK);
-		tblListDetail.setGridColor(new Color(0, 140, 140));
-		tblListDetail.setRowHeight(25);
-		tblListDetail.setBorder(new LineBorder(new Color(0, 140, 140)));
-		JTableHeader tblHeaderListDetail = tblListDetail.getTableHeader();
-		tblHeaderListDetail.setBackground(new Color(14,85,78));
-		tblHeaderListDetail.setForeground(Color.WHITE);
-		tblHeaderListDetail.setPreferredSize(new Dimension(100, 30));
-		tblHeaderListDetail.setFont(new Font("Tahoma", Font.BOLD, 12));
-		tblListDetail.setModel(dtmListDetail = new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"M\u00E3 CTSX", "S\u1ED1 l\u01B0\u1EE3ng s\u1EA3n xu\u1EA5t", "S\u1ED1 l\u01B0\u1EE3ng ho\u00E0n th\u00E0nh", "T\u00ECnh tr\u1EA1ng", "Ng\u00E0y l\u1EADp"
-			}
-		) {
-			private static final long serialVersionUID = 1L;
-
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-		});
-		tblListDetail.getColumnModel().getColumn(1).setPreferredWidth(110);
-		tblListDetail.getColumnModel().getColumn(2).setPreferredWidth(119);
-		scrListDetail.setViewportView(tblListDetail);
+//		tblHeaderListDetail.setBackground(new Color(14,85,78));
+//		tblHeaderListDetail.setForeground(Color.WHITE);
+//		tblHeaderListDetail.setPreferredSize(new Dimension(100, 30));
+//		tblHeaderListDetail.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		loadListProcedure();
 		randomIdProduct();
@@ -528,7 +514,8 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
         
         txtSearchProduct.getDocument().addDocumentListener(enventChangeSearchProduct);
         txtSearchProcedure.getDocument().addDocumentListener(enventChangeSearchProdure);
-		
+		chartTopFiveProduct(listTopProduct);
+        
 		btnClean.addActionListener(this);
 		btnChange.addActionListener(this);
 		btnInsertProcedure.addActionListener(this);
@@ -567,6 +554,16 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		btnSearchIdProcedure.setFocusPainted(false);
 		btnDeleteProduct.setFocusPainted(false);
 		btnDeleteProcedure.setFocusPainted(false);
+		
+		JPanel pnlStatistical = new JPanel();
+		pnlStatistical.setBounds(10, 196, 560, 230);
+		pnlListProcedure.add(pnlStatistical);
+		pnlStatistical.setLayout(null);
+		
+		lblChart = new JLabel("");
+		lblChart.setIcon(new ImageIcon("statistical/TopFiveProductInMonth_pie_Chart3D.jpeg"));
+		lblChart.setBounds(0, 0, 560, 230);
+		pnlStatistical.add(lblChart);
 		btnUpdateProduct.setFocusPainted(false);
 		
 		btnClean.setMnemonic(KeyEvent.VK_C);
@@ -637,26 +634,6 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		String[] row = { procedure.getProcedureID(), procedure.getName(), procedure.getPrice() + "",
 				procedure.getNumberOrdinal() + "" };
 		dtm.addRow(row);
-	}
-	
-	// Lấy và hiển thị tất cả chi tiết sản xuất hiện có của sản phẩm được chọn
-	public void loadListDetail(String productID) {
-		List<entity.DetailProduction> listDetail;
-		listDetail = detailDAO.getListDetailbyIdProduct(productID);
-		for (entity.DetailProduction detail : listDetail) {
-			addRowDetail(detail);
-		}
-	}
-	
-	// Thêm chi tiết sản xuất vào bảng chi tiết sản xuất
-	public void addRowDetail(entity.DetailProduction detail) {
-		boolean isStateFinished = detail.getQuantityProduction() == detail.getQuantityFinished() ? true : false;
-		if(isStateFinished) {
-			detailDAO.updateStateFinishDetailProduct(detail.getDetailProductionID());
-		}
-		SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
-		String[] row = { detail.getDetailProductionID()+"", detail.getQuantityProduction()+"", detail.getQuantityFinished()+"",detail.getState(), DateFor.format(detail.getDate()) };
-		dtmListDetail.addRow(row);
 	}
 	
 	// Kiểm tra quy trình đã được thêm vào bảng quy trình
@@ -773,6 +750,84 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 		btnUpdateProcedure.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 	}
+	
+	// Top 5 sản phẩm có nhiều hợp đồng nhất trong tháng bằng biểu đồ hình tròn
+	public void chartTopFiveProduct(List<TopProduct> listProduct) {
+		DefaultPieDataset dataset = new DefaultPieDataset( );
+		for(TopProduct pr : listProduct) {
+			dataset.setValue( pr.getProductID() , new Double( pr.getQuantityDetail() ) ); 
+		}
+		final PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {1}");
+	      JFreeChart chart = ChartFactory.createPieChart3D( 
+	         "Top 5 Sản Phẩm" ,  // chart title                   
+	         dataset ,         // data 
+	         true ,            // include legend                   
+	         true, 
+	         false);
+
+	      final PiePlot3D plot = ( PiePlot3D ) chart.getPlot( );   
+	      plot.setStartAngle( 270 );
+	      plot.setForegroundAlpha( 0.60f );         
+	      plot.setLabelGenerator(labelGenerator);
+	      int width = 560;   /* Width of the image */             
+	      int height = 230;  /* Height of the image */                             
+	      File pieChart3D = new File( "statistical/TopFiveProductInMonth_pie_Chart3D.jpeg" );                      
+	      try {
+			ChartUtilities.saveChartAsJPEG( pieChart3D , chart , width , height );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	// Thống kê danh sách hợp đồng của sản phẩm bằng biểu đồ tròn
+	public void chartDetailOfProductInMonth(List<entity.DetailProduction> listDetail) {
+		String idProduct = dtmProduct.getValueAt(tblListProduct.getSelectedRow(), 0).toString();
+		int quantityProduction = 0;
+		int quantityStopProduction = 0;
+		int quantityFinish = 0;
+		DefaultPieDataset dataset = new DefaultPieDataset( );
+		if(listDetail.size() > 0) {
+			for(entity.DetailProduction dt : listDetail) {
+				if(dt.getState().equals("Sản Xuất")) {
+					quantityProduction += 1;
+				}
+				else if(dt.getState().equals("Ngưng Sản Xuất")) {
+					quantityStopProduction += 1;
+				}
+				else {
+					quantityFinish += 1;
+				}
+			}
+			dataset.setValue( "Sản Xuất" , new Double( quantityProduction ) ); 
+			dataset.setValue( "Ngưng Sản Xuất" , new Double( quantityStopProduction ) ); 
+			dataset.setValue( "Hoàn Thành" , new Double( quantityFinish ) ); 
+		}
+		else {
+			dataset.setValue( "Chưa Sản Xuất" , new Double( 1 ) ); 
+		}
+		final PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {1}");
+	      JFreeChart chart = ChartFactory.createPieChart3D( 
+	         "Hợp Đồng Sản Xuất" ,  // chart title                   
+	         dataset ,         // data 
+	         true ,            // include legend                   
+	         true, 
+	         false);
+
+	      final PiePlot3D plot = ( PiePlot3D ) chart.getPlot( ); 
+	      plot.setStartAngle( 270 );
+	      plot.setForegroundAlpha( 0.60f );    
+	      plot.setLabelGenerator(labelGenerator);
+	      int width = 560;   /* Width of the image */             
+	      int height = 230;  /* Height of the image */                             
+	      File pieChart3D = new File( "statistical/DetailProductInMonthOf" + idProduct + "_pie_Chart3D.jpeg" );                      
+	      try {
+			ChartUtilities.saveChartAsJPEG( pieChart3D , chart , width , height );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	// Main
 	public static void main(String[] args) {
@@ -789,14 +844,12 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		if (o.equals(tblListProduct)) {
 			deleteDataOnTableModel(dtmListProcedure);
 			deleteDataOnTableModel(dtmProcedure);
-			deleteDataOnTableModel(dtmListDetail);
 			btnInsertProduct.setText("Thêm sản phẩm");
 			btnInsertProduct.setIcon(new ImageIcon("images\\math-add-icon.png"));
 			btnUpdateProduct.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 			String idProduct;
 			int rowProductSelected = tblListProduct.getSelectedRow();
 			idProduct = dtmProduct.getValueAt(rowProductSelected, 0).toString();
-			loadListDetail(idProduct);
 			List<Produre> listProcedure = Dao_Product.getListProcedurebyIdProduct(idProduct);
 			ListProcedure = listProcedure;
 			if (rowProductSelected >= 0 && listProcedure.size() > 0) {
@@ -816,6 +869,9 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 				cleanTextFieldProcedure();
 				txtSearchProcedure.setText("");
 			}
+			List<entity.DetailProduction> listDetailInMonth = detailDAO.getListDetailbyIdProductInMonth(idProduct);
+			chartDetailOfProductInMonth(listDetailInMonth);
+			lblChart.setIcon(new ImageIcon("statistical/DetailProductInMonthOf" + idProduct + "_pie_Chart3D.jpeg"));
 		} else if (o.equals(tblListProcedure)) {
 			int rowProcedureSelected = tblListProcedure.getSelectedRow();
 			int rowProductSelected = tblListProduct.getSelectedRow();
@@ -879,6 +935,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 			cleanProduct();
 			randomIdProduct();
 			spnOrder.setValue(1);
+			lblChart.setIcon(new ImageIcon("statistical/TopFiveProductInMonth_pie_Chart3D.jpeg"));
 		} else if (o.equals(btnChange)) {
 			int rowSelected = tblProcedure.getSelectedRow();
 			if (rowSelected >= 0) {
@@ -1081,10 +1138,8 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 						ListProcedure = new ArrayList<Produre>();
 						deleteDataOnTableModelProduct();
 						deleteDataOnTableModel(dtmListProcedure);
-						deleteDataOnTableModel(dtmListDetail);
 						loadListProduct();
 						loadListProcedureByIdProduct(product.getProductID(), dtmListProcedure);
-						loadListDetail(txtIdProduct.getText());
 						btnInsertProduct.setIcon(new ImageIcon("images\\math-add-icon.png"));
 						btnUpdateProduct.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 						btnInsertProduct.setText("Thêm sản phẩm");
@@ -1102,7 +1157,6 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 							JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!!!");
 							deleteDataOnTableModelProduct();
 							deleteDataOnTableModel(dtmListProcedure);
-							deleteDataOnTableModel(dtmListDetail);
 							loadListProduct();
 						}
 					}
@@ -1127,7 +1181,6 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 								JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!!!");
 								deleteDataOnTableModelProduct();
 								deleteDataOnTableModel(dtmListProcedure);
-								deleteDataOnTableModel(dtmListDetail);
 								loadListProduct();
 							}
 						}

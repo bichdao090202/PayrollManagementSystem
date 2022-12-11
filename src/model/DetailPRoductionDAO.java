@@ -45,6 +45,26 @@ public class DetailPRoductionDAO {
 		return listDetail;
 	}
 	
+	// lấy danh sách hợp đồng sản xuất trong tháng theo mã sản phẩm
+		public List<DetailProduction> getListDetailbyIdProductInMonth(String idProduct){
+			List<DetailProduction> listDetail = new ArrayList<DetailProduction>();
+			String sql = "select * from HopDongSanXuat where MaSanPham = ? AND MONTH(ThoiGian) = MONTH(GETDATE())";
+			try {
+				prstm = con.prepareStatement(sql);
+				prstm.setString(1, idProduct);
+				rs = prstm.executeQuery();
+				while(rs.next()) {
+					DetailProduction detail = new DetailProduction(rs.getInt("MaHopDong"), rs.getInt("SoLuongSanXuat"),rs.getString("TinhTrang"), rs.getString("MaSanPham"), rs.getDate("ThoiGian"));
+					detail.setQuantityFinished(rs.getInt("SoLuongHoanThanh"));
+					listDetail.add(detail);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			return listDetail;
+		}
+	
 	// Lấy danh sách hợp đồng sản xuất theo mã sản phẩm và tình trạng
 	public List<DetailProduction> getListDetailbyIdProductAndState(String idProduct, String state){
 		List<DetailProduction> listDetail = new ArrayList<DetailProduction>();
@@ -308,12 +328,13 @@ public class DetailPRoductionDAO {
 	}
 	
 	// Tìm kiếm danh sách sản phẩm có mã gần giống với mã được cho
-		public List<DetailProduction> searchListDetailProduction(String detailProductionID){
-			String sql = "select * from HopDongSanXuat where MaHopDong like '%" + detailProductionID + "%'";
+		public List<DetailProduction> searchListDetailProduction(String detailProductionID, String ProductID){
+			String sql = "select * from HopDongSanXuat where MaHopDong like '%" + detailProductionID + "%' AND MaSanPham = ?";
 			DetailProduction detailProduction = null;
 			List<DetailProduction> listDetailProduction = new ArrayList<DetailProduction>();
 			try {
 				prstm = con.prepareStatement(sql);
+				prstm.setString(1, ProductID);
 				rs = prstm.executeQuery();
 				while(rs.next()) {
 					detailProduction = new DetailProduction(rs.getInt("MaHopDong"), rs.getInt("SoLuongSanXuat"), rs.getString("TinhTrang"), rs.getString("MaSanPham"), rs.getDate("ThoiGian"));
