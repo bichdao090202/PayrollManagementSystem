@@ -3,7 +3,6 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import entity.Worker;
 import entity.Factory;
 import entity.Produre;
 import entity.Assignment;
-import entity.Bonus_Discipline;
 import entity.TeamProducing;
 import entity.TimesheetFactory;
 import entity.TimesheetOffice;
