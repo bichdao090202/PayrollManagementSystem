@@ -2,7 +2,6 @@ package ui;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,17 +14,13 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -62,10 +57,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
-import com.toedter.calendar.JDateChooser;
-
 import model.SalaryDAO;
 import entity.TimesheetOffice;
 import entity.Department;
@@ -74,7 +66,6 @@ import entity.EmployeeOffice;
 import entity.Worker;
 import entity.Factory;
 import entity.TimesheetFactory;
-import entity.Bonus_Discipline;
 import entity.TeamProducing;
 
 import javax.swing.DefaultComboBoxModel;
@@ -946,10 +937,33 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				deleteDataOnTableModel();
 			}
 		} else if (o.equals(btnExportSalary)) {
-			
 			try {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setCurrentDirectory(new File  
+						(System.getProperty("user.home") + System.getProperty("file.separator")+ "Documents"));
+				fileChooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+					@Override
+					public String getDescription() {
+						return "PDF Documents (*.pdf)";
+					}
+					
+					@Override
+					public boolean accept(File f) {
+						if (f.isDirectory()) {
+				            return true;
+				        } else {
+				            return f.getName().toLowerCase().endsWith(".pdf");
+				        }
+					}
+				});
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fileChooser.showSaveDialog(null);
 				
-				String path = "exportSalaryOfEmployee/salary" + (mChMonth.getMonth()+1) + "." + (yChYear.getYear()) + "." + txtIdEmployee.getText() + ".pdf";
+				String path = fileChooser.getSelectedFile().getAbsolutePath();
+				if (!path.toLowerCase().endsWith(".pdf")) {
+					path = path + ".pdf";
+				}
+				
 				PdfWriter pdfWriter = new PdfWriter(path);
 				PdfDocument pdfDocument = new PdfDocument(pdfWriter);
 				pdfDocument.addNewPage();
