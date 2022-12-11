@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 
 import entity.Produre;
 import entity.TimesheetFactory;
+import entity.TopProduct;
 import entity.Assignment;
 import entity.DetailProduction;
 import entity.Product;
@@ -524,6 +525,24 @@ public class ProductDAO {
 			e.printStackTrace();
 		}
 		return id;
+	}
+	
+	public List<TopProduct> getTopFiveProduct(){
+		List<TopProduct> listProduct = new ArrayList<TopProduct>();
+		String sql = "select TOP(5) *, SoHopDong = (select COUNT(*) from HopDongSanXuat hd where hd.MaSanPham = sp.MaSanPham AND MONTH(ThoiGian) = MONTH(GETDATE()) AND (TinhTrang = N'Sản Xuất' OR TinhTrang = N'Hoàn Thành')) from SanPham sp ORDER BY SoHopDong DESC";
+		try {
+			prstm = con.prepareStatement(sql);
+			rs = prstm.executeQuery();
+			while(rs.next()) {
+				TopProduct sanPham = new TopProduct(rs.getString("MaSanPham"), rs.getString("TenSanPham"), rs.getInt("SoHopDong"));
+				listProduct.add(sanPham);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return listProduct;
+		
 	}
 }
 

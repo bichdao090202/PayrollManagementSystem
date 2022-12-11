@@ -250,21 +250,21 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				listDetailSearch = detail_DAO.searchListDetailProduction(txtSearchDetail.getText());
+				listDetailSearch = detail_DAO.searchListDetailProduction(txtSearchDetail.getText(), productID);
 				deleteDataOnTableModel(dtmListDetail);
 				loadListDetailWithListDetail(listDetailSearch);
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				listDetailSearch = detail_DAO.searchListDetailProduction(txtSearchDetail.getText());
+				listDetailSearch = detail_DAO.searchListDetailProduction(txtSearchDetail.getText(), productID);
 				deleteDataOnTableModel(dtmListDetail);
 				loadListDetailWithListDetail(listDetailSearch);
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				listDetailSearch = detail_DAO.searchListDetailProduction(txtSearchDetail.getText());
+				listDetailSearch = detail_DAO.searchListDetailProduction(txtSearchDetail.getText(), productID);
 				deleteDataOnTableModel(dtmListDetail);
 				loadListDetailWithListDetail(listDetailSearch);
 			}
@@ -390,7 +390,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 							entity.DetailProduction detailInsert = new entity.DetailProduction(Integer.parseInt(txtDetailProductionId.getText()), Integer.parseInt(txtQuantityProduction.getText()), cmbState.getSelectedItem().toString(), productID, null);
 							boolean isInsertDetail = detail_DAO.insertDetailProduction(detailInsert);
 							if(isInsertDetail) {
-								JOptionPane.showMessageDialog(this, "Thêm sản xuất thành công!!!");
+								JOptionPane.showMessageDialog(this, "Thêm hợp đồng sản xuất thành công!!!");
 								cmbSearchState.setSelectedItem(detailInsert.getState());
 								deleteDataOnTableModel(dtmListDetail);
 								loadListDetailByState(productID, detailInsert.getState());
@@ -398,11 +398,11 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 								
 							}
 							else {
-								JOptionPane.showMessageDialog(this, "Thêm sản xuất thất bại");
+								JOptionPane.showMessageDialog(this, "Thêm hợp đồng sản xuất thất bại");
 							}
 						}
 						else {
-							JOptionPane.showMessageDialog(this, "Sản xuất đã tồn tại");
+							JOptionPane.showMessageDialog(this, "Hợp đồng sản xuất đã tồn tại");
 						}
 					}
 					else {
@@ -428,7 +428,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 							randomIdDetailProductNull(listDetailOnTable.get(listDetailOnTable.size() - 1).getDetailProductionID());
 						}
 						else {
-							JOptionPane.showMessageDialog(this, "Sản xuất đã tồn tại");
+							JOptionPane.showMessageDialog(this, "Hợp đồng sản xuất đã tồn tại");
 						}
 					}
 					
@@ -438,17 +438,28 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 					detailUpdate.setQuantityProduction(Integer.parseInt(txtQuantityProduction.getText()));
 					detailUpdate.setState(cmbState.getSelectedItem().toString());
 					boolean updateDetail = detail_DAO.updateDetail(detailUpdate);
-					if(updateDetail) {
+					if(
+						(preState.equals("Ngưng Sản Xuất") && cmbState.getSelectedItem().toString().equals("Ngưng Sản Xuất") && !dtmListDetail.getValueAt(tblListDetail.getSelectedRow(), 1).toString().equals(txtQuantityProduction.getText()))
+						|| (preState.equals("Hoàn Thành") && cmbState.getSelectedItem().toString().equals("Hoàn Thành") && !dtmListDetail.getValueAt(tblListDetail.getSelectedRow(), 1).toString().equals(txtQuantityProduction.getText()))
+					) {
+						if(cmbState.getSelectedItem().toString().equals("Ngưng Sản Xuất")) {
+							JOptionPane.showMessageDialog(this, "Trước và sau khi cập nhật, hợp đồng sản xuất hiện vẫn ngưng sản xuất nên không thể thay đổi số lượng sản xuất của hợp đồng");
+						}
+						else {
+							JOptionPane.showMessageDialog(this, "Trước và sau khi cập nhật, hợp đồng sản xuất hiện vẫn hoàn thành nên không thể thay đổi số lượng sản xuất của hợp đồng");
+						}
+					}
+					else if(updateDetail) {
 						if(cmbState.getSelectedItem().toString().equals("Sản Xuất")) {
 							detail_DAO.updateQuantityFinishDetail(0, Integer.parseInt(dtmListDetail.getValueAt(tblListDetail.getSelectedRow(), 0).toString()));
 						}
-						JOptionPane.showMessageDialog(this, "Cập nhật sản xuất thành công!!!");
+						JOptionPane.showMessageDialog(this, "Cập nhật hợp đồng sản xuất thành công!!!");
 						cmbSearchState.setSelectedItem(detailUpdate.getState());
 						deleteDataOnTableModel(dtmListDetail);
 						loadListDetailByState(productID, cmbState.getSelectedItem().toString());
 					}
 					else {
-						JOptionPane.showMessageDialog(this, "Cập nhật sản xuất thất bại");
+						JOptionPane.showMessageDialog(this, "Cập nhật hợp đồng sản xuất thất bại");
 					}
 				}
 			}
@@ -491,7 +502,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 						boolean isDeleteDetail = detail_DAO.isDeleteDetail(Integer.parseInt(dtmListDetail.getValueAt(rowSelected, 0).toString()));
 						if(isDeleteDetail) {
 							if(detail_DAO.deleteDetail(Integer.parseInt(dtmListDetail.getValueAt(rowSelected, 0).toString()))){
-								JOptionPane.showMessageDialog(this, "Xóa sản xuất thành công!!!");
+								JOptionPane.showMessageDialog(this, "Xóa hợp đồng sản xuất thành công!!!");
 								deleteDataOnTableModel(dtmListDetail);
 								if(cmbSearchState.getSelectedItem().toString().equals("Tất Cả")) {
 									loadListDetail(productID);
@@ -565,7 +576,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 		String regexIdProduction = "^([1-9][0-9]*)+";
 		String regexQuantityProduct = "^([1-9][0-9]*)+";
 		if (txtDetailProductionId.getText().isEmpty() || txtQuantityProduction.getText().isEmpty()) {
-			announce += "Vui lòng nhập đầy đủ thông tin quy trình";
+			announce += "Vui lòng nhập đầy đủ thông tin hợp đồng";
 		} else {
 			if (!txtDetailProductionId.getText().matches(regexIdProduction)) {
 				announce += "Mã chi tiết sản xuất phải bắt đầu bằng mã sản phẩm và theo sau 2 chữ số \n";
