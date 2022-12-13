@@ -30,6 +30,7 @@ import entity.Department;
 import entity.Employee;
 import model.DepartmentDAO;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.ScrollPaneConstants;
 
 public class DepartmentGUI extends JFrame implements ActionListener{
 
@@ -49,11 +50,11 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 
 	public DepartmentGUI() {
 		getContentPane().setBackground(Color.WHITE);
-		setSize(1200, 690);
+		setSize(1200, 731);
 		depDAO = new DepartmentDAO();
 		listDep = new ArrayList<>();
 		listDep = depDAO.getAllDepartments();
-		num = 30;
+		num = 33;
 		index = 0;
 		getContentPane().add(getUI());
 	}
@@ -175,8 +176,8 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 
 		JPanel pnTable = new JPanel();
 		pnTable.setBackground(Color.WHITE);
-		pnTable.setSize(730, 569);
-		pnTable.setLocation(0, 82);
+		pnTable.setSize(730, 615);
+		pnTable.setLocation(0, 76);
 		pnTable.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách phòng ban"));
 		String[] row0 = { "Mã", "Tên phòng ban", "Tên trưởng phòng", "Số lượng nhân viên" };
 		pnTable.setLayout(new BorderLayout(0, 0));
@@ -207,14 +208,15 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 		});
 		
 		JScrollPane sp = new JScrollPane(tblDepartment);
+		sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		sp.setLocation(10, 16);
 		sp.setBackground(Color.WHITE);
-		sp.setPreferredSize(new Dimension(1150, 470));
+		sp.setPreferredSize(new Dimension(1150, 474));
 		pnTable.add(sp);
 		
 		JPanel pnTableEmp = new JPanel();
 		pnTableEmp.setBackground(Color.WHITE);
-		pnTableEmp.setSize(435, 530);
+		pnTableEmp.setSize(435, 567);
 		pnTableEmp.setLocation(746, 82);
 		pnTableEmp.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách nhân viên"));
 		pnTableEmp.setLayout(new BorderLayout(0, 0));
@@ -290,18 +292,19 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(this, "Phòng ban đã đầy, hãy bảo trì hệ thống");
 				return;
 			}
-			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phòng ban này không?", "Thông báo",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				if (depDAO.addDepartment(newDep) == false) {
-					JOptionPane.showMessageDialog(this, "Thêm phòng ban thất bại, vui lòng thử lại sau");
-					return;
-				}
-				while (index + num <= listDep.size()) {
-					index += num;
-				}
-				refresh();
-				JOptionPane.showMessageDialog(this, "Thêm phòng ban thành công");
-			}	
+			depDAO.addDepartment(newDep);
+//			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phòng ban này không?", "Thông báo",
+//					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+//				if (depDAO.addDepartment(newDep) == false) {
+//					JOptionPane.showMessageDialog(this, "Thêm phòng ban thất bại, vui lòng thử lại sau");
+//					return;
+//				}
+//				while (index + num <= listDep.size()) {
+//					index += num;
+//				}
+//				refresh();
+//				JOptionPane.showMessageDialog(this, "Thêm phòng ban thành công");
+//			}	
 		}
 		if (o.equals(btnRefresh))
 			refresh();

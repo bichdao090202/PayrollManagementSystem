@@ -54,7 +54,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 
 	public AccountGUI() {
 		getContentPane().setBackground(Color.WHITE);
-		setSize(1200, 690);
+		setSize(1200, 731);
 		empOffDAO = new EmployeeOfficeDAO();
 		listEmpOff = new ArrayList<>();
 		listWorker = new ArrayList<>();
@@ -62,7 +62,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 		getContentPane().add(getUI());
 
 		index = 0;
-		num = 30;
+		num = 33;
 		flag = false;
 		loadTable();
 	}
@@ -173,7 +173,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 
 		JPanel pnTable = new JPanel();
 		pnTable.setBackground(Color.WHITE);
-		pnTable.setSize(1184, 531);
+		pnTable.setSize(1184, 583);
 		pnTable.setLocation(0, 70);
 		pnTable.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách nhân viên"));
 		
@@ -183,12 +183,12 @@ public class AccountGUI extends JFrame implements ActionListener {
 		tblAccount.getTableHeader().setBackground(COLOR);
 		tblAccount.getTableHeader().setForeground(Color.WHITE);
 		JScrollPane sp = new JScrollPane(tblAccount);
-		sp.setPreferredSize(new Dimension(1165, 503));
+		sp.setPreferredSize(new Dimension(1165, 551));
 		pnTable.add(sp);
 
 		JPanel pnChangePage = new JPanel();
 		pnChangePage.setBackground(Color.WHITE);
-		pnChangePage.setLocation(10, 604);
+		pnChangePage.setLocation(10, 650);
 		pnChangePage.setSize(1164, 36);
 		
 		pnChangePage.add(btnGoFirstPage = new JButton());

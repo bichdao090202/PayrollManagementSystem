@@ -83,7 +83,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 	public AssignmentGUI(Employee worker) {
 		setBackground(Color.WHITE);
 		getContentPane().setBackground(Color.WHITE);
-		setSize(1200, 690);
+		setSize(1200, 733);
 		daoAssignment = new AssignmentDAO();
 		listAssignment = new ArrayList<>();
 		daoWorker = new WorkerDAO();
@@ -92,7 +92,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		listProduct = new ArrayList<>();
 		daoProdure = new ProdureDAO();
 		listProdure = new ArrayList<>();
-		num = 17;
+		num = 20;
 		index = indexProduct = indexWorker = indexProdure = 0;
 		numWorker = numProduct = numProdure = 13;
 		this.worker = daoWorker.getWorkerByID(worker.getEmployeeID());
@@ -118,7 +118,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		pnWorker.setBounds(0, 0, 381, 288);
 		pnWorker.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Công nhân"));
 		tblWorker = new JTable();
-		String[] row1 = { "Mã CN", "Họ tên", "Tổ" };
+		String[] row1 = { "Mã CN", "Họ tên", "Tổ", "SL PC" };
 		pn1.setLayout(null);
 		pn1.add(pnWorker);
 		tblWorker = new JTable(modelWorker = new DefaultTableModel(row1, 0));
@@ -128,8 +128,9 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		tblWorker.getTableHeader().setBackground(COLOR);
 		tblWorker.getTableHeader().setForeground(Color.WHITE);
 		tblWorker.getColumnModel().getColumn(0).setPreferredWidth(70);
-		tblWorker.getColumnModel().getColumn(1).setPreferredWidth(170);
+		tblWorker.getColumnModel().getColumn(1).setPreferredWidth(200);
 		tblWorker.getColumnModel().getColumn(2).setPreferredWidth(80);
+		tblWorker.getColumnModel().getColumn(3).setPreferredWidth(80);
 
 		sp1.setLocation(10, 21);
 		sp1.setSize(359, 231);
@@ -246,14 +247,14 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 		JPanel pn3 = new JPanel();
 		pn3.setBackground(Color.WHITE);
-		pn3.setBounds(0, 291, 1033, 356);
+		pn3.setBounds(0, 289, 1033, 403);
 		pn3.setBorder(new TitledBorder(new LineBorder(COLOR, 2, true), "Danh sách Phân công"));
 		tblAssignment = new JTable();
 		String[] row4 = { "Mã PC", "Công nhân", "Hợp đồng", "Quy trình", "Ngày bắt đầu" };
 		pn3.setLayout(null);
 		tblAssignment = new JTable(modelAssignment = new DefaultTableModel(row4, 0));
 		JScrollPane sp4 = new JScrollPane(tblAssignment);
-		sp4.setBounds(10, 21, 1013, 297);
+		sp4.setBounds(10, 21, 1013, 343);
 		pn3.add(sp4);
 		sp4.setPreferredSize(new Dimension(1150, 300));
 		tblAssignment.setFillsViewportHeight(true);
@@ -269,7 +270,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 		JPanel pnChangePage = new JPanel();
 		pnChangePage.setBackground(Color.WHITE);
-		pnChangePage.setBounds(30, 315, 992, 36);
+		pnChangePage.setBounds(31, 360, 992, 36);
 		pn3.add(pnChangePage);
 		pnChangePage.add(btnGoFirstPage = new JButton());
 		btnGoFirstPage.setBackground(Color.WHITE);
@@ -665,17 +666,15 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		while (tblWorker.getRowCount() != 0)
 			modelWorker.removeRow(0);
 		for (Worker x : subListWorker) {
-			String[] row = { x.getEmployeeID(), x.getName(), x.getTeamID() };
+			String[] row = { x.getEmployeeID(), x.getName(), x.getTeamID(), daoAssignment.getQuantityAssignment(x.getEmployeeID())+""};
 			modelWorker.addRow(row);
 		}
-
 	}
 
 	public void loadTable2() {
 		subListProduct = listProduct.subList(indexProduct, Math.min(indexProduct + numProduct, listProduct.size()));
 		while (tblProduct.getRowCount() != 0)
 			modelProduct.removeRow(0);
-		System.out.print(subListProduct);
 		for (Product x : subListProduct) {
 			String[] row = { daoProduct.getProductionDetailID(x.getProductID()) + "", x.getProductID(), x.getName(),
 					daoProdure.getAllProdureByProductID(x.getProductID()).size() + "",
@@ -757,7 +756,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 
 	public static void main(String[] args) {
 		Employee worker = new Worker();
-		worker.setEmployeeID("NVSX0002");
+		worker.setEmployeeID("NVSX00080");
 		new AssignmentGUI(worker).setVisible(true);
 	}
 
@@ -796,7 +795,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			Worker w = new Worker();
 			w.setEmployeeID(assignment.getWorkerID());
 			indexWorker = listWorker.indexOf(w) / numWorker * numWorker;
-			loadTable1();
+			loadTable1();		
 			for (int i = 0; i <= tblWorker.getRowCount(); i++)
 				if (tblWorker.getValueAt(i, 0).equals(assignment.getWorkerID())) {
 					tblWorker.setRowSelectionInterval(i, i);

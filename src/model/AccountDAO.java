@@ -126,7 +126,7 @@ public class AccountDAO {
 	public List<Worker> getListAccountWorker() {
 		List<Worker> list = new ArrayList<Worker>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select * from NhanVienSanXuat WHERE EXISTS (SELECT * FROM PhanXuong WHERE NhanVienSanXuat.MaNhanVien = PhanXuong.MaQuanDoc) or EXISTS (SELECT * FROM ToSanXuat WHERE NhanVienSanXuat.MaNhanVien = ToSanXuat.MaToTruong) ORDER BY MaTo ASC");
+			PreparedStatement stmt = connection.prepareStatement("select * from NhanVienSanXuat  ORDER BY MaTo ASC");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Worker emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
