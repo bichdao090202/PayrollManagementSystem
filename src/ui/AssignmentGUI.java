@@ -675,6 +675,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		subListProduct = listProduct.subList(indexProduct, Math.min(indexProduct + numProduct, listProduct.size()));
 		while (tblProduct.getRowCount() != 0)
 			modelProduct.removeRow(0);
+		System.out.print(subListProduct);
 		for (Product x : subListProduct) {
 			String[] row = { daoProduct.getProductionDetailID(x.getProductID()) + "", x.getProductID(), x.getName(),
 					daoProdure.getAllProdureByProductID(x.getProductID()).size() + "",
@@ -716,7 +717,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		index = indexProduct = indexWorker = indexProdure = 0;
 		listWorker = daoWorker.getListWorker(worker.getTeamID());
 		loadTable1();
-		listProduct = daoProduct.getAllProduct();
+		listProduct = daoProduct.getProductProducing();
 		loadTable2();
 		loadTable3("");
 		listAssignment = daoAssignment.getAllAssignments(worker.getTeamID());
