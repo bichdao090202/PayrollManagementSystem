@@ -18,12 +18,12 @@ import entity.TeamProducing;
 import entity.TimesheetFactory;
 import entity.TimesheetOffice;
 
-public class SalaryDAO {
+public class Salary_DAO {
 	private Connection con;
 	private PreparedStatement prstm;
 	private ResultSet rs;
 	
-	public SalaryDAO() {
+	public Salary_DAO() {
 		con = ConnectDB.getInstance().getConnection();
 	}
 	
