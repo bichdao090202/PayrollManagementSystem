@@ -96,6 +96,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	public static final String fontString = "C:\\Windows\\Fonts\\times.ttf";
 	private List<Employee> listEmployee = new ArrayList<Employee>();
+	
 
 	public SalaryGUI() {
 		getContentPane().setBackground(Color.WHITE);
