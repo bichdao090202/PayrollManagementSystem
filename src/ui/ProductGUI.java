@@ -19,16 +19,11 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
@@ -38,27 +33,21 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
-import com.itextpdf.awt.geom.misc.RenderingHints.Key;
+//import com.itextpdf.awt.geom.misc.RenderingHints.Key;
 
 import custom_field.JTextFieldHint;
 import model.DetailPRoductionDAO;
 import model.ProductDAO;
-import entity.Assignment;
 import entity.Product;
 import entity.Produre;
-import entity.TeamProducing;
-import entity.TimesheetFactory;
 import entity.TopProduct;
-import entity.Worker;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JScrollBar;
+//import javax.swing.JComboBox;
+//import javax.swing.DefaultComboBoxModel;
+//import javax.swing.JScrollBar;
 
 import java.io.*;
-
-import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory; 
 import org.jfree.chart.JFreeChart;
@@ -71,6 +60,8 @@ import org.jfree.chart.ChartUtilities;
 public class ProductGUI extends JFrame implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private JTextField txtIdProduct;
 	private JTextField txtNameProduct;
 	private JTextField txtIdProcedure;
@@ -109,6 +100,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	private JLabel lblChart;
 
 	public ProductGUI() {
+		getContentPane().setBackground(Color.WHITE);
 //		getUI();
 	}
 	
@@ -117,6 +109,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		getContentPane().setLayout(null);
 
 		JPanel pnlProduct = new JPanel();
+		pnlProduct.setBackground(Color.WHITE);
 		pnlProduct.setBorder(new TitledBorder(new LineBorder(new Color(0, 140, 140)), "S\u1EA3n Ph\u1EA9m", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 140, 140)));
 		pnlProduct.setBounds(10, 10, 460, 191);
 		getContentPane().add(pnlProduct);
@@ -129,6 +122,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlProduct.add(lblIdProduct);
 
 		txtIdProduct = new JTextField();
+		txtIdProduct.setBackground(Color.WHITE);
 		txtIdProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtIdProduct.setBounds(162, 35, 245, 19);
 		pnlProduct.add(txtIdProduct);
@@ -166,7 +160,21 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		lblDetailProduction.setBounds(37, 115, 115, 13);
 		pnlProduct.add(lblDetailProduction);
 
-		btnClean = new JButton("");
+		btnClean = new JButton();
+		btnClean.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnClean.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnClean.setBackground(Color.WHITE);
+			}
+		});
+		btnClean.setBorder(new LineBorder(COLOR, 2, false));
+		btnClean.setForeground(COLOR);
+		btnClean.setBackground(Color.WHITE);
 		btnClean.setFocusable(false);
 		btnClean.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnClean.setIcon(new ImageIcon("images\\Clear-icon.png"));
@@ -174,6 +182,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlProduct.add(btnClean);
 
 		pnlProcedure = new JPanel();
+		pnlProcedure.setBackground(Color.WHITE);
 		pnlProcedure.setBorder(new TitledBorder(new LineBorder(new Color(0, 140, 140)), "Quy tr\u00ECnh", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 140, 140)));
 		pnlProcedure.setBounds(513, 10, 485, 191);
 		getContentPane().add(pnlProcedure);
@@ -186,6 +195,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlProcedure.add(lblIdProcedure);
 
 		txtIdProcedure = new JTextField();
+		txtIdProcedure.setBackground(Color.WHITE);
 		txtIdProcedure.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtIdProcedure.setColumns(10);
 		txtIdProcedure.setBounds(137, 29, 106, 19);
@@ -260,9 +270,22 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 			}
 		});
 
-		btnInsertProcedure = new JButton("");
+		btnInsertProcedure = new JButton();
+		btnInsertProcedure.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnInsertProcedure.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnInsertProcedure.setBackground(Color.WHITE);
+			}
+		});
+		btnInsertProcedure.setBorder(new LineBorder(COLOR, 2, false));
+		btnInsertProcedure.setForeground(COLOR);
+		btnInsertProcedure.setBackground(Color.WHITE);
 		btnInsertProcedure.setFocusable(false);
-		btnInsertProcedure.setForeground(Color.BLACK);
 		btnInsertProcedure.setIcon(new ImageIcon("images\\math-add-icon.png"));
 		btnInsertProcedure.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnInsertProcedure.addActionListener(new ActionListener() {
@@ -277,6 +300,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlProcedure.add(scrProcedure);
 
 		tblProcedure = new JTable();
+		tblProcedure.setFillsViewportHeight(true);
 		tblProcedure.setBackground(Color.WHITE);
 		tblProcedure.setGridColor(new Color(0, 140, 140));
 		tblProcedure.setBorder(new LineBorder(new Color(0, 140, 140)));
@@ -299,6 +323,20 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		scrProcedure.setViewportView(tblProcedure);
 
 		btnInsertProduct = new JButton("Thêm sản phẩm");
+		btnInsertProduct.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnInsertProduct.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnInsertProduct.setBackground(Color.WHITE);
+			}
+		});
+		btnInsertProduct.setBorder(new LineBorder(COLOR, 2, false));
+		btnInsertProduct.setForeground(COLOR);
+		btnInsertProduct.setBackground(Color.WHITE);
 		btnInsertProduct.setFocusable(false);
 		btnInsertProduct.setIcon(new ImageIcon("images\\math-add-icon.png"));
 		btnInsertProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -306,11 +344,13 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		getContentPane().add(btnInsertProduct);
 
 		JPanel pnlListProducts = new JPanel();
+		pnlListProducts.setBackground(Color.WHITE);
 		pnlListProducts.setBounds(0, 211, 1186, 442);
 		getContentPane().add(pnlListProducts);
 		pnlListProducts.setLayout(null);
 
 		JPanel pnlListProduct = new JPanel();
+		pnlListProduct.setBackground(Color.WHITE);
 		pnlListProduct.setBorder(new TitledBorder(new LineBorder(new Color(0, 140, 140)), "Danh sách sản phẩm",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 140, 140)));
 		pnlListProduct.setBounds(10, 10, 580, 432);
@@ -324,21 +364,63 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		txtSearchProduct.setBounds(10, 18, 277, 19);
 		pnlListProduct.add(txtSearchProduct);
 
-		btnSearchIdProduct = new JButton("");
+		btnSearchIdProduct = new JButton();
+		btnSearchIdProduct.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSearchIdProduct.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSearchIdProduct.setBackground(Color.WHITE);
+			}
+		});
+		btnSearchIdProduct.setBorder(new LineBorder(COLOR, 2, false));
+		btnSearchIdProduct.setForeground(COLOR);
+		btnSearchIdProduct.setBackground(Color.WHITE);
 		btnSearchIdProduct.setFocusable(false);
 		btnSearchIdProduct.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSearchIdProduct.setBounds(297, 18, 70, 21);
 		pnlListProduct.add(btnSearchIdProduct);
 
-		btnDeleteProduct = new JButton("");
+		btnDeleteProduct = new JButton();
+		btnDeleteProduct.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDeleteProduct.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDeleteProduct.setBackground(Color.WHITE);
+			}
+		});
+		btnDeleteProduct.setBorder(new LineBorder(COLOR, 2, false));
+		btnDeleteProduct.setForeground(COLOR);
+		btnDeleteProduct.setBackground(Color.WHITE);
 		btnDeleteProduct.setFocusable(false);
 		btnDeleteProduct.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDeleteProduct.setBounds(382, 18, 70, 21);
 		pnlListProduct.add(btnDeleteProduct);
 
-		btnUpdateProduct = new JButton("");
+		btnUpdateProduct = new JButton();
+		btnUpdateProduct.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdateProduct.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdateProduct.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdateProduct.setBorder(new LineBorder(COLOR, 2, false));
+		btnUpdateProduct.setForeground(COLOR);
+		btnUpdateProduct.setBackground(Color.WHITE);
 		btnUpdateProduct.setFocusable(false);
 		btnUpdateProduct.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateProduct.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -350,6 +432,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListProduct.add(scrProduct);
 
 		tblListProduct = new JTable();
+		tblListProduct.setFillsViewportHeight(true);
 		tblListProduct.setBackground(Color.WHITE);
 		tblListProduct.setForeground(Color.BLACK);
 		tblListProduct.setGridColor(new Color(0, 140, 140));
@@ -371,6 +454,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		scrProduct.setViewportView(tblListProduct);
 
 		JPanel pnlListProcedure = new JPanel();
+		pnlListProcedure.setBackground(Color.WHITE);
 		pnlListProcedure.setBorder(new TitledBorder(new LineBorder(new Color(0, 140, 140)), "Chi tiết sản phẩm",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 140, 140)));
 		pnlListProcedure.setBounds(596, 10, 580, 432);
@@ -382,6 +466,8 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListProcedure.add(scrListProcedure);
 
 		tblListProcedure = new JTable();
+		tblListProcedure.setBackground(Color.WHITE);
+		tblListProcedure.setFillsViewportHeight(true);
 		tblListProcedure.setForeground(Color.BLACK);
 		tblListProcedure.setGridColor(new Color(0, 140, 140));
 		tblListProcedure.setRowHeight(25);
@@ -411,28 +497,84 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		txtSearchProcedure.setBounds(10, 18, 277, 19);
 		pnlListProcedure.add(txtSearchProcedure);
 
-		btnSearchIdProcedure = new JButton("");
+		btnSearchIdProcedure = new JButton();
+		btnSearchIdProcedure.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSearchIdProcedure.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSearchIdProcedure.setBackground(Color.WHITE);
+			}
+		});
+		btnSearchIdProcedure.setBorder(new LineBorder(COLOR, 2, false));
+		btnSearchIdProcedure.setForeground(COLOR);
+		btnSearchIdProcedure.setBackground(Color.WHITE);
 		btnSearchIdProcedure.setFocusable(false);
 		btnSearchIdProcedure.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdProcedure.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSearchIdProcedure.setBounds(297, 17, 70, 21);
 		pnlListProcedure.add(btnSearchIdProcedure);
 
-		btnDeleteProcedure = new JButton("");
+		btnDeleteProcedure = new JButton();
+		btnDeleteProcedure.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDeleteProcedure.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDeleteProcedure.setBackground(Color.WHITE);
+			}
+		});
+		btnDeleteProcedure.setBorder(new LineBorder(COLOR, 2, false));
+		btnDeleteProcedure.setForeground(COLOR);
+		btnDeleteProcedure.setBackground(Color.WHITE);
 		btnDeleteProcedure.setFocusable(false);
 		btnDeleteProcedure.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteProcedure.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDeleteProcedure.setBounds(382, 17, 70, 21);
 		pnlListProcedure.add(btnDeleteProcedure);
 
-		btnUpdateProcedure = new JButton("");
+		btnUpdateProcedure = new JButton();
+		btnUpdateProcedure.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdateProcedure.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdateProcedure.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdateProcedure.setBorder(new LineBorder(COLOR, 2, false));
+		btnUpdateProcedure.setForeground(COLOR);
+		btnUpdateProcedure.setBackground(Color.WHITE);
 		btnUpdateProcedure.setFocusable(false);
 		btnUpdateProcedure.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateProcedure.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnUpdateProcedure.setBounds(462, 17, 70, 21);
 		pnlListProcedure.add(btnUpdateProcedure);
 
-		btnChange = new JButton("");
+		btnChange = new JButton();
+		btnChange.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnChange.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnChange.setBackground(Color.WHITE);
+			}
+		});
+		btnChange.setBorder(new LineBorder(COLOR, 2, false));
+		btnChange.setForeground(COLOR);
+		btnChange.setBackground(Color.WHITE);
 		btnChange.setFocusable(false);
 		btnChange.setBounds(386, 67, 50, 21);
 		pnlProcedure.add(btnChange);
@@ -443,6 +585,20 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 			btnChange.setIcon(new ImageIcon("images\\exchange.png"));
 		}
 		btnModal = new JButton("Thêm/Sửa/Xóa Hợp Đồng");
+		btnModal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnModal.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnModal.setBackground(Color.WHITE);
+			}
+		});
+		btnModal.setBorder(new LineBorder(COLOR, 2, false));
+		btnModal.setForeground(COLOR);
+		btnModal.setBackground(Color.WHITE);
 		btnModal.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnModal.setBounds(162, 112, 245, 25);
 		pnlProduct.add(btnModal);
@@ -556,11 +712,13 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		btnDeleteProcedure.setFocusPainted(false);
 		
 		JPanel pnlStatistical = new JPanel();
+		pnlStatistical.setBackground(Color.WHITE);
 		pnlStatistical.setBounds(10, 196, 560, 230);
 		pnlListProcedure.add(pnlStatistical);
 		pnlStatistical.setLayout(null);
 		
 		lblChart = new JLabel("");
+		lblChart.setBackground(Color.WHITE);
 		lblChart.setIcon(new ImageIcon("statistical/TopFiveProductInMonth_pie_Chart3D.jpeg"));
 		lblChart.setBounds(0, 0, 560, 230);
 		pnlStatistical.add(lblChart);
@@ -752,6 +910,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	}
 	
 	// Top 5 sản phẩm có nhiều hợp đồng nhất trong tháng bằng biểu đồ hình tròn
+	@SuppressWarnings("removal")
 	public void chartTopFiveProduct(List<TopProduct> listProduct) {
 		DefaultPieDataset dataset = new DefaultPieDataset( );
 		for(TopProduct pr : listProduct) {
@@ -781,6 +940,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	}
 	
 	// Thống kê danh sách hợp đồng của sản phẩm bằng biểu đồ tròn
+	@SuppressWarnings("removal")
 	public void chartDetailOfProductInMonth(List<entity.DetailProduction> listDetail) {
 		String idProduct = dtmProduct.getValueAt(tblListProduct.getSelectedRow(), 0).toString();
 		int quantityProduction = 0;
@@ -1275,7 +1435,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		String announce = "";
 		String regexIdProduct = "^[A-Z]{2}[0-9]{3}$";
 		String regexNameProduct = "^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$";
-		String regexQuantityProductive = "(^[1-9][0-9]*)+";
+//		String regexQuantityProductive = "(^[1-9][0-9]*)+";
 		if (txtIdProduct.getText().isEmpty() || txtNameProduct.getText().isEmpty()) {
 			announce += "Vui lòng nhập đầy đủ thông tin sản phẩm";
 		} else {

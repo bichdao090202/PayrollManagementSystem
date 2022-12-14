@@ -41,6 +41,7 @@ import entity.Factory;
 import entity.TeamProducing;
 import javax.swing.ImageIcon;
 
+@SuppressWarnings("unused")
 public class FactoryGUI extends JFrame implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
@@ -1043,7 +1044,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 					}
 					if (!checkContainFactory) {
 						boolean insertFactory = Dao_Factory.insertFactory(factory);
-						boolean insertListTeam = Dao_Factory.insertListTeam(ListTeam);
+						Dao_Factory.insertListTeam(ListTeam);
 						if (insertFactory) {
 							JOptionPane.showMessageDialog(this, "Thêm phân xưởng thành công!!!");
 							ListTeam = new ArrayList<TeamProducing>();

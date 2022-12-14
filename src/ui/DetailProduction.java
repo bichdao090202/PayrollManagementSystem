@@ -66,6 +66,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 	private List<entity.DetailProduction> listDetailSearch = new ArrayList<entity.DetailProduction>();
 
 	public DetailProduction(String productid, List<entity.DetailProduction> listDetails) {
+		getContentPane().setBackground(Color.WHITE);
 		setSize(1100, 250);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
@@ -73,6 +74,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 		listDetailOnTable = listDetails;
 		
 		JPanel pnllFormDetail = new JPanel();
+		pnllFormDetail.setBackground(Color.WHITE);
 		pnllFormDetail.setBorder(new TitledBorder(new LineBorder(new Color(0, 140, 140)), "Th\u00F4ng tin s\u1EA3n xu\u1EA5t", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 140, 140)));
 		pnllFormDetail.setBounds(10, 10, 462, 193);
 		getContentPane().add(pnllFormDetail);
@@ -84,6 +86,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 		pnllFormDetail.add(lblDetailProductionId);
 		
 		txtDetailProductionId = new JTextField();
+		txtDetailProductionId.setBackground(Color.WHITE);
 		txtDetailProductionId.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtDetailProductionId.setEditable(false);
 		txtDetailProductionId.setColumns(10);
@@ -107,6 +110,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 		pnllFormDetail.add(lblState);
 		
 		cmbState = new JComboBox();
+		cmbState.setBackground(Color.WHITE);
 		cmbState.setModel(new DefaultComboBoxModel(new String[] {"Sản Xuất", "Ngưng Sản Xuất", "Hoàn Thành"}));
 		cmbState.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		cmbState.setBounds(174, 110, 246, 22);
@@ -134,6 +138,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 		pnllFormDetail.add(btnCancel);
 		
 		pnlListDetail = new JPanel();
+		pnlListDetail.setBackground(Color.WHITE);
 		pnlListDetail.setLayout(null);
 		pnlListDetail.setBorder(new TitledBorder(new LineBorder(new Color(0, 140, 140)), "Danh s\u00E1ch s\u1EA3n xu\u1EA5t", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 140, 140)));
 		pnlListDetail.setBounds(485, 10, 591, 193);
@@ -175,6 +180,7 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 		pnlListDetail.add(btnSearchDetail);
 		
 		cmbSearchState = new JComboBox();
+		cmbSearchState.setBackground(Color.WHITE);
 		cmbSearchState.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		cmbSearchState.setModel(new DefaultComboBoxModel(new String[] {"Tất Cả", "Sản Xuất", "Ngưng Sản Xuất", "Hoàn Thành"}));
 		cmbSearchState.setBounds(209, 22, 130, 21);
@@ -185,6 +191,8 @@ public class DetailProduction extends JFrame implements ActionListener, MouseLis
 		pnlListDetail.add(scrollPane);
 		
 		tblListDetail = new JTable();
+		tblListDetail.setBackground(Color.WHITE);
+		tblListDetail.setFillsViewportHeight(true);
 		tblListDetail.setForeground(Color.BLACK);
 		tblListDetail.setGridColor(new Color(0, 140, 140));
 		tblListDetail.setRowHeight(25);
