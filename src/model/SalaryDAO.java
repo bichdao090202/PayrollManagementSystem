@@ -18,12 +18,12 @@ import entity.TeamProducing;
 import entity.TimesheetFactory;
 import entity.TimesheetOffice;
 
-public class Salary_DAO {
+public class SalaryDAO {
 	private Connection con;
 	private PreparedStatement prstm;
 	private ResultSet rs;
 	
-	public Salary_DAO() {
+	public SalaryDAO() {
 		con = ConnectDB.getInstance().getConnection();
 	}
 	
@@ -284,20 +284,20 @@ public class Salary_DAO {
 	}
 	
 	// Tính tổng lương của nhân viên
-	public double calculateTotalSalaryOfE(String idEmployee, int month, int year) {
-		double totalSalary = 0;
-		List<Assignment> listAssignment = getListAssignmentOfEmployee(idEmployee, month, year);
-		List<TimesheetFactory> listTime = new ArrayList<TimesheetFactory>();
-		ProductDAO productDao = new ProductDAO();
-		for(Assignment a : listAssignment) {
-			listTime.add(searchTimeSheetsFactoryById(a.getAssignmentID()));
+	public double getSalaryOfWorker(String idEmployee, int month, int year) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM VIEW_LUONGNHANVIENSANXUAT WHERE Thang = ? AND Nam = ? AND MaNhanVien = ?");
+			stmt.setInt(1, month);
+			stmt.setInt(2, year);
+			stmt.setString(3, idEmployee);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getDouble("TongTien");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		for(TimesheetFactory time : listTime) {
-			Assignment assignment = searchAssignmentById(time.getAssignmentID());
-			Produre produre = productDao.searchProcedureByIdProcedure(assignment.getProdureID());
-			totalSalary += time.getQuantity() * produre.getPrice();
-		}
-		return totalSalary;
+		return 0;
 	}
 	
 	// lấy số ngày làm việc của nhân viên hành chính
