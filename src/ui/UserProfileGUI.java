@@ -32,13 +32,11 @@ import javax.swing.border.LineBorder;
 public class UserProfileGUI extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
-	private static final Color COLOR_HOVER = new Color(173, 217, 245);
-	private JPasswordField txtCurrentPassword;
-	private JPasswordField txtNewPassword;
-	private JPasswordField txtConfirmPassword;
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
+	private JPasswordField txtCurrentPassword, txtNewPassword, txtConfirmPassword;
 	private final JPanel contentPane = new JPanel();
-	private JButton btnChangePwd;
-	private JButton btnOk;
+	private JButton btnChangePwd, btnOk;
 	private AccountDAO accountDAO;
 	private Employee employee;
 	private JButton btnLogOut;
@@ -125,7 +123,7 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		
 		btnChangePwd = new JButton("Đổi mật khẩu");
 		btnChangePwd.addActionListener(this);
-		btnChangePwd.setBorder(new LineBorder(new Color(0, 0, 255), 2));
+		btnChangePwd.setBorder(new LineBorder(COLOR, 2));
 		btnChangePwd.setBackground(Color.WHITE);
 		btnChangePwd.setFocusable(false);
 		btnChangePwd.setBounds(29, 146, 126, 23);
@@ -141,8 +139,8 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		});
 		contentPane.add(btnChangePwd);
 		
-		btnOk = new JButton("Ok");
-		btnOk.setBorder(new LineBorder(new Color(0, 0, 255), 2));
+		btnOk = new JButton("Đóng");
+		btnOk.setBorder(new LineBorder(COLOR, 2));
 		btnOk.setBackground(Color.WHITE);
 		btnOk.setFocusable(false);
 		btnOk.setBounds(343, 265, 89, 23);
@@ -164,7 +162,7 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 		btnLogOut.setFocusable(false);
 		btnLogOut.setBounds(29, 180, 126, 23);
 		btnLogOut.setBackground(Color.WHITE);
-		btnLogOut.setBorder(new LineBorder(new Color(0, 0, 255), 2));
+		btnLogOut.setBorder(new LineBorder(COLOR, 2));
 		btnLogOut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -249,20 +247,25 @@ public class UserProfileGUI extends JDialog implements ActionListener {
 			dispose();
 		}
 		if (e.getSource() == btnLogOut) {
-			dispose();
-			frame.dispose();
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-						LoginGUI frame = new LoginGUI();
-						frame.setLocationRelativeTo(null);
-						frame.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
+			if (JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn đăng xuất chứ?",
+					"Thông báo", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				dispose();
+				frame.dispose();
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+							LoginGUI frame = new LoginGUI();
+							frame.setLocationRelativeTo(null);
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
-				}
-			});
+				});
+			}
+			
 		}
 	}
 }

@@ -287,12 +287,15 @@ public class SalaryDAO {
 	public double calculateTotalSalaryOfE(String idEmployee, int month, int year) {
 		double totalSalary = 0;
 		List<Assignment> listAssignment = getListAssignmentOfEmployee(idEmployee, month, year);
+		System.out.println(listAssignment);
 		List<TimesheetFactory> listTime = new ArrayList<TimesheetFactory>();
 		ProductDAO productDao = new ProductDAO();
 		for(Assignment a : listAssignment) {
+			System.out.println(a);
 			listTime.add(searchTimeSheetsFactoryById(a.getAssignmentID()));
 		}
 		for(TimesheetFactory time : listTime) {
+			System.out.println(time);
 			Assignment assignment = searchAssignmentById(time.getAssignmentID());
 			Produre produre = productDao.searchProcedureByIdProcedure(assignment.getProdureID());
 			totalSalary += time.getQuantity() * produre.getPrice();

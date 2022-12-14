@@ -300,7 +300,7 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		pnTable.add(pnSearch, BorderLayout.NORTH);
 		pnSearch.setLayout(new MigLayout("", "[7px][][]", "[20px,grow]"));
 
-		txtSearch = new JTextFieldHint("Nhập mã nhân viên");
+		txtSearch = new JTextFieldHint("Nhập mã hoặc tên nhân viên");
 		txtSearch.setBackground(Color.WHITE);
 		txtSearch.setMinimumSize(new Dimension(150, 20));
 		pnSearch.add(txtSearch, "cell 0 0,grow");

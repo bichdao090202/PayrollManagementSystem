@@ -38,6 +38,8 @@ public class LoginGUI extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Image ICON_APPLICATION = new ImageIcon("images\\icon_application.png").getImage();
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private JPanel contentPane;
 	private JButton btnLogin;
 	private JTextFieldHint txtUser;
@@ -58,14 +60,14 @@ public class LoginGUI extends JFrame implements ActionListener {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 1001, 566);
-		
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
 		JPanel pnMainLeft = new JPanel();
-		pnMainLeft.setBackground(new Color(16, 84, 129));
+		pnMainLeft.setBackground(COLOR);
 		contentPane.add(pnMainLeft, BorderLayout.WEST);
 		pnMainLeft.setLayout(new BorderLayout(0, 0));
 
@@ -90,7 +92,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnLogin.setBackground(new Color(173, 217, 245));
+				btnLogin.setBackground(COLOR_HOVER);
 			}
 
 			@Override
@@ -98,10 +100,10 @@ public class LoginGUI extends JFrame implements ActionListener {
 				btnLogin.setBackground(Color.WHITE);
 			}
 		});
+		btnLogin.setBorder(new LineBorder(COLOR, 3, false));
+		btnLogin.setForeground(COLOR);
+		btnLogin.setBackground(Color.WHITE);
 		btnLogin.setMnemonic(KeyEvent.VK_ENTER);
-		btnLogin.setForeground(new Color(16, 84, 129));
-		btnLogin.setBackground(new Color(255, 255, 255));
-		btnLogin.setBorder(new LineBorder(new Color(16, 84, 129), 3, true));
 		btnLogin.setFocusable(false);
 		btnLogin.setFont(new Font("Arial", Font.PLAIN, 17));
 		btnLogin.setBounds(166, 345, 140, 36);
@@ -109,8 +111,9 @@ public class LoginGUI extends JFrame implements ActionListener {
 		pnMainRight.add(btnLogin);
 
 		JLabel lblLogin = new JLabel("Đăng nhập");
+		lblLogin.setBackground(Color.WHITE);
 		lblLogin.setFont(new Font("Arial", Font.PLAIN, 30));
-		lblLogin.setForeground(new Color(16, 84, 129));
+		lblLogin.setForeground(COLOR);
 		lblLogin.setBounds(159, 70, 155, 36);
 		pnMainRight.add(lblLogin);
 
@@ -121,7 +124,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		pnMainRight.add(pnUser);
 		pnUser.setLayout(new BorderLayout(0, 0));
 
-		txtUser = new JTextFieldHint("Username");
+		txtUser = new JTextFieldHint("Tên đăng nhập");
 		txtUser.setText("NVHC00081");
 		txtUser.setLocation(55, 0);
 		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -146,7 +149,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		lblIconPassword.setIcon(new ImageIcon("images\\login\\password.png"));
 		pnPassword.add(lblIconPassword, BorderLayout.WEST);
 
-		txtPassword = new JPasswordFieldHint("Password");
+		txtPassword = new JPasswordFieldHint("Mật khảu");
 		lblIconPassword.setLabelFor(txtPassword);
 		txtPassword.setText("111111111111");
 		txtPassword.setLocation(55, 0);
@@ -154,17 +157,19 @@ public class LoginGUI extends JFrame implements ActionListener {
 		txtPassword.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		pnPassword.add(txtPassword, BorderLayout.CENTER);
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnLogin) {
 			String username = txtUser.getText().trim();
 			String pwd = String.valueOf(txtPassword.getPassword()).trim();
 			if (username.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Tên tài khoản không được để trống", "Lỗi", JOptionPane.NO_OPTION,
+				JOptionPane.showMessageDialog(this, "Tên đăng nhập không được để trống", "Lỗi", JOptionPane.NO_OPTION,
 						null);
+				txtUser.requestFocus();
 			} else if (pwd.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống", "Lỗi", JOptionPane.NO_OPTION, null);
+				txtPassword.requestFocus();
 			} else {
 				HashMap<String, String> account = accountDAO.getPasswordEncryption(username);
 				if (!account.isEmpty() & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"),
@@ -178,9 +183,9 @@ public class LoginGUI extends JFrame implements ActionListener {
 					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
+								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 								setVisible(false);
 								dispose();
-								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 								MenuGUI menuGUI = new MenuGUI(emp);
 								menuGUI.setLocationRelativeTo(null);
 								menuGUI.setResizable(false);
@@ -193,6 +198,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 				} else {
 					JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu không chính xác! Vui lòng nhập lại.",
 							"Đăng nhập thất bại", JOptionPane.NO_OPTION, null);
+					txtUser.requestFocus();
 				}
 			}
 		}
