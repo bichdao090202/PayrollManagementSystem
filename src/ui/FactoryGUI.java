@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,8 @@ import javax.swing.ImageIcon;
 public class FactoryGUI extends JFrame implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private JTextField txtIdFactory;
 	private JTextField txtNameFactory;
 	private JTextField txtIdTeam;
@@ -95,6 +98,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlFactory.add(lblIdFactory);
 
 		txtIdFactory = new JTextField();
+		txtIdFactory.setBackground(Color.WHITE);
 		txtIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtIdFactory.setBounds(162, 35, 245, 19);
 		pnlFactory.add(txtIdFactory);
@@ -125,7 +129,21 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			}
 		});
 
-		btnClean = new JButton("");
+		btnClean = new JButton();
+		btnClean.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnClean.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnClean.setBackground(Color.WHITE);
+			}
+		});
+		btnClean.setBorder(new LineBorder(COLOR, 2, false));
+		btnClean.setForeground(COLOR);
+		btnClean.setBackground(Color.WHITE);
 		btnClean.setIcon(new ImageIcon("images\\Clear-icon.png"));
 		btnClean.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnClean.setFocusPainted(false);
@@ -147,6 +165,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlTeam.add(lblIdTeam);
 
 		txtIdTeam = new JTextField();
+		txtIdTeam.setBackground(Color.WHITE);
 		txtIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtIdTeam.setColumns(10);
 		txtIdTeam.setBounds(96, 29, 340, 19);
@@ -194,6 +213,20 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		});
 
 		btnInsertTeam = new JButton("");
+		btnInsertTeam.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnInsertTeam.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnInsertTeam.setBackground(Color.WHITE);
+			}
+		});
+		btnInsertTeam.setBorder(new LineBorder(COLOR, 2, false));
+		btnInsertTeam.setForeground(COLOR);
+		btnInsertTeam.setBackground(Color.WHITE);
 		btnInsertTeam.setIcon(new ImageIcon("images\\math-add-icon.png"));
 		btnInsertTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnInsertTeam.addActionListener(new ActionListener() {
@@ -209,6 +242,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlTeam.add(scrTeam);
 
 		tblTeam = new JTable();
+		tblTeam.setFillsViewportHeight(true);
+		tblTeam.setBackground(Color.WHITE);
 		tblTeam.setForeground(Color.BLACK);
 		tblTeam.setGridColor(new Color(0,140,140));
 		tblTeam.setBorder(new LineBorder(new Color(0,140,140)));
@@ -226,6 +261,20 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		scrTeam.setViewportView(tblTeam);
 
 		btnInsertFactory = new JButton("Thêm phân xưởng");
+		btnInsertFactory.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnInsertFactory.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnInsertFactory.setBackground(Color.WHITE);
+			}
+		});
+		btnInsertFactory.setBorder(new LineBorder(COLOR, 2, false));
+		btnInsertFactory.setForeground(COLOR);
+		btnInsertFactory.setBackground(Color.WHITE);
 		btnInsertFactory.setIcon(new ImageIcon("images\\math-add-icon.png"));
 		btnInsertFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnInsertFactory.setBounds(1008, 90, 168, 40);
@@ -233,14 +282,15 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 
 		JPanel pnlListFactories = new JPanel();
 		pnlListFactories.setBackground(Color.WHITE);
-		pnlListFactories.setBounds(-10, 211, 1186, 442);
+		pnlListFactories.setBounds(-10, 211, 1186, 480);
 		getContentPane().add(pnlListFactories);
 		pnlListFactories.setLayout(null);
 
 		JPanel pnlListFactory = new JPanel();
+		pnlListFactory.setBackground(Color.WHITE);
 		pnlListFactory.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Danh sách phân xưởng",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
-		pnlListFactory.setBounds(10, 10, 580, 432);
+		pnlListFactory.setBounds(10, 10, 580, 457);
 		pnlListFactories.add(pnlListFactory);
 		pnlListFactory.setLayout(null);
 
@@ -251,26 +301,68 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtSearchIdFactory.setBounds(10, 18, 277, 19);
 		pnlListFactory.add(txtSearchIdFactory);
 
-		btnSearchIdFactory = new JButton("");
+		btnSearchIdFactory = new JButton();
+		btnSearchIdFactory.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSearchIdFactory.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSearchIdFactory.setBackground(Color.WHITE);
+			}
+		});
+		btnSearchIdFactory.setBorder(new LineBorder(COLOR, 2, false));
+		btnSearchIdFactory.setForeground(COLOR);
+		btnSearchIdFactory.setBackground(Color.WHITE);
 		btnSearchIdFactory.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSearchIdFactory.setBounds(297, 18, 70, 21);
 		pnlListFactory.add(btnSearchIdFactory);
 
-		btnDeleteFactory = new JButton("");
+		btnDeleteFactory = new JButton();
+		btnDeleteFactory.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDeleteFactory.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDeleteFactory.setBackground(Color.WHITE);
+			}
+		});
+		btnDeleteFactory.setBorder(new LineBorder(COLOR, 2, false));
+		btnDeleteFactory.setForeground(COLOR);
+		btnDeleteFactory.setBackground(Color.WHITE);
 		btnDeleteFactory.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDeleteFactory.setBounds(382, 18, 70, 21);
 		pnlListFactory.add(btnDeleteFactory);
 
-		btnUpdateFactory = new JButton("");
+		btnUpdateFactory = new JButton();
+		btnUpdateFactory.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdateFactory.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdateFactory.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdateFactory.setBorder(new LineBorder(COLOR, 2, false));
+		btnUpdateFactory.setForeground(COLOR);
+		btnUpdateFactory.setBackground(Color.WHITE);
 		btnUpdateFactory.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateFactory.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnUpdateFactory.setBounds(462, 18, 70, 21);
 		pnlListFactory.add(btnUpdateFactory);
 
 		JScrollPane scrListFactory = new JScrollPane();
-		scrListFactory.setBounds(10, 57, 560, 365);
+		scrListFactory.setBounds(10, 57, 560, 398);
 		pnlListFactory.add(scrListFactory);
 
 		tblListFactory = new JTable();
@@ -296,6 +388,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		scrListFactory.setViewportView(tblListFactory);
 
 		JPanel pnlListTeam = new JPanel();
+		pnlListTeam.setBackground(Color.WHITE);
 		pnlListTeam.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Danh sách tổ", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlListTeam.setBounds(596, 10, 580, 211);
@@ -307,6 +400,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListTeam.add(scrListTeam);
 
 		tblListTeam = new JTable();
+		tblListTeam.setFillsViewportHeight(true);
+		tblListTeam.setBackground(Color.WHITE);
 		tblListTeam.setForeground(Color.BLACK);
 		tblListTeam.setBorder(new LineBorder(new Color(0,140,140)));
 		tblListTeam.setGridColor(new Color(0,140,140));
@@ -333,36 +428,81 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		txtSearchIdTeam.setBounds(10, 18, 277, 19);
 		pnlListTeam.add(txtSearchIdTeam);
 
-		btnSearchIdTeam = new JButton("");
+		btnSearchIdTeam = new JButton();
+		btnSearchIdTeam.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSearchIdTeam.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSearchIdTeam.setBackground(Color.WHITE);
+			}
+		});
+		btnSearchIdTeam.setBorder(new LineBorder(COLOR, 2, false));
+		btnSearchIdTeam.setForeground(COLOR);
+		btnSearchIdTeam.setBackground(Color.WHITE);
 		btnSearchIdTeam.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSearchIdTeam.setBounds(297, 18, 70, 21);
 		pnlListTeam.add(btnSearchIdTeam);
 
-		btnDeleteTeam = new JButton("");
+		btnDeleteTeam = new JButton();
+		btnDeleteTeam.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnDeleteTeam.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnDeleteTeam.setBackground(Color.WHITE);
+			}
+		});
+		btnDeleteTeam.setBorder(new LineBorder(COLOR, 2, false));
+		btnDeleteTeam.setForeground(COLOR);
+		btnDeleteTeam.setBackground(Color.WHITE);
 		btnDeleteTeam.setIcon(new ImageIcon("images\\Close-2-icon.png"));
 		btnDeleteTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDeleteTeam.setBounds(382, 18, 70, 21);
 		pnlListTeam.add(btnDeleteTeam);
 
-		btnUpdateTeam = new JButton("");
+		btnUpdateTeam = new JButton();
+		btnUpdateTeam.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUpdateTeam.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUpdateTeam.setBackground(Color.WHITE);
+			}
+		});
+		btnUpdateTeam.setBorder(new LineBorder(COLOR, 2, false));
+		btnUpdateTeam.setForeground(COLOR);
+		btnUpdateTeam.setBackground(Color.WHITE);
 		btnUpdateTeam.setIcon(new ImageIcon("images\\Text-Edit-icon.png"));
 		btnUpdateTeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnUpdateTeam.setBounds(462, 18, 70, 21);
 		pnlListTeam.add(btnUpdateTeam);
 
 		JPanel pnlListEmployeeByTeam = new JPanel();
+		pnlListEmployeeByTeam.setBackground(Color.WHITE);
 		pnlListEmployeeByTeam.setLayout(null);
 		pnlListEmployeeByTeam.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Danh sách nhân viên",
 				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0,140,140)));
-		pnlListEmployeeByTeam.setBounds(596, 231, 580, 201);
+		pnlListEmployeeByTeam.setBounds(596, 231, 580, 236);
 		pnlListFactories.add(pnlListEmployeeByTeam);
 
 		JScrollPane scrListEmployeeByTeam = new JScrollPane();
-		scrListEmployeeByTeam.setBounds(10, 20, 560, 171);
+		scrListEmployeeByTeam.setBounds(10, 20, 560, 205);
 		pnlListEmployeeByTeam.add(scrListEmployeeByTeam);
 
 		tblEmployeeByTeam = new JTable();
+		tblEmployeeByTeam.setBackground(Color.WHITE);
+		tblEmployeeByTeam.setFillsViewportHeight(true);
 		tblEmployeeByTeam.setForeground(Color.BLACK);
 		tblEmployeeByTeam.setBorder(new LineBorder(new Color(0,140,140)));
 		tblEmployeeByTeam.setGridColor(new Color(0,140,140));
@@ -382,7 +522,21 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		});
 		scrListEmployeeByTeam.setViewportView(tblEmployeeByTeam);
 
-		btnChange = new JButton("");
+		btnChange = new JButton();
+		btnChange.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnChange.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnChange.setBackground(Color.WHITE);
+			}
+		});
+		btnChange.setBorder(new LineBorder(COLOR, 2, false));
+		btnChange.setForeground(COLOR);
+		btnChange.setBackground(Color.WHITE);
 		btnChange.setIcon(new ImageIcon("images\\Clear-icon.png"));
 		btnChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -445,17 +599,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
         
         txtSearchIdFactory.getDocument().addDocumentListener(enventChangeSearchFactory);
         txtSearchIdTeam.getDocument().addDocumentListener(enventChangeSearchTeam);
-		
-		btnClean.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnChange.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnInsertFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnInsertTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnSearchIdFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnSearchIdTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnDeleteFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnDeleteTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnUpdateFactory.setBorder(new LineBorder(new Color(14,85,78), 2));
-		btnUpdateTeam.setBorder(new LineBorder(new Color(14,85,78), 2));
 
 		tblListFactory.addMouseListener(this);
 		tblListTeam.addMouseListener(this);
