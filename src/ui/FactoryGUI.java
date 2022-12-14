@@ -73,6 +73,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 	private List<Factory> listFactorySearch = new ArrayList<Factory>();
 
 	public FactoryGUI() {
+		getContentPane().setBackground(Color.WHITE);
 //		getUI();
 	}
 	public Component getUI() {
@@ -80,6 +81,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		getContentPane().setLayout(null);
 
 		JPanel pnlFactory = new JPanel();
+		pnlFactory.setBackground(Color.WHITE);
 		pnlFactory.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Phân xưởng", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlFactory.setBounds(10, 10, 460, 191);
@@ -131,6 +133,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlFactory.add(btnClean);
 
 		JPanel pnlTeam = new JPanel();
+		pnlTeam.setBackground(Color.WHITE);
 		pnlTeam.setBorder(new TitledBorder(new LineBorder(new Color(0,140,140)), "Tổ", TitledBorder.LEADING,
 				TitledBorder.TOP, null, new Color(0,140,140)));
 		pnlTeam.setBounds(513, 10, 485, 191);
@@ -201,6 +204,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlTeam.add(btnInsertTeam);
 
 		JScrollPane scrTeam = new JScrollPane();
+		scrTeam.setBackground(Color.WHITE);
 		scrTeam.setBounds(40, 93, 396, 88);
 		pnlTeam.add(scrTeam);
 
@@ -228,6 +232,7 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		getContentPane().add(btnInsertFactory);
 
 		JPanel pnlListFactories = new JPanel();
+		pnlListFactories.setBackground(Color.WHITE);
 		pnlListFactories.setBounds(-10, 211, 1186, 442);
 		getContentPane().add(pnlListFactories);
 		pnlListFactories.setLayout(null);
@@ -269,6 +274,8 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 		pnlListFactory.add(scrListFactory);
 
 		tblListFactory = new JTable();
+		tblListFactory.setBackground(Color.WHITE);
+		tblListFactory.setFillsViewportHeight(true);
 		tblListFactory.setForeground(Color.BLACK);
 		tblListFactory.setGridColor(new Color(0,140,140));
 		tblListFactory.setRowHeight(25);
@@ -724,7 +731,6 @@ public class FactoryGUI extends JFrame implements ActionListener, MouseListener 
 			}
 		} else if (o.equals(tblListTeam)) {
 			int rowTeamSelected = tblListTeam.getSelectedRow();
-			int rowFactorySelected = tblListFactory.getSelectedRow();
 			if (rowTeamSelected >= 0) {
 				txtIdTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 0).toString());
 				txtNameTeam.setText(dtmListTeam.getValueAt(rowTeamSelected, 1).toString());

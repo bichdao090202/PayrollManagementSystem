@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -79,44 +80,25 @@ import javax.swing.ImageIcon;
 public class SalaryGUI extends JFrame implements ActionListener, MouseListener, ItemListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField txtSearchIdEmployee;
+	private static final Color COLOR = new Color(14, 85, 78);
+	private static final Color COLOR_HOVER = new Color(36, 217, 199);
 	private JTable tblListEmployee;
-	private JTextField txtIdEmployee;
-	private JTextField txtNameEmployee;
-	private JTextField txtGenderEmployee;
-	private JTextField txtPhonenumberEmployee;
-	private JTextField txtNameBank;
-	private JTextField txtSTKBank;
-	private JTextField txtNameOwnerBank;
-	private JTextField txtSpecializePosition;
-	private JTextField txtIdTeamIdDeparment;
-	private JTextField txtAddressEmployee;
-	private JTextField txtNumberOfWorkDay;
-	private JTextField txtNumberOfDayOff;
-	private JTextField txtTargets;
-	private JTextField txtReason;
-	private JTextField txtBonus;
-	private JTextField txtFine;
-	private JTextField txtTotalSalary;
-	private JButton btnSearchIdEmployee;
-	private JComboBox<String> cmbTypeEmployee;
-	private JComboBox<String> cmbFactoryDeparment;
+	private JTextField txtIdEmployee, txtNameEmployee, txtGenderEmployee, txtPhonenumberEmployee, txtNameBank, txtSTKBank, txtNameOwnerBank, txtSpecializePosition, txtSearchIdEmployee;
+	private JTextField txtIdTeamIdDeparment, txtAddressEmployee, txtNumberOfWorkDay, txtNumberOfDayOff, txtTargets, txtReason, txtBonus, txtFine, txtTotalSalary, dateBirthDayEmployee;
+	private JButton btnSearchIdEmployee, btnExportSalary;
+	private JComboBox<String> cmbTypeEmployee, cmbFactoryDeparment;
 	private DefaultTableModel dtmListEmployee;
 	private JButton btnExportListSalary;
-	private JTextField dateBirthDayEmployee;
 	private SalaryDAO Dao_Salary = new SalaryDAO();
-	private DefaultComboBoxModel<String> dcmbTypeEmployee;
-	private DefaultComboBoxModel<String> dcmbPosition;
-	private DefaultComboBoxModel<String> dcmbTeam;
-	private DefaultComboBoxModel<String> dcmbFactoryDeparment;
+	private DefaultComboBoxModel<String> dcmbTypeEmployee, dcmbPosition, dcmbTeam, dcmbFactoryDeparment;
 	private JMonthChooser mChMonth;
 	private JYearChooser yChYear;
-	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	private JButton btnExportSalary;
+	private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	public static final String fontString = "C:\\Windows\\Fonts\\times.ttf";
 	private List<Employee> listEmployee = new ArrayList<Employee>();
 
 	public SalaryGUI() {
+		getContentPane().setBackground(Color.WHITE);
 //		getUI();
 	}
 	
@@ -144,7 +126,21 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtSearchIdEmployee.setBounds(164, 30, 394, 19);
 		pnlTopSalary.add(txtSearchIdEmployee);
 
-		btnSearchIdEmployee = new JButton("");
+		btnSearchIdEmployee = new JButton();
+		btnSearchIdEmployee.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSearchIdEmployee.setBackground(COLOR_HOVER);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSearchIdEmployee.setBackground(Color.WHITE);
+			}
+		});
+		btnSearchIdEmployee.setBorder(new LineBorder(COLOR, 2, false));
+		btnSearchIdEmployee.setForeground(COLOR);
+		btnSearchIdEmployee.setBackground(Color.WHITE);
 		btnSearchIdEmployee.setIcon(new ImageIcon("images\\Zoom-icon.png"));
 		btnSearchIdEmployee.setFocusable(false);
 		btnSearchIdEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -564,7 +560,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 		txtTotalSalary.setEditable(false);
 		txtTargets.setEditable(false);
 		
-		btnSearchIdEmployee.setBorder(new LineBorder(new Color(14,85,78), 2));
+//		btnSearchIdEmployee.setBorder(new LineBorder(new Color(14,85,78), 2));
 		btnExportSalary.setBorder(new LineBorder(new Color(14,85,78), 2));
 		btnExportListSalary.setBorder(new LineBorder(new Color(14,85,78), 2));
 		
@@ -909,6 +905,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -1243,7 +1240,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				try {
 					sign.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				sign.setFontColor(ColorConstants.RED);
@@ -1264,10 +1260,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				DisplayPDF display = new DisplayPDF(path);
 			} catch (FileNotFoundException ex) {
-				// TODO Auto-generated catch block
 				ex.printStackTrace();
 			} catch (IOException e2) {
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 
@@ -1505,7 +1499,6 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				try {
 					sign.setFont(PdfFontFactory.createFont(FontConstants.TIMES_ROMAN));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				sign.setFontColor(ColorConstants.RED);
@@ -1531,10 +1524,8 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				DisplayPDF display = new DisplayPDF(path);
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
