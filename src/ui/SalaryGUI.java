@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -59,7 +60,7 @@ import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.text.pdf.BaseFont;
-import model.SalaryDAO;
+import model.Salary_DAO;
 import entity.TimesheetOffice;
 import entity.Department;
 import entity.Employee;
@@ -91,6 +92,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 	private JButton btnExportListSalary;
 	private SalaryDAO Dao_Salary = new SalaryDAO();
 	private DefaultComboBoxModel<String> dcmbTypeEmployee, dcmbPosition, dcmbTeam, dcmbFactoryDeparment;
+
 	private JMonthChooser mChMonth;
 	private JYearChooser yChYear;
 	private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -1258,7 +1260,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				
 				
 				document.close();
-				
+				JOptionPane.showMessageDialog(this, "Lưu file thành công!!!");
 				DisplayPDF display = new DisplayPDF(path);
 			} catch (FileNotFoundException ex) {
 				ex.printStackTrace();
@@ -1522,7 +1524,7 @@ public class SalaryGUI extends JFrame implements ActionListener, MouseListener, 
 				document.add(sign);
 				
 				document.close();
-				
+				JOptionPane.showMessageDialog(this, "Lưu file thành công!!!");
 				DisplayPDF display = new DisplayPDF(path);
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
