@@ -27,6 +27,15 @@ public class SalaryDAO {
 		con = ConnectDB.getInstance().getConnection();
 	}
 	
+	public List<Worker> getListWorkerOfFactory(String factoryID){
+		List<Worker> listWorkerOfFactory = new ArrayList<Worker>();
+		List<TeamProducing> listTeamOfFactory = getListTeamByIdFactory(factoryID);
+		for(TeamProducing team : listTeamOfFactory) {
+			listWorkerOfFactory.addAll(getListEmployeeByIdTeam(team.getTeamID()));
+		}
+		return listWorkerOfFactory;
+	}
+	
 	// Lấy tất cả nhân viên sản xuất
 	public List<Worker> getListEmployeeProductive(){
 		String sql = "select * from NhanVienSanXuat";
