@@ -94,23 +94,44 @@ public class TimesheetWorkerDAO {
 		return listTimesheets;
 	}
 	
-	public List<String> searchTimesheet(String emp, Date date) {
+	public List<String> searchTimesheet(String emp, Date date, String teamID) {
 		List<String> listTimesheets = new ArrayList<String>();
 		try {
 			PreparedStatement stmt = null;
-			if (emp.isEmpty() & date != null) {
-				stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NgayChamCong = ?");
-				stmt.setDate(1, new java.sql.Date(date.getTime()));
-			} else if (!emp.isEmpty() & date == null) {
-				stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NhanVien LIKE ?");
-				stmt.setString(1, "%" + emp + "%");
-			} else if (!emp.isEmpty() & date != null) {
-				stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NhanVien LIKE ? AND NgayChamCong = ?");
-				stmt.setDate(2, new java.sql.Date(date.getTime()));
-				stmt.setString(1, "%" + emp + "%");
-			} else {
-				stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX");
+			if (teamID == null) {
+				if (emp.isEmpty() & date != null) {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NgayChamCong = ?");
+					stmt.setDate(1, new java.sql.Date(date.getTime()));
+				} else if (!emp.isEmpty() & date == null) {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NhanVien LIKE ?");
+					stmt.setString(1, "%" + emp + "%");
+				} else if (!emp.isEmpty() & date != null) {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NhanVien LIKE ? AND NgayChamCong = ?");
+					stmt.setDate(2, new java.sql.Date(date.getTime()));
+					stmt.setString(1, "%" + emp + "%");
+				} else {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX");
+				}
+			}else {
+				if (emp.isEmpty() & date != null) {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NgayChamCong = ? AND MaTo = ?");
+					stmt.setDate(1, new java.sql.Date(date.getTime()));
+					stmt.setString(2, teamID);
+				} else if (!emp.isEmpty() & date == null) {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NhanVien LIKE ?  AND MaTo = ?");
+					stmt.setString(1, "%" + emp + "%");
+					stmt.setString(2, teamID);
+				} else if (!emp.isEmpty() & date != null) {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE NhanVien LIKE ? AND NgayChamCong = ? AND MaTo = ?");
+					stmt.setDate(2, new java.sql.Date(date.getTime()));
+					stmt.setString(1, "%" + emp + "%");
+					stmt.setString(3, teamID);
+				} else {
+					stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE MaTo = ?");
+					stmt.setString(1, teamID);
+				}
 			}
+			
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				String timesheet = rs.getInt("MaChamCong") + ";" + rs.getString("NhanVien") + ";"

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,19 +67,6 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 	private JTextField txtWorker, txtProduct, txtProduce, txtSearch;
 	private JDateChooser dateTimesheet, dateSearch;
 	private String teamID = null;
-
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					TimesheetWorkerGUI frame = new TimesheetWorkerGUI();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	public Component getUI() {
 
@@ -477,7 +463,7 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		if (e.getSource() == btnSearch) {
 			String emp = txtSearch.getText();
 			Date date = dateSearch.getDate();
-			loadDateToTableTimesheet(timsheetWorkerDAO.searchTimesheet(emp, date));
+			loadDateToTableTimesheet(timsheetWorkerDAO.searchTimesheet(emp, date, teamID));
 		}
 	}
 }

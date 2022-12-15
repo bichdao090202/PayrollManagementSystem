@@ -292,7 +292,7 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(this, "Phòng ban đã đầy, hãy bảo trì hệ thống");
 				return;
 			}
-			depDAO.addDepartment(newDep);
+//			depDAO.addDepartment(newDep);
 			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phòng ban này không?", "Thông báo",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 				if (depDAO.addDepartment(newDep) == false) {
