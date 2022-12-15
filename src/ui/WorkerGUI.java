@@ -356,7 +356,7 @@ public class WorkerGUI extends JFrame implements ActionListener {
 					txtSpeciality.setText(((Worker) emp).getSpeciality().trim());
 					String nameFactory = factoryDAO.getNameFactoryByTeamID(((Worker) emp).getTeamID());
 					cboFactory.setSelectedItem(nameFactory);
-					cboPosition.setSelectedItem(((Worker) emp).getPosition());
+					cboPosition.setSelectedItem(emp.getPosition());
 					String nameTeam = teamDAO.getNameTeamByID(((Worker) emp).getTeamID());
 					cboTeam.setSelectedItem(nameTeam);
 				}

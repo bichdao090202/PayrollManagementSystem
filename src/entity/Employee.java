@@ -13,13 +13,14 @@ public class Employee {
 	private String bankName;
 	private String accountNumber;
 	private String beneficiany; // tên người thụ hưởng
-	
+	private String position;
+
 	public Employee() {
 		super();
 	}
-	
-	public Employee(String name, boolean gender, Date birthday, String address, String phone,
-			String bankName, String accountNumber, String beneficiany) {
+
+	public Employee(String name, boolean gender, Date birthday, String address, String phone, String bankName,
+			String accountNumber, String beneficiany, String position) {
 		super();
 		this.name = name;
 		this.gender = gender;
@@ -29,10 +30,11 @@ public class Employee {
 		this.bankName = bankName;
 		this.accountNumber = accountNumber;
 		this.beneficiany = beneficiany;
+		this.position = position;
 	}
 
 	public Employee(String employeeID, String name, boolean gender, Date birthday, String address, String phone,
-			String bankName, String accountNumber, String beneficiany) {
+			String bankName, String accountNumber, String beneficiany, String position) {
 		super();
 		this.employeeID = employeeID;
 		this.name = name;
@@ -43,6 +45,7 @@ public class Employee {
 		this.bankName = bankName;
 		this.accountNumber = accountNumber;
 		this.beneficiany = beneficiany;
+		this.position = position;
 	}
 
 	public String getEmployeeID() {
@@ -117,6 +120,14 @@ public class Employee {
 		this.beneficiany = beneficiany;
 	}
 
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
 	@Override
 	public String toString() {
 		return "Employee [employeeID=" + employeeID + ", name=" + name + ", gender=" + gender + ", birthday=" + birthday
@@ -140,6 +151,5 @@ public class Employee {
 		Employee other = (Employee) obj;
 		return Objects.equals(employeeID, other.employeeID);
 	}
-	
-	
+
 }

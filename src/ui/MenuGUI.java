@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import entity.Employee;
+import entity.EmployeeOffice;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -45,9 +46,13 @@ public class MenuGUI extends JFrame {
 	private JPanel pnMenu;
 	private ImageAvatar imageAvatar;
 	private JPanel pnContent;
+	private Employee employee;
+	private String position;
 
 	public MenuGUI(Employee employee) {
-		timesheetGUI = new TimesheetGUI();
+		this.employee = employee;
+		position = employee.getPosition();
+		timesheetGUI = new TimesheetGUI(employee);
 		employeeGUI = new EmployeeGUI();
 		departmentGUI = new DepartmentGUI();
 		productGUI = new ProductGUI();
@@ -69,7 +74,6 @@ public class MenuGUI extends JFrame {
 		content[7] = accountGUI.getUI();
 
 		arraySelectedItem = new boolean[8];
-		arraySelectedItem[0] = true;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 730);
@@ -128,12 +132,26 @@ public class MenuGUI extends JFrame {
 		menu[0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[0].setBackground(COLOR_HOVER);
+				if (!position.equals("Tổ Trưởng") && !position.equals("Quản Đốc")) {
+					if (!((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						menu[0].setBackground(COLOR_HOVER);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					menu[0].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(0);
+				if (!position.equals("Tổ Trưởng") && !position.equals("Quản Đốc")) {
+					if (!((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						hoverOutItem(0);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(0);
+				}
 			}
 
 			@Override
@@ -142,7 +160,6 @@ public class MenuGUI extends JFrame {
 			}
 		});
 		menu[0].setBackground(COLOR);
-		menu[0].setBackground(COLOR_HOVER);
 		menu[0].setSize(new Dimension(100, 100));
 		pnMenu.add(menu[0]);
 		menu[0].setLayout(new BorderLayout(0, 0));
@@ -162,12 +179,26 @@ public class MenuGUI extends JFrame {
 		menu[1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[1].setBackground(COLOR_HOVER);
+				if (!position.equals("Tổ Trưởng") && !position.equals("Quản Đốc")) {
+					if (!((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						menu[1].setBackground(COLOR_HOVER);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					menu[1].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(1);
+				if (!position.equals("Tổ Trưởng") && !position.equals("Quản Đốc")) {
+					if (!((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						hoverOutItem(1);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(1);
+				}
 			}
 
 			@Override
@@ -195,12 +226,22 @@ public class MenuGUI extends JFrame {
 		menu[2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[2].setBackground(COLOR_HOVER);
+				if (position.equals("Quản Đốc")) {
+					menu[2].setBackground(COLOR_HOVER);
+				}
+				if (position.equals("Quản Trị")) {
+					menu[2].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(2);
+				if (position.equals("Quản Đốc")) {
+					hoverOutItem(2);
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(2);
+				}
 			}
 
 			public void mouseClicked(MouseEvent e) {
@@ -227,12 +268,22 @@ public class MenuGUI extends JFrame {
 		menu[3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[3].setBackground(COLOR_HOVER);
+				if (position.equals("Tổ Trưởng")) {
+					menu[3].setBackground(COLOR_HOVER);
+				}
+				if (position.equals("Quản Trị")) {
+					menu[3].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(3);
+				if (position.equals("Tổ Trưởng")) {
+					hoverOutItem(3);
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(3);
+				}
 			}
 
 			public void mouseClicked(MouseEvent e) {
@@ -259,12 +310,29 @@ public class MenuGUI extends JFrame {
 		menu[4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[4].setBackground(COLOR_HOVER);
+				if (position.equals("Tổ Trưởng")) {
+					menu[4].setBackground(COLOR_HOVER);
+				}
+				if ((position.equals("Nhân Viên") || position.equals("Trưởng Phòng")) && ((EmployeeOffice) employee).getDepartmentID().equals("PB01")) {
+					menu[4].setBackground(COLOR_HOVER);
+				}
+				if (position.equals("Quản Trị")) {
+					menu[4].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(4);
+				if (position.equals("Tổ Trưởng")) {
+					hoverOutItem(4);
+				}
+				if ((position.equals("Nhân Viên") || position.equals("Trưởng Phòng"))
+						&& ((EmployeeOffice) employee).getDepartmentID().equals("PB01")) {
+					hoverOutItem(4);
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(4);
+				}
 			}
 
 			public void mouseClicked(MouseEvent e) {
@@ -291,12 +359,22 @@ public class MenuGUI extends JFrame {
 		menu[5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[5].setBackground(COLOR_HOVER);
+				if (position.equals("Quản Đốc")) {
+					menu[5].setBackground(COLOR_HOVER);
+				}
+				if (position.equals("Quản Trị")) {
+					menu[5].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(5);
+				if (position.equals("Quản Đốc")) {
+					hoverOutItem(5);
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(5);
+				}
 			}
 
 			public void mouseClicked(MouseEvent e) {
@@ -323,12 +401,26 @@ public class MenuGUI extends JFrame {
 		menu[6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[6].setBackground(COLOR_HOVER);
+				if (position.equals("Nhân Viên") || position.equals("Trưởng Phòng")) {
+					if (((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						menu[6].setBackground(COLOR_HOVER);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					menu[6].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(6);
+				if (position.equals("Nhân Viên") || position.equals("Trưởng Phòng")) {
+					if (((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						hoverOutItem(6);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(6);
+				}
 			}
 
 			public void mouseClicked(MouseEvent e) {
@@ -355,12 +447,26 @@ public class MenuGUI extends JFrame {
 		menu[7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu[7].setBackground(COLOR_HOVER);
+				if (!position.equals("Tổ Trưởng") && !position.equals("Quản Đốc")) {
+					if (!((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						menu[7].setBackground(COLOR_HOVER);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					menu[7].setBackground(COLOR_HOVER);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				hoverOutItem(7);
+				if (!position.equals("Tổ Trưởng") && !position.equals("Quản Đốc")) {
+					if (!((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						hoverOutItem(7);
+					}
+				}
+				if (position.equals("Quản Trị")) {
+					hoverOutItem(7);
+				}
 			}
 
 			public void mouseClicked(MouseEvent e) {
@@ -415,8 +521,30 @@ public class MenuGUI extends JFrame {
 		pnContainer.add(pnContent);
 		pnContent.setLayout(new BorderLayout(0, 0));
 
-		pnContent.add(content[0]);
-		content[0].setVisible(true);
+		if (position.equals("Tổ Trưởng")) {
+			pnContent.add(content[3]);
+			startHover(3);
+		} else if (position.equals("Quản Đốc")) {
+			pnContent.add(content[2]);
+			startHover(2);
+		} else if (position.equals("Nhân Viên") || position.equals("Trưởng Phòng")) {
+			if (((EmployeeOffice) employee).getDepartmentID().equals("PB01")) {
+				pnContent.add(content[0]);
+				startHover(0);
+			} else {
+				pnContent.add(content[6]);
+				startHover(6);
+			}
+		} else if (position.equals("Quản Trị")) {
+			pnContent.add(content[0]);
+			startHover(0);
+		}
+
+	}
+	
+	public void startHover(int index) {
+		arraySelectedItem[index] = true;
+		menu[index].setBackground(COLOR_HOVER);
 	}
 
 	public void clickShowMenu() {
@@ -440,19 +568,44 @@ public class MenuGUI extends JFrame {
 			showMenu = false;
 		}
 		for (int j = 0; j < arraySelectedItem.length; j++) {
-			if (index != j) {
-				arraySelectedItem[j] = false;
-				menu[j].setBackground(COLOR);
+			if (position.equals("Quản Đốc")) {
+				if (index == 2 || index == 5) {
+					showContent(index, j);
+				}
+			} else if (position.equals("Tổ Trưởng")) {
+				if (index == 3 || index == 4) {
+					showContent(index, j);
+				}
+			} else if (position.equals("Nhân Viên") || position.equals("Trưởng Phòng")) {
+				if (index == 0 || index == 1 || index == 4 || index == 7) {
+					if (((EmployeeOffice) employee).getDepartmentID().equals("PB01")) {
+						showContent(index, j);
+					}
+				}
+				if (index == 6) {
+					if (((EmployeeOffice) employee).getDepartmentID().equals("PB02")) {
+						showContent(index, j);
+					}
+				}
 			} else {
-				arraySelectedItem[j] = true;
-				menu[j].setBackground(COLOR_HOVER);
-				pnContent.removeAll();
-				pnContent.add(content[j]);
-				content[j].setVisible(true);
-				pnContent.repaint();
-				pnContent.revalidate();
-				pnMenu.repaint();
+				showContent(index, j);
 			}
+		}
+	}
+
+	public void showContent(int index, int j) {
+		if (index != j) {
+			arraySelectedItem[j] = false;
+			menu[j].setBackground(COLOR);
+		} else {
+			arraySelectedItem[j] = true;
+			menu[j].setBackground(COLOR_HOVER);
+			pnContent.removeAll();
+			pnContent.add(content[j]);
+			content[j].setVisible(true);
+			pnContent.repaint();
+			pnContent.revalidate();
+			pnMenu.repaint();
 		}
 	}
 
