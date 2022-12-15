@@ -501,13 +501,17 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAdd) {
 			TimesheetOffice timesheet = createTimesheetOfficeFromInput();
-			if (timesheetDAO.addTimesheet(timesheet)) {
-				loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
-				JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo", JOptionPane.NO_OPTION,
-						null);
-			} else {
-				JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
-						JOptionPane.NO_OPTION, null);
+			if (JOptionPane.showConfirmDialog(this,
+					"Bạn có chắn chắn muốn thêm chấm công cho nhân viên này không?", "Thông báo",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				if (timesheetDAO.addTimesheet(timesheet)) {
+					loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
+					JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo", JOptionPane.NO_OPTION,
+							null);
+				} else {
+					JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
+							JOptionPane.NO_OPTION, null);
+				}
 			}
 		}
 		if (e.getSource() == btnUpdate) {
@@ -520,17 +524,21 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 					TimesheetOffice timesheets = createTimesheetOfficeFromInput();
 					String employeeID = dtmEmp.getValueAt(rowSelected, 0).toString().substring(0, 9);
 					Date date = sdfDate.parse(dtmEmp.getValueAt(rowSelected, 1).toString());
-					if (timesheets.getDate().compareTo(date) != 0 & timesheets.getEmployeeID() != employeeID) {
+					if (timesheets.getDate().compareTo(date) != 0 || timesheets.getEmployeeID() != employeeID) {
 						JOptionPane.showMessageDialog(this, "Không được cập nhật nhân viên và ngày chấm công",
 								"Thông báo", JOptionPane.NO_OPTION, null);
 					} else {
-						if (timesheetDAO.updateTimesheet(timesheets)) {
-							loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
-							JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",
-									JOptionPane.NO_OPTION, null);
-						} else {
-							JOptionPane.showMessageDialog(this, "Cập nhật chấm công không thành công.", "Thông báo",
-									JOptionPane.NO_OPTION, null);
+						if (JOptionPane.showConfirmDialog(this,
+								"Bạn có chắn chắn muốn cập nhật chấm công cho nhân viên " + employeeID + " không?", "Thông báo",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+							if (timesheetDAO.updateTimesheet(timesheets)) {
+								loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
+								JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",
+										JOptionPane.NO_OPTION, null);
+							} else {
+								JOptionPane.showMessageDialog(this, "Cập nhật chấm công không thành công.", "Thông báo",
+										JOptionPane.NO_OPTION, null);
+							}
 						}
 					}
 				} catch (Exception e1) {
@@ -547,13 +555,17 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 				try {
 					String employeeID = dtmEmp.getValueAt(rowSelected, 0).toString().substring(0, 9);
 					Date date = sdfDate.parse(dtmEmp.getValueAt(rowSelected, 1).toString());
-					if (timesheetDAO.deleteTimesheet(employeeID, date)) {
-						loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
-						JOptionPane.showMessageDialog(this, "Xóa chấm công thành công.", "Thông báo",
-								JOptionPane.NO_OPTION, null);
-					} else {
-						JOptionPane.showMessageDialog(this, "Xóa chấm công không thành công.", "Thông báo",
-								JOptionPane.NO_OPTION, null);
+					if (JOptionPane.showConfirmDialog(this,
+							"Bạn có chắn chắn muốn xóa chấm công cho nhân viên " + employeeID + " không?", "Thông báo",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						if (timesheetDAO.deleteTimesheet(employeeID, date)) {
+							loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
+							JOptionPane.showMessageDialog(this, "Xóa chấm công thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
+						} else {
+							JOptionPane.showMessageDialog(this, "Xóa chấm công không thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
+						}
 					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
