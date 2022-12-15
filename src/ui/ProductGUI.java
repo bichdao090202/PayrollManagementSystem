@@ -48,6 +48,10 @@ import javax.swing.ImageIcon;
 //import javax.swing.JScrollBar;
 
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 
 import org.jfree.chart.ChartFactory; 
 import org.jfree.chart.JFreeChart;
@@ -98,6 +102,8 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	private int rowCountTblProcedure = 0;
 	private String prevState;
 	private JLabel lblChart;
+	private String linkPresent = "";
+	private String linkPresentOfProduct = "";
 
 	public ProductGUI() {
 		getContentPane().setBackground(Color.WHITE);
@@ -670,8 +676,8 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
         
         txtSearchProduct.getDocument().addDocumentListener(enventChangeSearchProduct);
         txtSearchProcedure.getDocument().addDocumentListener(enventChangeSearchProdure);
-		chartTopFiveProduct(listTopProduct);
-        
+		chartTopFiveProduct(listTopProduct, "statistical/TopFiveProductInMonth_pie_Chart3D.jpeg");
+       
 		btnClean.addActionListener(this);
 		btnChange.addActionListener(this);
 		btnInsertProcedure.addActionListener(this);
@@ -911,7 +917,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	
 	// Top 5 sản phẩm có nhiều hợp đồng nhất trong tháng bằng biểu đồ hình tròn
 	@SuppressWarnings("removal")
-	public void chartTopFiveProduct(List<TopProduct> listProduct) {
+	public void chartTopFiveProduct(List<TopProduct> listProduct, String linkPresent) {
 		DefaultPieDataset dataset = new DefaultPieDataset( );
 		for(TopProduct pr : listProduct) {
 			dataset.setValue( pr.getProductID() , new Double( pr.getQuantityDetail() ) ); 
@@ -929,8 +935,8 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	      plot.setForegroundAlpha( 0.60f );         
 	      plot.setLabelGenerator(labelGenerator);
 	      int width = 560;   /* Width of the image */             
-	      int height = 230;  /* Height of the image */                             
-	      File pieChart3D = new File( "statistical/TopFiveProductInMonth_pie_Chart3D.jpeg" );                      
+	      int height = 230;  /* Height of the image */  
+	      File pieChart3D = new File( linkPresent );                      
 	      try {
 			ChartUtilities.saveChartAsJPEG( pieChart3D , chart , width , height );
 		} catch (IOException e) {
@@ -941,7 +947,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	
 	// Thống kê danh sách hợp đồng của sản phẩm bằng biểu đồ tròn
 	@SuppressWarnings("removal")
-	public void chartDetailOfProductInMonth(List<entity.DetailProduction> listDetail) {
+	public void chartDetailOfProductInMonth(List<entity.DetailProduction> listDetail, String link) {
 		String idProduct = dtmProduct.getValueAt(tblListProduct.getSelectedRow(), 0).toString();
 		int quantityProduction = 0;
 		int quantityStopProduction = 0;
@@ -980,13 +986,52 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	      plot.setLabelGenerator(labelGenerator);
 	      int width = 560;   /* Width of the image */             
 	      int height = 230;  /* Height of the image */                             
-	      File pieChart3D = new File( "statistical/DetailProductInMonthOf" + idProduct + "_pie_Chart3D.jpeg" );                      
+	      File pieChart3D = new File( link );                      
 	      try {
 			ChartUtilities.saveChartAsJPEG( pieChart3D , chart , width , height );
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	// Xóa link file
+	public void deleteFile(String file) {
+		try {
+            Files.deleteIfExists(
+                Paths.get(file));
+        }
+        catch (NoSuchFileException e) {
+        	
+        }
+        catch (DirectoryNotEmptyException e) {
+
+        }
+        catch (IOException e) {
+
+        }
+	}
+	
+	// Tìm link File top 5 sản phẩm
+	public String searchlinkFile() {
+		for(int i = 1; i <= 10; i++) {
+			File pieChart3D = new File("statistical/TopFiveProductInMonth_pie_Chart3D" + i + ".jpeg");
+			if(pieChart3D.exists()) {
+				 return "statistical/TopFiveProductInMonth_pie_Chart3D" + i + ".jpeg";
+			}
+		}
+		return "";
+	}
+	
+	// Tìm link file của sản phẩm 
+	public String searchlinkFileOfProduct(String idProduct) {
+		for(int i = 1; i <= 10; i++) {
+			File pieChart3D = new File("statistical/DetailProductInMonthOf_" + idProduct + "_pie_Chart3D" + i + ".jpeg");
+			if(pieChart3D.exists()) {
+				 return "statistical/DetailProductInMonthOf_" + idProduct + "_pie_Chart3D" + i + ".jpeg";
+			}
+		}
+		return "";
 	}
 
 	// Main
@@ -1029,9 +1074,15 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 				cleanTextFieldProcedure();
 				txtSearchProcedure.setText("");
 			}
+			
 			List<entity.DetailProduction> listDetailInMonth = detailDAO.getListDetailbyIdProductInMonth(idProduct);
-			chartDetailOfProductInMonth(listDetailInMonth);
-			lblChart.setIcon(new ImageIcon("statistical/DetailProductInMonthOf" + idProduct + "_pie_Chart3D.jpeg"));
+			linkPresentOfProduct = searchlinkFileOfProduct(idProduct);
+			deleteFile(linkPresentOfProduct);
+			int randomInt = (int)(Math.random()*(10-1+1)+1);
+			linkPresentOfProduct = "statistical/DetailProductInMonthOf_" + idProduct + "_pie_Chart3D" + randomInt + ".jpeg";
+			chartDetailOfProductInMonth(listDetailInMonth, linkPresentOfProduct);
+			lblChart.setIcon(new ImageIcon(linkPresentOfProduct));
+			
 		} else if (o.equals(tblListProcedure)) {
 			int rowProcedureSelected = tblListProcedure.getSelectedRow();
 			int rowProductSelected = tblListProduct.getSelectedRow();
@@ -1091,11 +1142,18 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if (o.equals(btnClean)) {
+		if (o.equals(btnClean)) { 
 			cleanProduct();
 			randomIdProduct();
 			spnOrder.setValue(1);
-			lblChart.setIcon(new ImageIcon("statistical/TopFiveProductInMonth_pie_Chart3D.jpeg"));
+			
+			linkPresent = searchlinkFile();
+			deleteFile(linkPresent);
+			int randomNumbber = (int)(Math.random()*(10-1+1)+1);
+			linkPresent = "statistical/TopFiveProductInMonth_pie_Chart3D" + randomNumbber + ".jpeg";
+			chartTopFiveProduct(Dao_Product.getTopFiveProduct(), linkPresent);
+			lblChart.setIcon(new ImageIcon(linkPresent));
+			
 		} else if (o.equals(btnChange)) {
 			int rowSelected = tblProcedure.getSelectedRow();
 			if (rowSelected >= 0) {
