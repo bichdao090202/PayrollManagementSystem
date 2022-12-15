@@ -348,7 +348,7 @@ public class WorkerGUI extends JFrame implements ActionListener {
 					} else {
 						cboGender.setSelectedIndex(1);
 					}
-					
+
 					txtPhone.setText(emp.getPhone().trim());
 					txtAddress.setText(emp.getAddress().trim());
 					txtAccountNumber.setText(emp.getAccountNumber().trim());
@@ -356,7 +356,7 @@ public class WorkerGUI extends JFrame implements ActionListener {
 					txtSpeciality.setText(((Worker) emp).getSpeciality().trim());
 					String nameFactory = factoryDAO.getNameFactoryByTeamID(((Worker) emp).getTeamID());
 					cboFactory.setSelectedItem(nameFactory);
-					cboPosition.setSelectedItem(((Worker)emp).getPosition());
+					cboPosition.setSelectedItem(((Worker) emp).getPosition());
 					String nameTeam = teamDAO.getNameTeamByID(((Worker) emp).getTeamID());
 					cboTeam.setSelectedItem(nameTeam);
 				}
@@ -447,14 +447,14 @@ public class WorkerGUI extends JFrame implements ActionListener {
 				showMessage(txtBeneficiany,
 						"Tên người thụ hưởng gồm một hoặc nhiều từ được ngăn cách nhau bởi khoảng trắng. Chữ cái đầu mỗi từ được viết hoa");
 				return false;
-			}  else if (!accountNumber.matches("^[0-9]{9,14}$")) {
+			} else if (!accountNumber.matches("^[0-9]{9,14}$")) {
 				showMessage(txtAccountNumber, "Số tài khoản ngân hàng từ 9 đến 14 chữ số.");
 				return false;
-			} else if (!speciality.matches("^[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ][A-Za-z\sàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ]+$")) {
+			} else if (!speciality.matches(
+					"^[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹ][A-Za-z\sàáâãèéêìíòóôõùúăđĩũơàáâãèéêìíòóôõùúăđĩũơưăạảấầẩẫậắằẳẵặẹẻẽềềểưăạảấầẩẫậắằẳẵặẹẻẽềềểễệỉịọỏốồổỗộớờởỡợụủứừễếệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵýỷỹửữựỳỵỷỹÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỄẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸỬỮỰỲỴỶỸ]+$")) {
 				showMessage(txtSpeciality, "Chuyên môn chỉ chứa chữ cái");
 				return false;
-			}
-			else {
+			} else {
 				return true;
 			}
 		}
@@ -540,16 +540,26 @@ public class WorkerGUI extends JFrame implements ActionListener {
 			int rowSelected = tblWorker.getSelectedRow();
 			if (rowSelected >= 0) {
 				String employeeID = tblWorker.getValueAt(rowSelected, 0).toString();
-				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn xóa nhân viên " + employeeID + " không?",
-						"Thông báo xóa", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (workerDAO.deleteEmployee(employeeID)) {
-						loadDataToTable(workerDAO.getAllWorker());
-						JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " thành công.",
-								"Thông báo xóa", JOptionPane.NO_OPTION, null);
-					} else {
-						JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " không thành công.",
-								"Thông báo xóa", JOptionPane.NO_OPTION, null);
+				if (!workerDAO.checkDelete_Account(employeeID)) {
+					JOptionPane.showMessageDialog(this,
+							"Nhân viên " + employeeID + " đã có tài khoản trong hệ thống không thể xóa!!!",
+							"Thông báo xóa", JOptionPane.NO_OPTION, null);
+				} else if (!workerDAO.checkDelete_Assignment(employeeID)) {
+					JOptionPane.showMessageDialog(this,
+							"Nhân viên " + employeeID + " đã được phân công không thể xóa!!!", "Thông báo xóa",
+							JOptionPane.NO_OPTION, null);
+				} else {
+					if (JOptionPane.showConfirmDialog(this,
+							"Bạn có chắn chắn muốn xóa nhân viên " + employeeID + " không?", "Thông báo xóa",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						if (workerDAO.deleteEmployee(employeeID)) {
+							loadDataToTable(workerDAO.getAllWorker());
+							JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " thành công.",
+									"Thông báo xóa", JOptionPane.NO_OPTION, null);
+						} else {
+							JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " không thành công.",
+									"Thông báo xóa", JOptionPane.NO_OPTION, null);
+						}
 					}
 				}
 			} else {

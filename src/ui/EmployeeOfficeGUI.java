@@ -533,16 +533,26 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 			int rowSelected = tblEmp.getSelectedRow();
 			if (rowSelected >= 0) {
 				String employeeID = tblEmp.getValueAt(rowSelected, 0).toString();
-				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn xóa nhân viên " + employeeID + " không?",
-						"Thông báo xóa", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (employeeOfficeDAO.deleteEmployee(employeeID)) {
-						loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
-						JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " thành công.",
-								"Thông báo xóa", JOptionPane.NO_OPTION, null);
-					} else {
-						JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " không thành công.",
-								"Thông báo xóa", JOptionPane.NO_OPTION, null);
+				if (!employeeOfficeDAO.checkDelete(employeeID)) {
+					JOptionPane.showMessageDialog(this, "Nhân viên " + employeeID + " đã có chấm công không thể xóa!!!", "Thông báo xóa",
+							JOptionPane.NO_OPTION, null);
+				}
+				else if (!employeeOfficeDAO.checkDelete_Account(employeeID)) {
+					JOptionPane.showMessageDialog(this, "Nhân viên " + employeeID + " đã có tài khoản trong hệ thống không thể xóa!!!", "Thông báo xóa",
+							JOptionPane.NO_OPTION, null);
+				}
+				else {
+					if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn xóa nhân viên " + employeeID + " không?",
+							"Thông báo xóa", JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						if (employeeOfficeDAO.deleteEmployee(employeeID)) {
+							loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
+							JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " thành công.",
+									"Thông báo xóa", JOptionPane.NO_OPTION, null);
+						} else {
+							JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " không thành công.",
+									"Thông báo xóa", JOptionPane.NO_OPTION, null);
+						}
 					}
 				}
 			} else {

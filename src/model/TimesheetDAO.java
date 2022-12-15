@@ -36,6 +36,23 @@ public class TimesheetDAO {
 		return listTimesheet;
 	}
 	
+	public List<TimesheetOffice> getAllTimesheetCurrent() {
+		List<TimesheetOffice> listTimesheet = new ArrayList<TimesheetOffice>();
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGHANHCHINH WHERE NGAYCHAMCONG = CAST(GETDATE() AS Date)");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				TimesheetOffice timesheet = new TimesheetOffice(
+						rs.getDate("NgayChamCong"), rs.getTime("CheckInSang"), rs.getTime("CheckOutSang"),
+						rs.getTime("CheckInChieu"), rs.getTime("CheckOutChieu"), rs.getString("NhanVien"));
+				listTimesheet.add(timesheet);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listTimesheet;
+	}
+	
 	public boolean addTimesheet(TimesheetOffice timesheetsOffice) {
 		try {
 			PreparedStatement stmt = null;

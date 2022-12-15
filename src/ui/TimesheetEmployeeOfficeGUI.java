@@ -444,7 +444,7 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 		tblEmp.getTableHeader().setForeground(Color.WHITE);
 		scrollTable.setViewportView(tblEmp);
 
-		loadDataToTable(timesheetDAO.getAllTimesheet());
+		loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
 		return contentPane;
 	}
 
@@ -502,7 +502,7 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 		if (e.getSource() == btnAdd) {
 			TimesheetOffice timesheet = createTimesheetOfficeFromInput();
 			if (timesheetDAO.addTimesheet(timesheet)) {
-				loadDataToTable(timesheetDAO.getAllTimesheet());
+				loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
 				JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo", JOptionPane.NO_OPTION,
 						null);
 			} else {
@@ -525,7 +525,7 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 								"Thông báo", JOptionPane.NO_OPTION, null);
 					} else {
 						if (timesheetDAO.updateTimesheet(timesheets)) {
-							loadDataToTable(timesheetDAO.getAllTimesheet());
+							loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
 							JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",
 									JOptionPane.NO_OPTION, null);
 						} else {
@@ -548,7 +548,7 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 					String employeeID = dtmEmp.getValueAt(rowSelected, 0).toString().substring(0, 9);
 					Date date = sdfDate.parse(dtmEmp.getValueAt(rowSelected, 1).toString());
 					if (timesheetDAO.deleteTimesheet(employeeID, date)) {
-						loadDataToTable(timesheetDAO.getAllTimesheet());
+						loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
 						JOptionPane.showMessageDialog(this, "Xóa chấm công thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);
 					} else {
