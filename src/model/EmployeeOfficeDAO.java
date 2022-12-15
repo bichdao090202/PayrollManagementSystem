@@ -16,10 +16,11 @@ public class EmployeeOfficeDAO {
 	public EmployeeOfficeDAO() {
 		connection = ConnectDB.getInstance().getConnection();
 	}
-	
+
 	public boolean checkDelete(String empID) {
 		try {
-			PreparedStatement stmt = connection.prepareStatement("SELECT TOP 1 * FROM CHAMCONGHANHCHINH WHERE MaNhanVien = ?");
+			PreparedStatement stmt = connection
+					.prepareStatement("SELECT TOP 1 * FROM CHAMCONGHANHCHINH WHERE MaNhanVien = ?");
 			stmt.setString(1, empID);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -30,7 +31,7 @@ public class EmployeeOfficeDAO {
 		}
 		return true;
 	}
-	
+
 	public boolean checkDelete_Account(String empID) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement("SELECT TOP 1 * FROM TaiKhoan WHERE TenDangNhap = ?");
@@ -48,7 +49,8 @@ public class EmployeeOfficeDAO {
 	public List<Employee> getAllEmployeeOffice() {
 		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM NHANVIENHANHCHINH");
+			PreparedStatement stmt = connection
+					.prepareStatement("SELECT * FROM NHANVIENHANHCHINH WHERE MaNhanVien != 'QUANTRI'");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Employee emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
@@ -166,8 +168,8 @@ public class EmployeeOfficeDAO {
 	public List<String> getAllName() {
 		List<String> listEmp = new ArrayList<String>();
 		try {
-			PreparedStatement stmt = connection
-					.prepareStatement("SELECT MaNhanVien, TenNhanVien  FROM NHANVIENHANHCHINH");
+			PreparedStatement stmt = connection.prepareStatement(
+					"SELECT MaNhanVien, TenNhanVien  FROM NHANVIENHANHCHINH WHERE MaNhanVien != 'QUANTRI'");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				listEmp.add(rs.getString("MaNhanVien") + " - " + rs.getString("TenNhanVien"));
@@ -181,8 +183,8 @@ public class EmployeeOfficeDAO {
 	public List<Employee> searchEmployeeByEmployeeID(String empID) {
 		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
-			PreparedStatement stmt = connection
-					.prepareStatement("SELECT * FROM NHANVIENHANHCHINH WHERE MaNhanVien LIKE ?");
+			PreparedStatement stmt = connection.prepareStatement(
+					"SELECT * FROM NHANVIENHANHCHINH WHERE MaNhanVien LIKE ? AND MaNhanVien != 'QUANTRI'");
 			stmt.setString(1, "%" + empID + "%");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -197,12 +199,12 @@ public class EmployeeOfficeDAO {
 		}
 		return listEmp;
 	}
-	
+
 	public List<Employee> searchEmployeeByName(String name) {
 		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
-			PreparedStatement stmt = connection
-					.prepareStatement("SELECT * FROM NHANVIENHANHCHINH WHERE TenNhanVien LIKE ?");
+			PreparedStatement stmt = connection.prepareStatement(
+					"SELECT * FROM NHANVIENHANHCHINH WHERE TenNhanVien LIKE ?  AND MaNhanVien != 'QUANTRI'");
 			stmt.setString(1, "%" + name + "%");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
