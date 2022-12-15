@@ -5,11 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import entity.Employee;
-import entity.EmployeeOffice;
 import entity.Worker;
 
 public class WorkerDAO {
@@ -215,5 +213,33 @@ public class WorkerDAO {
 			e.printStackTrace();
 		}
 		return listEmp;
+	}
+	
+	public boolean checkDelete_Account(String empID) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT TOP 1 * FROM TaiKhoan WHERE TenDangNhap = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	public boolean checkDelete_Assignment(String empID) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT TOP 1 * FROM PhanCong WHERE MaNhanVien = ?");
+			stmt.setString(1, empID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 }
