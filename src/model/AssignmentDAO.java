@@ -279,5 +279,20 @@ public class AssignmentDAO {
 		}
 		return false;
 	}
+	
+	public int getQuantityAssignment(String idWorker) {
+		int num = 0;
+		try {
+			PreparedStatement stmt = connection.prepareStatement("select number = count(MaPhanCong) from PhanCong WHERE EXISTS (select * from NhanVienSanXuat where NhanVienSanXuat.MaNhanVien = PhanCong.MaNhanVien AND NhanVienSanXuat.MaNhanVien = ?) and EXISTS (select * from  SanPham sp join HopDongSanXuat ctsx on sp.MaSanPham = ctsx.MaSanPham where ctsx.TinhTrang = N'Sản Xuất' and ctsx.MaSanPham = SUBSTRING(PhanCong.MaQuyTrinh,1,5))");
+			stmt.setString(1, idWorker);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				num = rs.getInt("number");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return num;
+	}
 
 }
