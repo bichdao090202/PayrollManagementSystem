@@ -293,18 +293,18 @@ public class DepartmentGUI extends JFrame implements ActionListener{
 				return;
 			}
 			depDAO.addDepartment(newDep);
-//			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phòng ban này không?", "Thông báo",
-//					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-//				if (depDAO.addDepartment(newDep) == false) {
-//					JOptionPane.showMessageDialog(this, "Thêm phòng ban thất bại, vui lòng thử lại sau");
-//					return;
-//				}
-//				while (index + num <= listDep.size()) {
-//					index += num;
-//				}
-//				refresh();
-//				JOptionPane.showMessageDialog(this, "Thêm phòng ban thành công");
-//			}	
+			if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm phòng ban này không?", "Thông báo",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				if (depDAO.addDepartment(newDep) == false) {
+					JOptionPane.showMessageDialog(this, "Thêm phòng ban thất bại, vui lòng thử lại sau");
+					return;
+				}
+				while (index + num <= listDep.size()) {
+					index += num;
+				}
+				refresh();
+				JOptionPane.showMessageDialog(this, "Thêm phòng ban thành công");
+			}	
 		}
 		if (o.equals(btnRefresh))
 			refresh();
