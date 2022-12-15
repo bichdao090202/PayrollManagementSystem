@@ -126,13 +126,11 @@ public class AccountDAO {
 	public List<Worker> getListAccountWorker() {
 		List<Worker> list = new ArrayList<Worker>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("select * from NhanVienSanXuat  ORDER BY MaTo ASC");
+			PreparedStatement stmt = connection.prepareStatement("select * from NhanVienSanXuat WHERE CHUCVU != N'Công Nhân'  ORDER BY MaTo ASC");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				Worker emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
-						rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
-						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"),
-						rs.getString("ChuyenMon"), rs.getString("MaTo"));
+				Worker emp = new Worker(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"), rs.getBoolean("GioiTinh"), rs.getDate("NgaySinh"), rs.getString("DiaChi"), rs.getString("SDT"),
+						rs.getString("TenNganHang"), rs.getString("SoTaiKhoan"), rs.getString("TenNguoiThuHuong"), rs.getString("ChuyenMon"), rs.getString("MaTo"), rs.getString("ChucVu"));
 				list.add(emp);
 			}
 		} catch (Exception e) {
