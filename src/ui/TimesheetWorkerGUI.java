@@ -34,15 +34,19 @@ import com.toedter.calendar.JDateChooser;
 import com.toedter.components.JSpinField;
 
 import custom_field.JTextFieldHint;
+import entity.Employee;
 import entity.TimesheetFactory;
+import entity.Worker;
 //import model.TimesheetDAO;
 import model.TimesheetWorkerDAO;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.ListSelectionModel;
 
 public class TimesheetWorkerGUI extends JFrame implements ActionListener {
-	public TimesheetWorkerGUI() {
-		getUI();
+	private Employee employee;
+	public TimesheetWorkerGUI(Employee employee) {
+		this.employee = employee;
+//		getUI();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -63,19 +67,20 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 	private JSpinField spinAmountCompleted;
 	private JTextField txtWorker, txtProduct, txtProduce, txtSearch;
 	private JDateChooser dateTimesheet, dateSearch;
+	private String teamID = null;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TimesheetWorkerGUI frame = new TimesheetWorkerGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					TimesheetWorkerGUI frame = new TimesheetWorkerGUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	public Component getUI() {
 
@@ -332,9 +337,14 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 		btnSearch.setFocusable(false);
 		btnSearch.addActionListener(this);
 		pnSearch.add(btnSearch, "cell 2 0");
-
+		try {
+			teamID = ((Worker) employee).getTeamID();
+		} catch (Exception e) {
+			teamID = null;
+		}
+		
 		loadDateToTableAssignment();
-		loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
+		loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheetByTeam(teamID));
 		return contentPane;
 	}
 
@@ -348,7 +358,12 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 			}
 		};
 		tblAssignment.setModel(dtmAssignment);
-		List<String> listAssignment = timsheetWorkerDAO.getAllAssignment();
+		List<String> listAssignment = null;
+		if (teamID == null) {
+			listAssignment = timsheetWorkerDAO.getAllAssignment();
+		}else {
+			listAssignment = timsheetWorkerDAO.getAllAssignmentByTeam(teamID);
+		}
 		for (String assignment : listAssignment) {
 			dtmAssignment.addRow(assignment.split(";"));
 		}
@@ -399,7 +414,7 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 						"Bạn có chắn chắn muốn thêm chấm công cho nhân viên " + emp + " không?", "Thông báo",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 					if (timsheetWorkerDAO.addTimesheetsFactory(timesheetsFactory)) {
-						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
+						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheetByTeam(teamID));
 						loadDateToTableAssignment();
 						JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);
@@ -422,7 +437,7 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 						"Bạn có chắn chắn muốn cập nhật chấm công cho nhân viên " + emp + " không?", "Thông báo",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 					if (timsheetWorkerDAO.updateTimesheetsFactory(timesheetsFactory)) {
-						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
+						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheetByTeam(teamID));
 						loadDateToTableAssignment();
 						JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);
@@ -445,7 +460,7 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 						"Bạn có chắn chắn muốn xóa chấm công cho nhân viên " + emp + " không?", "Thông báo",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 					if (timsheetWorkerDAO.deleteTimesheet(timesheetID)) {
-						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheet());
+						loadDateToTableTimesheet(timsheetWorkerDAO.getAllTimesheetByTeam(teamID));
 						loadDateToTableAssignment();
 						JOptionPane.showMessageDialog(this, "Xóa chấm công thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);

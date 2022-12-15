@@ -289,33 +289,24 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 		btnReset.setIcon(new ImageIcon("images\\operations\\refresh.png"));
 		btnReset.setFocusable(false);
 		GroupLayout gl_pnOperations = new GroupLayout(pnOperations);
-		gl_pnOperations.setHorizontalGroup(
-			gl_pnOperations.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnOperations.createSequentialGroup()
-					.addGap(324)
-					.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-					.addGap(51)
-					.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-					.addGap(51)
-					.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-					.addGap(51)
-					.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(323, Short.MAX_VALUE))
-		);
-		gl_pnOperations.setVerticalGroup(
-			gl_pnOperations.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnOperations.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_pnOperations.createParallelGroup(Alignment.TRAILING)
+		gl_pnOperations.setHorizontalGroup(gl_pnOperations.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnOperations.createSequentialGroup().addGap(324)
+						.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE).addGap(51)
+						.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE).addGap(51)
+						.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE).addGap(51)
+						.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(323, Short.MAX_VALUE)));
+		gl_pnOperations.setVerticalGroup(gl_pnOperations.createParallelGroup(Alignment.LEADING).addGroup(gl_pnOperations
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_pnOperations.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_pnOperations.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		gl_pnOperations.linkSize(SwingConstants.VERTICAL, new Component[] {btnAdd, btnUpdate, btnDelete, btnReset});
-		gl_pnOperations.linkSize(SwingConstants.HORIZONTAL, new Component[] {btnAdd, btnUpdate, btnDelete, btnReset});
+				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		gl_pnOperations.linkSize(SwingConstants.VERTICAL, new Component[] { btnAdd, btnUpdate, btnDelete, btnReset });
+		gl_pnOperations.linkSize(SwingConstants.HORIZONTAL, new Component[] { btnAdd, btnUpdate, btnDelete, btnReset });
 		pnOperations.setLayout(gl_pnOperations);
 
 		JPanel pnTable = new JPanel();
@@ -510,20 +501,31 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				String position = (String) cboPosition.getSelectedItem();
 				String departmentID = ((String) cboDept.getSelectedItem()).substring(0, 4);
 				String empID = tblEmp.getValueAt(rowSelected, 0).toString();
+				Employee empOld = employeeOfficeDAO.getEmployeeOffice(empID);
 				Employee employee = new EmployeeOffice(empID, name, gender, birthday, address, phone, bankName,
 						accountNumber, beneficiany, salary, position, departmentID);
-				if (JOptionPane.showConfirmDialog(this,
-						"Bạn có chắn chắn muốn cập nhật lại thông tin của nhân viên này không?", "Thông báo",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (employeeOfficeDAO.updateEmployeeOffice(employee)) {
-						loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
-						JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công.", "Thông báo",
-								JOptionPane.NO_OPTION, null);
-					} else {
-						JOptionPane.showMessageDialog(this, "Cập nhật nhân viên không thành công.", "Thông báo",
-								JOptionPane.NO_OPTION, null);
+				if (empOld.getPosition().equals("Trưởng Phòng") && employee.getPosition().equals("Nhân Viên")) {
+					System.out.println(empID);
+					if (!employeeOfficeDAO.checkDelete_Account(empID)) {
+						JOptionPane.showMessageDialog(this,
+								"Nhân viên này đã có tài khoản trong hệ thống. Vui lòng xóa tài khoản trước khi cập nhật sang vị trị mới.",
+								"Thông báo", JOptionPane.NO_OPTION, null);
+					}
+				} else {
+					if (JOptionPane.showConfirmDialog(this,
+							"Bạn có chắn chắn muốn cập nhật lại thông tin của nhân viên này không?", "Thông báo",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						if (employeeOfficeDAO.updateEmployeeOffice(employee)) {
+							loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
+							JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
+						} else {
+							JOptionPane.showMessageDialog(this, "Cập nhật nhân viên không thành công.", "Thông báo",
+									JOptionPane.NO_OPTION, null);
+						}
 					}
 				}
+
 			} else {
 				JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên muốn cập nhật trước", "Thông báo",
 						JOptionPane.NO_OPTION, null);
@@ -534,17 +536,16 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 			if (rowSelected >= 0) {
 				String employeeID = tblEmp.getValueAt(rowSelected, 0).toString();
 				if (!employeeOfficeDAO.checkDelete(employeeID)) {
-					JOptionPane.showMessageDialog(this, "Nhân viên " + employeeID + " đã có chấm công không thể xóa!!!", "Thông báo xóa",
-							JOptionPane.NO_OPTION, null);
-				}
-				else if (!employeeOfficeDAO.checkDelete_Account(employeeID)) {
-					JOptionPane.showMessageDialog(this, "Nhân viên " + employeeID + " đã có tài khoản trong hệ thống không thể xóa!!!", "Thông báo xóa",
-							JOptionPane.NO_OPTION, null);
-				}
-				else {
-					if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn xóa nhân viên " + employeeID + " không?",
-							"Thông báo xóa", JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					JOptionPane.showMessageDialog(this, "Nhân viên " + employeeID + " đã có chấm công không thể xóa!!!",
+							"Thông báo xóa", JOptionPane.NO_OPTION, null);
+				} else if (!employeeOfficeDAO.checkDelete_Account(employeeID)) {
+					JOptionPane.showMessageDialog(this,
+							"Nhân viên " + employeeID + " đã có tài khoản trong hệ thống không thể xóa!!!",
+							"Thông báo xóa", JOptionPane.NO_OPTION, null);
+				} else {
+					if (JOptionPane.showConfirmDialog(this,
+							"Bạn có chắn chắn muốn xóa nhân viên " + employeeID + " không?", "Thông báo xóa",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 						if (employeeOfficeDAO.deleteEmployee(employeeID)) {
 							loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
 							JOptionPane.showMessageDialog(this, "Xóa nhân viên " + employeeID + " thành công.",

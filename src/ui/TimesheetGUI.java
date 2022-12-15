@@ -49,7 +49,7 @@ public class TimesheetGUI extends JFrame {
 
 	public Component getUI() {
 		timesheetsEmployeeOfficeGUI = new TimesheetEmployeeOfficeGUI();
-		timesheetWorkerGUI = new TimesheetWorkerGUI();
+		timesheetWorkerGUI = new TimesheetWorkerGUI(employee);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setSize(1200, 690);
@@ -66,7 +66,7 @@ public class TimesheetGUI extends JFrame {
 		
 		if (employee.getPosition().equals("Tổ Trưởng")) {
 			tabbedPane.addTab("Nhân viên sản xuất", null, timesheetWorkerGUI.getUI(), null);
-		} else if (employee.getPosition().equals("Nhân Viên")){
+		} else if (employee.getPosition().equals("Nhân Viên") || employee.getPosition().equals("Trưởng Phòng")){
 			tabbedPane.addTab("Nhân viên hành chính", null, timesheetsEmployeeOfficeGUI.getUI(), null);
 		} else {
 			tabbedPane.addTab("Nhân viên hành chính", null, timesheetsEmployeeOfficeGUI.getUI(), null);

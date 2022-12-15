@@ -34,6 +34,25 @@ public class TimesheetWorkerDAO {
 		}
 		return listAssignment;
 	}
+	
+	public List<String> getAllAssignmentByTeam(String teamID) {
+		List<String> listAssignment = new ArrayList<String>();
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM VIEW_PHANCONG WHERE MaTo = ?");
+			stmt.setString(1, teamID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String assignment = rs.getInt("MaPhanCong") + ";" + rs.getString("NhanVien") + ";"
+						+ rs.getString("SanPham") + ";" + rs.getString("QuyTrinh") + ";" + rs.getDate("NgayThamGia")
+						+ ";" + rs.getInt("MaHopDong") + ";" + rs.getInt("SoLuongSanXuat") + ";"
+						+ rs.getInt("SoLuongCanHoanThanh");
+				listAssignment.add(assignment);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listAssignment;
+	}
 
 	public List<String> getAllTimesheet() {
 		List<String> listTimesheets = new ArrayList<String>();
@@ -45,6 +64,29 @@ public class TimesheetWorkerDAO {
 						+ rs.getString("SanPham") + ";" + rs.getString("QuyTrinh") + ";" + rs.getDate("NgayChamCong")
 						+ ";" + rs.getInt("SoLuongThanhPham");
 				listTimesheets.add(timesheet);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listTimesheets;
+	}
+	
+	public List<String> getAllTimesheetByTeam(String teamID) {
+		List<String> listTimesheets = new ArrayList<String>();
+		try {
+			if (teamID == null) {
+				listTimesheets = getAllTimesheet();
+				return listTimesheets;
+			}else {
+				PreparedStatement stmt = connection.prepareStatement("SELECT * FROM VIEW_CHAMCONGSX WHERE MaTo = ?");
+				stmt.setString(1, teamID);
+				ResultSet rs = stmt.executeQuery();
+				while (rs.next()) {
+					String timesheet = rs.getInt("MaChamCong") + ";" + rs.getString("NhanVien") + ";"
+							+ rs.getString("SanPham") + ";" + rs.getString("QuyTrinh") + ";" + rs.getDate("NgayChamCong")
+							+ ";" + rs.getInt("SoLuongThanhPham");
+					listTimesheets.add(timesheet);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

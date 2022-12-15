@@ -517,16 +517,24 @@ public class WorkerGUI extends JFrame implements ActionListener {
 				String empID = tblWorker.getValueAt(rowSelectedWorker, 0).toString();
 				Employee employee = new Worker(empID, name, gender, birthday, address, phone, bankName, accountNumber,
 						beneficiany, speciality, teamID, position);
-				if (validInput(name, birthday, address, phone, accountNumber, beneficiany, speciality)) {
-					if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
-							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-						if (workerDAO.updateWorker(employee)) {
-							loadDataToTable(workerDAO.getAllWorker());
-							JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công.", "Thông báo",
-									JOptionPane.NO_OPTION, null);
-						} else {
-							JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên không thành công.",
-									"Thông báo", JOptionPane.NO_OPTION, null);
+				Employee empOld = workerDAO.getWorker(empID);
+				if (empOld.getPosition().equals("Tổ Trưởng") || empOld.getPosition().equals("Quản Đốc") && employee.getPosition().equals("Công Nhân")) {
+					if (!workerDAO.checkDelete_Account(empID)) {
+						JOptionPane.showMessageDialog(this, "Nhân viên này đã có tài khoản trong hệ thống. Vui lòng xóa tài khoản trước khi chuyển sang vị trí mới",
+								"Thông báo", JOptionPane.NO_OPTION, null);
+					}
+				}else {
+					if (validInput(name, birthday, address, phone, accountNumber, beneficiany, speciality)) {
+						if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+							if (workerDAO.updateWorker(employee)) {
+								loadDataToTable(workerDAO.getAllWorker());
+								JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công.", "Thông báo",
+										JOptionPane.NO_OPTION, null);
+							} else {
+								JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên không thành công.",
+										"Thông báo", JOptionPane.NO_OPTION, null);
+							}
 						}
 					}
 				}
