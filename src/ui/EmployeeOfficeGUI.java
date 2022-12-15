@@ -354,7 +354,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 					}
 					String nameDept = departmentDAO.getNameDepartmentByID(((EmployeeOffice) emp).getDepartmentID());
 					cboDept.setSelectedItem(((EmployeeOffice) emp).getDepartmentID() + " - " + nameDept);
-					cboPosition.setSelectedItem(((EmployeeOffice) emp).getPosition());
+					cboPosition.setSelectedItem(emp.getPosition());
 				}
 			}
 		});

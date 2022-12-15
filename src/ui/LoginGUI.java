@@ -12,6 +12,7 @@ import javax.swing.border.MatteBorder;
 import custom_field.JPasswordFieldHint;
 import custom_field.JTextFieldHint;
 import entity.Employee;
+import entity.EmployeeOffice;
 import entity.PasswordBasedEncryption;
 import model.AccountDAO;
 import model.EmployeeOfficeDAO;
@@ -27,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.HashMap;
 import java.awt.Color;
 import javax.swing.SwingConstants;
@@ -157,7 +159,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		txtPassword.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		pnPassword.add(txtPassword, BorderLayout.CENTER);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnLogin) {
@@ -175,7 +177,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 				if (!account.isEmpty() & PasswordBasedEncryption.verifyUserPassword(pwd, account.get("password hash"),
 						account.get("salt"))) {
 					emp = null;
-					if (username.contains("NVHC")) {
+					if (username.contains("NVHC") || username.equals("QUANTRI")) {
 						emp = employeeOfficeDAO.getEmployeeOffice(username);
 					} else {
 						emp = workerDAO.getWorker(username);

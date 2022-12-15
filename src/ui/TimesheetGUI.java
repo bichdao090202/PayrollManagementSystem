@@ -1,10 +1,14 @@
 package ui;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import entity.Employee;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -21,6 +25,14 @@ public class TimesheetGUI extends JFrame {
 	private JPanel contentPane;
 	private TimesheetEmployeeOfficeGUI timesheetsEmployeeOfficeGUI;
 	private TimesheetWorkerGUI timesheetWorkerGUI;
+	private Employee employee;
+	
+	
+
+	public TimesheetGUI(Employee employee) {
+		super();
+		this.employee = employee;
+	}
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -52,9 +64,14 @@ public class TimesheetGUI extends JFrame {
 		tabbedPane.setBackground(Color.WHITE);
 		contentPane.add(tabbedPane);
 		
-		tabbedPane.addTab("Nhân viên hành chính", null, timesheetsEmployeeOfficeGUI.getUI(), null);
-		tabbedPane.addTab("Nhân viên sản xuất", null, timesheetWorkerGUI.getUI(), null);
-		
+		if (employee.getPosition().equals("Tổ Trưởng")) {
+			tabbedPane.addTab("Nhân viên sản xuất", null, timesheetWorkerGUI.getUI(), null);
+		} else if (employee.getPosition().equals("Nhân Viên")){
+			tabbedPane.addTab("Nhân viên hành chính", null, timesheetsEmployeeOfficeGUI.getUI(), null);
+		} else {
+			tabbedPane.addTab("Nhân viên hành chính", null, timesheetsEmployeeOfficeGUI.getUI(), null);
+			tabbedPane.addTab("Nhân viên sản xuất", null, timesheetWorkerGUI.getUI(), null);
+		}
 		return contentPane;
 	}
 

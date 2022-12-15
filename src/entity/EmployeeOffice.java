@@ -1,11 +1,12 @@
 package entity;
 
 import java.util.Date;
+import java.util.Objects;
 
 //nhân viên hành chính
 public class EmployeeOffice extends Employee {
 	private double salary; // lương theo chức danh
-	private String position;
+//	private String position;
 	private String departmentID;
 
 	public EmployeeOffice() {
@@ -15,25 +16,25 @@ public class EmployeeOffice extends Employee {
 	public EmployeeOffice(String name, boolean gender, Date birthday, String address, String phone,
 			String bankName, String accountNumber, String beneficiany, double salary, String position,
 			String departmentID) {
-		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany, position);
 		this.salary = salary;
-		this.position = position;
+//		this.position = position;
 		this.departmentID = departmentID;
 	}
 
 	public EmployeeOffice(String employeeID, String name, boolean gender, Date birthday, String address, String phone,
 			String bankName, String accountNumber, String beneficiany, double salary, String position,
 			String departmentID) {
-		super(employeeID, name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		super(employeeID, name, gender, birthday, address, phone, bankName, accountNumber, beneficiany, position);
 		this.salary = salary;
-		this.position = position;
+//		this.position = position;
 		this.departmentID = departmentID;
 	}
 
 	public EmployeeOffice(double salary, String position, String departmentID) {
 		super();
 		this.salary = salary;
-		this.position = position;
+//		this.position = position;
 		this.departmentID = departmentID;
 	}
 
@@ -45,13 +46,13 @@ public class EmployeeOffice extends Employee {
 		this.salary = salary;
 	}
 
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
+//	public String getPosition() {
+//		return position;
+//	}
+//
+//	public void setPosition(String position) {
+//		this.position = position;
+//	}
 
 	public String getDepartmentID() {
 		return departmentID;
@@ -69,5 +70,6 @@ public class EmployeeOffice extends Employee {
 			return getEmployeeID() + ";" + getName() + ";Nữ;" + getBirthday() + ";" + getAddress() + ";" + getPhone();
 		}
 	}
+
 
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 public class Worker extends Employee {
 	private String speciality; // chuyên môn
 	private String teamID;
-	private String position;
+//	private String position;
 
 	public Worker() {
 		super();
@@ -13,14 +13,14 @@ public class Worker extends Employee {
 
 	public Worker(String name, boolean gender, Date birthday, String address, String phone, String bankName,
 			String accountNumber, String beneficiany, String speciality, String teamID) {
-		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany, null);
 		this.speciality = speciality;
 		this.teamID = teamID;
 	}
 
 	public Worker(String employeeID, String name, boolean gender, Date birthday, String address, String phone,
 			String bankName, String accountNumber, String beneficiany, String speciality, String teamID) {
-		super(employeeID, name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		super(employeeID, name, gender, birthday, address, phone, bankName, accountNumber, beneficiany, null);
 		this.speciality = speciality;
 		this.teamID = teamID;
 	}
@@ -28,18 +28,18 @@ public class Worker extends Employee {
 	public Worker(String employeeID, String name, boolean gender, Date birthday, String address, String phone,
 			String bankName, String accountNumber, String beneficiany, String speciality, String teamID,
 			String position) {
-		super(employeeID, name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		super(employeeID, name, gender, birthday, address, phone, bankName, accountNumber, beneficiany, position);
 		this.speciality = speciality;
 		this.teamID = teamID;
-		this.position = position;
+//		this.position = position;
 	}
 
 	public Worker(String name, boolean gender, Date birthday, String address, String phone, String bankName,
 			String accountNumber, String beneficiany, String speciality, String teamID, String position) {
-		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany);
+		super(name, gender, birthday, address, phone, bankName, accountNumber, beneficiany, position);
 		this.speciality = speciality;
 		this.teamID = teamID;
-		this.position = position;
+//		this.position = position;
 	}
 
 	public String getSpeciality() {
@@ -68,13 +68,13 @@ public class Worker extends Employee {
 					+ getPhone();
 		}
 	}
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
+//
+//	public String getPosition() {
+//		return position;
+//	}
+//
+//	public void setPosition(String position) {
+//		this.position = position;
+//	}
 
 }

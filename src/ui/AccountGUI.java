@@ -247,7 +247,7 @@ public class AccountGUI extends JFrame implements ActionListener {
 			tblModel.removeRow(0);
 		for (Employee x : newList) {
 			String[] row = { x.getEmployeeID(), x.getName(), empOffDAO.getDepNameByEmpID(x.getEmployeeID()),
-					((EmployeeOffice) x).getPosition(),
+					x.getPosition(),
 					(accDAO.checkAccByEmpID(x.getEmployeeID()) == true ? "Có tài khoản" : null) };
 			tblModel.addRow(row);
 		}
