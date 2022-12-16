@@ -12,6 +12,7 @@ public class Application {
 				try {
 					UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 					LoginGUI frame = new LoginGUI();
+					frame.setTitle("Quản lý tiền lương");
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {

@@ -466,11 +466,11 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 			String position = (String) cboPosition.getSelectedItem();
 			String departmentID = ((String) cboDept.getSelectedItem()).substring(0, 4);
 			if (validInput(name, birthday, address, phone, accountNumber, beneficiany, salary)) {
-				Employee employee = new EmployeeOffice(name, gender, birthday, address, phone, bankName, accountNumber,
+				Employee employeeInsert = new EmployeeOffice(name, gender, birthday, address, phone, bankName, accountNumber,
 						beneficiany, salary, position, departmentID);
 				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm nhân viên không?", "Thông báo",
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					if (employeeOfficeDAO.addEmployee(employee)) {
+					if (employeeOfficeDAO.addEmployee(employeeInsert)) {
 						loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
 						JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công.", "Thông báo",
 								JOptionPane.NO_OPTION, null);
@@ -502,9 +502,9 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 				String departmentID = ((String) cboDept.getSelectedItem()).substring(0, 4);
 				String empID = tblEmp.getValueAt(rowSelected, 0).toString();
 				Employee empOld = employeeOfficeDAO.getEmployeeOffice(empID);
-				Employee employee = new EmployeeOffice(empID, name, gender, birthday, address, phone, bankName,
+				Employee employeeUpdate = new EmployeeOffice(empID, name, gender, birthday, address, phone, bankName,
 						accountNumber, beneficiany, salary, position, departmentID);
-				if (empOld.getPosition().equals("Trưởng Phòng") && employee.getPosition().equals("Nhân Viên")) {
+				if (empOld.getPosition().equals("Trưởng Phòng") && employeeUpdate.getPosition().equals("Nhân Viên")) {
 					System.out.println(empID);
 					if (!employeeOfficeDAO.checkDelete_Account(empID)) {
 						JOptionPane.showMessageDialog(this,
@@ -515,7 +515,7 @@ public class EmployeeOfficeGUI extends JFrame implements ActionListener {
 					if (JOptionPane.showConfirmDialog(this,
 							"Bạn có chắn chắn muốn cập nhật lại thông tin của nhân viên này không?", "Thông báo",
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-						if (employeeOfficeDAO.updateEmployeeOffice(employee)) {
+						if (employeeOfficeDAO.updateEmployeeOffice(employeeUpdate)) {
 							loadDataToTable(employeeOfficeDAO.getAllEmployeeOffice());
 							JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công.", "Thông báo",
 									JOptionPane.NO_OPTION, null);

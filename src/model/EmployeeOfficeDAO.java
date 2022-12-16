@@ -50,7 +50,7 @@ public class EmployeeOfficeDAO {
 		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
 			PreparedStatement stmt = connection
-					.prepareStatement("SELECT * FROM NHANVIENHANHCHINH WHERE MaNhanVien != 'QUANTRI'");
+					.prepareStatement("SELECT * FROM NHANVIENHANHCHINH WHERE MaNhanVien != 'NVHC00000'");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Employee emp = new EmployeeOffice(rs.getString("MaNhanVien"), rs.getString("TenNhanVien"),
@@ -94,7 +94,7 @@ public class EmployeeOfficeDAO {
 			stmt.setString(4, emp.getAddress());
 			stmt.setString(5, emp.getPhone());
 			stmt.setDouble(6, ((EmployeeOffice) emp).getSalary());
-			stmt.setString(7, ((EmployeeOffice) emp).getPosition());
+			stmt.setString(7, emp.getPosition());
 			stmt.setString(8, ((EmployeeOffice) emp).getDepartmentID());
 			stmt.setString(9, emp.getBankName());
 			stmt.setString(10, emp.getAccountNumber());
@@ -169,7 +169,7 @@ public class EmployeeOfficeDAO {
 		List<String> listEmp = new ArrayList<String>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
-					"SELECT MaNhanVien, TenNhanVien  FROM NHANVIENHANHCHINH WHERE MaNhanVien != 'QUANTRI'");
+					"SELECT MaNhanVien, TenNhanVien  FROM NHANVIENHANHCHINH WHERE MaNhanVien != 'NVHC00000'");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				listEmp.add(rs.getString("MaNhanVien") + " - " + rs.getString("TenNhanVien"));
@@ -184,7 +184,7 @@ public class EmployeeOfficeDAO {
 		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
-					"SELECT * FROM NHANVIENHANHCHINH WHERE MaNhanVien LIKE ? AND MaNhanVien != 'QUANTRI'");
+					"SELECT * FROM NHANVIENHANHCHINH WHERE MaNhanVien LIKE ? AND MaNhanVien != 'NVHC00000'");
 			stmt.setString(1, "%" + empID + "%");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -204,7 +204,7 @@ public class EmployeeOfficeDAO {
 		List<Employee> listEmp = new ArrayList<Employee>();
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
-					"SELECT * FROM NHANVIENHANHCHINH WHERE TenNhanVien LIKE ?  AND MaNhanVien != 'QUANTRI'");
+					"SELECT * FROM NHANVIENHANHCHINH WHERE TenNhanVien LIKE ?  AND MaNhanVien != 'NVHC00000'");
 			stmt.setString(1, "%" + name + "%");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {

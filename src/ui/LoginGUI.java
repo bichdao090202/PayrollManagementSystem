@@ -127,7 +127,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 		pnUser.setLayout(new BorderLayout(0, 0));
 
 		txtUser = new JTextFieldHint("Tên đăng nhập");
-		txtUser.setText("NVHC00081");
+		txtUser.setText("NVHC00000");
 		txtUser.setLocation(55, 0);
 		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtUser.setBorder(null);

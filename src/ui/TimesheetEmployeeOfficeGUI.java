@@ -501,16 +501,22 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAdd) {
 			TimesheetOffice timesheet = createTimesheetOfficeFromInput();
-			if (JOptionPane.showConfirmDialog(this,
-					"Bạn có chắn chắn muốn thêm chấm công cho nhân viên này không?", "Thông báo",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				if (timesheetDAO.addTimesheet(timesheet)) {
-					loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
-					JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo", JOptionPane.NO_OPTION,
-							null);
-				} else {
-					JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
-							JOptionPane.NO_OPTION, null);
+			if (!timesheetDAO.checkTimesheet(timesheet.getEmployeeID(), timesheet.getDate())) {
+				System.out.println(timesheet.getEmployeeID());
+				JOptionPane.showMessageDialog(this, "Nhân viên này đã có chấm công trong ngày " +sdfDate.format(timesheet.getDate()) 
+						+ " nên không thể thêm chấm công!!!", "Thông báo", JOptionPane.NO_OPTION, null);
+			} else {
+				if (JOptionPane.showConfirmDialog(this, "Bạn có chắn chắn muốn thêm chấm công cho nhân viên này không?",
+						"Thông báo", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					if (timesheetDAO.addTimesheet(timesheet)) {
+						loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
+						JOptionPane.showMessageDialog(this, "Thêm chấm công thành công.", "Thông báo",
+								JOptionPane.NO_OPTION, null);
+					} else {
+						JOptionPane.showMessageDialog(this, "Thêm chấm công không thành công.", "Thông báo",
+								JOptionPane.NO_OPTION, null);
+					}
 				}
 			}
 		}
@@ -524,13 +530,14 @@ public class TimesheetEmployeeOfficeGUI extends JFrame implements ActionListener
 					TimesheetOffice timesheets = createTimesheetOfficeFromInput();
 					String employeeID = dtmEmp.getValueAt(rowSelected, 0).toString().substring(0, 9);
 					Date date = sdfDate.parse(dtmEmp.getValueAt(rowSelected, 1).toString());
-					if (timesheets.getDate().compareTo(date) != 0 || timesheets.getEmployeeID() != employeeID) {
+					if (!timesheets.getEmployeeID().trim().equals(employeeID) || timesheets.getDate().compareTo(date) != 0) {
 						JOptionPane.showMessageDialog(this, "Không được cập nhật nhân viên và ngày chấm công",
 								"Thông báo", JOptionPane.NO_OPTION, null);
 					} else {
 						if (JOptionPane.showConfirmDialog(this,
-								"Bạn có chắn chắn muốn cập nhật chấm công cho nhân viên " + employeeID + " không?", "Thông báo",
-								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+								"Bạn có chắn chắn muốn cập nhật chấm công cho nhân viên " + employeeID + " không?",
+								"Thông báo", JOptionPane.YES_NO_OPTION,
+								JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 							if (timesheetDAO.updateTimesheet(timesheets)) {
 								loadDataToTable(timesheetDAO.getAllTimesheetCurrent());
 								JOptionPane.showMessageDialog(this, "Cập nhật chấm công thành công.", "Thông báo",

@@ -74,6 +74,8 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 	private List<Assignment> subListAssignment;
 	private List<Produre> subListProdure;
 	private List<Product> subListProduct;
+	private List<entity.DetailProduction> listDetailProduction;
+	private List<entity.DetailProduction> subListDetailProduction;
 	private List<Worker> subListWorker;
 	private JDateChooser calendar;
 	private JLabel lbDate;
@@ -127,7 +129,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		tblWorker.getTableHeader().setOpaque(false);
 		tblWorker.getTableHeader().setBackground(COLOR);
 		tblWorker.getTableHeader().setForeground(Color.WHITE);
-		tblWorker.getColumnModel().getColumn(0).setPreferredWidth(70);
+		tblWorker.getColumnModel().getColumn(0).setPreferredWidth(90);
 		tblWorker.getColumnModel().getColumn(1).setPreferredWidth(200);
 		tblWorker.getColumnModel().getColumn(2).setPreferredWidth(80);
 		tblWorker.getColumnModel().getColumn(3).setPreferredWidth(80);
@@ -618,14 +620,14 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			loadTable2();
 		}
 		if (o.equals(btnNextPage2)) {
-			if (indexProduct + numProduct >= listProduct.size())
+			if (indexProduct + numProduct >= listDetailProduction.size())
 				return;
 			else
 				indexProduct += numProduct;
 			loadTable2();
 		}
 		if (o.equals(btnGoLastPage2)) {
-			indexProduct = (listProduct.size() - 1) / numProduct * numProduct;
+			indexProduct = (listDetailProduction.size() - 1) / numProduct * numProduct;
 			loadTable2();
 		}
 		if (o.equals(btnGoFirstPage3)) {
@@ -672,17 +674,27 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 	}
 
 	public void loadTable2() {
-		subListProduct = listProduct.subList(indexProduct, Math.min(indexProduct + numProduct, listProduct.size()));
+//		subListProduct = listProduct.subList(indexProduct, Math.min(indexProduct + numProduct, listProduct.size()));
+//		while (tblProduct.getRowCount() != 0)
+//			modelProduct.removeRow(0);
+//		for (Product x : subListProduct) {
+//			String[] row = { daoProduct.getProductionDetailID(x.getProductID()) + "", x.getProductID(), x.getName(),
+//					daoProdure.getAllProdureByProductID(x.getProductID()).size() + "",
+//					daoAssignment.getQuanProduct(x.getProductID()) + "",
+//					daoAssignment.getQuanDoneProduct(x.getProductID()) + "" };
+//			modelProduct.addRow(row);
+//
+//		}
+		subListDetailProduction = listDetailProduction.subList(indexProduct, Math.min(indexProduct + numProduct, listDetailProduction.size()));
 		while (tblProduct.getRowCount() != 0)
 			modelProduct.removeRow(0);
-		for (Product x : subListProduct) {
-			String[] row = { daoProduct.getProductionDetailID(x.getProductID()) + "", x.getProductID(), x.getName(),
-					daoProdure.getAllProdureByProductID(x.getProductID()).size() + "",
-					daoAssignment.getQuanProduct(x.getProductID()) + "",
-					daoAssignment.getQuanDoneProduct(x.getProductID()) + "" };
+		for (entity.DetailProduction x : subListDetailProduction) {
+			String[] row = { x.getDetailProductionID()+"", x.getProductId(), daoProduct.searchProductByIdProduct(x.getProductId()).getName(),daoProduct.getListProcedurebyIdProduct(x.getProductId()).size()+"",
+					x.getQuantityProduction()+"",x.getQuantityFinished()+""};
 			modelProduct.addRow(row);
-
 		}
+
+		
 	}
 
 	public void loadTable3(String id) {
@@ -704,9 +716,7 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 			String[] row = { x.getAssignmentID() + "",
 					"(" + x.getWorkerID() + ")  " + daoWorker.getWorkerNameByID(x.getWorkerID()),
-					" (" + daoProduct
-							.getProductionDetailID(daoProduct.getProductByProdureID(x.getProdureID()).getProductID())
-							+ ") " + daoProduct.getProductByProdureID(x.getProdureID()).getName(),
+					 daoProduct.getProductByProdureID(x.getProdureID()).getName(),
 					daoProdure.getProdureByID(x.getProdureID()).getName(), formatter.format(x.getDate()) };
 			modelAssignment.addRow(row);
 		}
@@ -716,7 +726,8 @@ public class AssignmentGUI extends JFrame implements ActionListener, MouseListen
 		index = indexProduct = indexWorker = indexProdure = 0;
 		listWorker = daoWorker.getListWorker(worker.getTeamID());
 		loadTable1();
-		listProduct = daoProduct.getProductProducing();
+//		listProduct = daoProduct.getProductProducing();
+		listDetailProduction = daoProduct.getAllDetailProduction();
 		loadTable2();
 		loadTable3("");
 		listAssignment = daoAssignment.getAllAssignments(worker.getTeamID());

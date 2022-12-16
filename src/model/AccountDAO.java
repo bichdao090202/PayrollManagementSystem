@@ -24,13 +24,16 @@ public class AccountDAO {
 	public HashMap<String, String> getPasswordEncryption(String username) {
 		HashMap<String, String> account = new HashMap<String, String>();
 		try {
-			PreparedStatement stmt = connection.prepareStatement("SELECT MatKhau, GiaTriSalt FROM TAIKHOAN WHERE TenDangNhap = ?");
+			PreparedStatement stmt = connection.prepareStatement("SELECT MatKhau FROM TAIKHOAN WHERE TenDangNhap = ?");
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				account.put("username", username);
-				account.put("password hash", rs.getString("MatKhau"));
-				account.put("salt", rs.getString("GiaTriSalt"));
+				String pwd = rs.getString("MatKhau");
+				String hash = pwd.substring(0, 44);
+				String salt = pwd.substring(44, 74);
+				account.put("password hash", hash);
+				account.put("salt", salt);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -42,9 +45,9 @@ public class AccountDAO {
 		try {			
 			PreparedStatement stmt = null;
 			if (id.contains("NVHC"))
-				stmt = connection.prepareStatement("insert into TaiKhoan values (?,'DOcr0ReFI71nDyKTyrVeEAywTdZnGfLd0gzPI/ic7l0=','ldj9ds892ha9dl8dos9sf442aadw8o',null,?)");
+				stmt = connection.prepareStatement("insert into TaiKhoan values (?,'DOcr0ReFI71nDyKTyrVeEAywTdZnGfLd0gzPI/ic7l0=ldj9ds892ha9dl8dos9sf442aadw8o',null,?)");
 			else 
-				stmt = connection.prepareStatement("insert into TaiKhoan values (?,'DOcr0ReFI71nDyKTyrVeEAywTdZnGfLd0gzPI/ic7l0=','ldj9ds892ha9dl8dos9sf442aadw8o',?,null)");
+				stmt = connection.prepareStatement("insert into TaiKhoan values (?,'DOcr0ReFI71nDyKTyrVeEAywTdZnGfLd0gzPI/ic7l0=ldj9ds892ha9dl8dos9sf442aadw8o',?,null)");
 			stmt.setString(1, id);
 			stmt.setString(2, id);
 			int insertResult = stmt.executeUpdate();
@@ -72,10 +75,9 @@ public class AccountDAO {
 	public boolean updatePasword(String password, String salt, String empID) {
 		try {
 			PreparedStatement stmt = connection.prepareStatement(
-					"UPDATE TAIKHOAN SET MatKhau = ?, GiaTriSalt = ? WHERE TenDangNhap = ?");
-			stmt.setString(1, password);
-			stmt.setString(2, salt);
-			stmt.setString(3, empID);
+					"UPDATE TAIKHOAN SET MatKhau = ? WHERE TenDangNhap = ?");
+			stmt.setString(1, password + salt);
+			stmt.setString(2, empID);
 			int insertResult = stmt.executeUpdate();
 			if (insertResult > 0) {
 				return true;
@@ -89,7 +91,7 @@ public class AccountDAO {
 	public boolean setDefaultPassword (String id) {
 		int n = 0;
 		try {
-			PreparedStatement stmt = connection.prepareStatement("update TaiKhoan set matKhau = 'DOcr0ReFI71nDyKTyrVeEAywTdZnGfLd0gzPI/ic7l0=', GiaTriSalt = 'ldj9ds892ha9dl8dos9sf442aadw8o' where TenDangNhap = ?");
+			PreparedStatement stmt = connection.prepareStatement("update TaiKhoan set matKhau = 'DOcr0ReFI71nDyKTyrVeEAywTdZnGfLd0gzPI/ic7l0=ldj9ds892ha9dl8dos9sf442aadw8o' where TenDangNhap = ?");
 			stmt.setString(1, id);
 			n= stmt.executeUpdate();
 		} catch (SQLException e) {
