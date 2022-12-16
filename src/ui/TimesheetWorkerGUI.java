@@ -232,8 +232,6 @@ public class TimesheetWorkerGUI extends JFrame implements ActionListener {
 					txtProduce.setText(tblAssignment.getValueAt(rowSelected, 3).toString());
 					dateTimesheet.setDate(CURRENT_DATE);
 					spinAmountCompleted.setValue(1);
-					spinAmountCompleted
-							.setMaximum(Integer.parseInt(tblAssignment.getValueAt(rowSelected, 7).toString()));
 				}
 			}
 		});

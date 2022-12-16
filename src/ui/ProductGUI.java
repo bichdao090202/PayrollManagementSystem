@@ -614,10 +614,6 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		spnOrder.setModel(new SpinnerNumberModel(1, 1, 10, 1));
 		spnOrder.setBounds(270, 67, 30, 20);
 		pnlProcedure.add(spnOrder);
-//		tblHeaderListDetail.setBackground(new Color(14,85,78));
-//		tblHeaderListDetail.setForeground(Color.WHITE);
-//		tblHeaderListDetail.setPreferredSize(new Dimension(100, 30));
-//		tblHeaderListDetail.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		loadListProcedure();
 		randomIdProduct();
@@ -731,17 +727,22 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		btnUpdateProduct.setFocusPainted(false);
 		
 		btnClean.setMnemonic(KeyEvent.VK_C);
-		btnClean.setToolTipText("Phím tắt : Alt + C");
+		btnClean.setToolTipText("Làm mới sản phẩm : Alt + C");
 		btnInsertProduct.setMnemonic(KeyEvent.VK_A);
-		btnInsertProduct.setToolTipText("Phím tắt : Alt + A");
+		btnInsertProduct.setToolTipText("Thêm sản phẩm : Alt + A");
 		btnSearchIdProduct.setMnemonic(KeyEvent.VK_S);
-		btnSearchIdProduct.setToolTipText("Phím tắt : Alt + S");
+		btnSearchIdProduct.setToolTipText("Tìm kiếm sản phẩm : Alt + S");
 		btnDeleteProduct.setMnemonic(KeyEvent.VK_D);
-		btnDeleteProduct.setToolTipText("Phím tắt : Alt + D");
+		btnDeleteProduct.setToolTipText("Xóa sản phẩm : Alt + D");
 		btnUpdateProduct.setMnemonic(KeyEvent.VK_U);
-		btnUpdateProduct.setToolTipText("Phím tắt : Alt + U");
+		btnUpdateProduct.setToolTipText("Cập nhật sản phẩm : Alt + U");
 		btnModal.setMnemonic(KeyEvent.VK_M);
-		btnModal.setToolTipText("Phím tắt : Alt + M");
+		btnModal.setToolTipText("Hợp đồng sản xuất : Alt + M");
+		spnOrder.setToolTipText("Thứ tự quy trình");
+		btnChange.setToolTipText("Làm mới quy trình");
+		btnSearchIdProcedure.setToolTipText("Tìm kiếm quy trình");
+		btnUpdateProcedure.setToolTipText("Cập nhật quy trình");
+		btnDeleteProcedure.setToolTipText("Xóa quy trình");
 		
 		return getContentPane();
 	}
@@ -924,7 +925,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		}
 		final PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {1}");
 	      JFreeChart chart = ChartFactory.createPieChart3D( 
-	         "Top 5 Sản Phẩm" ,  // chart title                   
+	         "Top 5 Sản Phẩm Sản Xuất Nhiều Nhất Trong Tháng" ,  // chart title                   
 	         dataset ,         // data 
 	         true ,            // include legend                   
 	         true, 
@@ -974,7 +975,7 @@ public class ProductGUI extends JFrame implements ActionListener, MouseListener 
 		}
 		final PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {1}");
 	      JFreeChart chart = ChartFactory.createPieChart3D( 
-	         "Hợp Đồng Sản Xuất" ,  // chart title                   
+	         "Chi Tiết Hợp Đồng Sản Xuất" ,  // chart title                   
 	         dataset ,         // data 
 	         true ,            // include legend                   
 	         true, 

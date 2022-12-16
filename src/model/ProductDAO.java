@@ -31,9 +31,26 @@ public class ProductDAO {
 	private ResultSet rs;
 	private ArrayList<Produre> ListProcedure;
 	private DetailPRoductionDAO detailDAO = new DetailPRoductionDAO();
+	private ArrayList<DetailProduction> ListDetailProduction;
+	
 	
 	public ProductDAO() {
 		con = ConnectDB.getInstance().getConnection();
+	}
+	
+	public List<DetailProduction> getAllDetailProduction() {
+		List<DetailProduction> listDetailProduction = new ArrayList<DetailProduction>();
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM HopDongSanXuat  where TinhTrang = N'Sản Xuất'");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				DetailProduction dp = new DetailProduction(rs.getInt("MaHopDong"), rs.getInt("SoLuongSanXuat"), rs.getInt("SoLuongHoanThanh"), rs.getString("TinhTrang"), rs.getString("MaSanPham"), rs.getDate("ThoiGian"));
+				listDetailProduction.add(dp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listDetailProduction;
 	}
 	
 	// Lấy tất cả sản phẩm hiện có

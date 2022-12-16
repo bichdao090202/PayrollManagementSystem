@@ -88,7 +88,7 @@ public class WorkerDAO {
 			stmt.setString(8, ((Worker)emp).getTeamID());
 			stmt.setString(9, emp.getAccountNumber());
 			stmt.setString(10, emp.getBeneficiany());
-			stmt.setString(11, ((Worker)emp).getPosition());
+			stmt.setString(11, emp.getPosition());
 			int insertResult = stmt.executeUpdate();
 			if (insertResult > 0) {
 				return true;
@@ -148,13 +148,13 @@ public class WorkerDAO {
 			PreparedStatement stmt = connection.prepareStatement("DELETE FROM NHANVIENSANXUAT WHERE MaNhanVien = ?");
 			stmt.setString(1, empID);
 			int result = stmt.executeUpdate();
-			if (result < 0) {
-				return false;
+			if (result > 0) {
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 	
 	public Worker getWorkerByID(String empID) {		

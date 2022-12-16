@@ -18,6 +18,21 @@ public class TimesheetDAO {
 	public TimesheetDAO() {
 		connection = ConnectDB.getInstance().getConnection();
 	}
+	
+	public boolean checkTimesheet(String empID, java.util.Date date) {
+		try {
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM CHAMCONGHANHCHINH WHERE MANHANVIEN = ? AND NGAYCHAMCONG = ?");
+			stmt.setString(1, empID);
+			stmt.setDate(2, new java.sql.Date(date.getTime()));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
 
 	public List<TimesheetOffice> getAllTimesheet() {
 		List<TimesheetOffice> listTimesheet = new ArrayList<TimesheetOffice>();

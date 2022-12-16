@@ -25,6 +25,18 @@ public class DetailProduction {
 		this.date = date;
 	}
 
+	
+	public DetailProduction(int detailProductionID, int quantityProduction, int quantityfinished, String state,
+			String productId, Date date) {
+		super();
+		this.detailProductionID = detailProductionID;
+		this.quantityProduction = quantityProduction;
+		this.quantityfinished = quantityfinished;
+		this.state = state;
+		this.productId = productId;
+		this.date = date;
+	}
+
 	public int getDetailProductionID() {
 		return detailProductionID;
 	}
